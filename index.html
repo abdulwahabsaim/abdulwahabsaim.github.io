@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Abdul Wahab Saim | Junior Network Engineer & NOC Specialist</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Google Fonts: Inter & Fira Code -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['Fira Code', 'monospace'],
+          },
+          colors: {
+            cyber: {
+              bg: '#080C14',
+              card: '#0D121D',
+              border: '#1E293B',
+              cyan: '#00D2FF',
+              green: '#00FF88',
+              amber: '#FFAA00',
+              blue: '#3B82F6',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body { background-color: #080C14; color: #F1F5F9; }
+    .glow-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glow-card:hover {
+      border-color: rgba(0, 210, 255, 0.4);
+      box-shadow: 0 0 25px rgba(0, 210, 255, 0.12);
+      transform: translateY(-2px);
+    }
+    canvas#network-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+    .terminal-scrollbar::-webkit-scrollbar { width: 6px; }
+    .terminal-scrollbar::-webkit-scrollbar-track { background: #090D16; }
+    .terminal-scrollbar::-webkit-scrollbar-thumb { background: #1E293B; border-radius: 3px; }
+  </style>
+</head>
+<body class="bg-cyber-bg font-sans antialiased overflow-x-hidden selection:bg-cyber-cyan selection:text-cyber-bg">
+
+  <!-- ========================================================================= -->
+  <!-- NAVBAR -->
+  <!-- ========================================================================= -->
+  <nav class="fixed top-0 left-0 w-full z-50 bg-cyber-bg/85 backdrop-blur-md border-b border-cyber-border">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-2.5 font-mono font-bold text-cyber-cyan text-base sm:text-lg tracking-wider">
+        <i data-lucide="network" class="w-5 h-5 text-cyber-green"></i>
+        <span>AWS<span class="text-cyber-green">//</span>NET-OPS</span>
+      </a>
+
+      <div class="hidden md:flex items-center gap-8 font-mono text-xs tracking-wider text-gray-300">
+        <a href="#about" class="hover:text-cyber-cyan transition-colors">./about</a>
+        <a href="#repositories" class="hover:text-cyber-cyan transition-colors">./enterprise-labs</a>
+        <a href="#terminal" class="hover:text-cyber-cyan transition-colors">./cisco-cli</a>
+        <a href="#skills" class="hover:text-cyber-cyan transition-colors">./tech-stack</a>
+        <a href="#contact" class="hover:text-cyber-cyan transition-colors">./connect</a>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-cyber-green/10 border border-cyber-green/30 text-cyber-green text-xs font-mono">
+          <span class="w-2 h-2 rounded-full bg-cyber-green animate-pulse"></span>
+          <span>NETHERLANDS • OPEN TO ROLES</span>
+        </div>
+        <a href="https://github.com/abdulwahabsaim" target="_blank" class="p-2 rounded-lg bg-cyber-card border border-cyber-border hover:border-cyber-cyan text-gray-300 hover:text-white transition-all">
+          <i data-lucide="github" class="w-4 h-4"></i>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ========================================================================= -->
+  <!-- HERO SECTION -->
+  <!-- ========================================================================= -->
+  <section id="about" class="relative min-h-screen flex items-center justify-center pt-24 pb-16 px-4 overflow-hidden">
+    <canvas id="network-canvas"></canvas>
+
+    <div class="relative z-10 max-w-5xl mx-auto text-center">
+      
+      <!-- Telemetry Status Tag -->
+      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-cyber-card/90 border border-cyber-cyan/30 text-cyber-cyan font-mono text-xs mb-8 shadow-lg shadow-cyber-cyan/5">
+        <i data-lucide="shield-check" class="w-4 h-4 text-cyber-green"></i>
+        <span>CISCO CCNA 200-301 CERTIFIED • B.SC. COMPUTER SCIENCE (7TH SEM)</span>
+      </div>
+
+      <!-- Main Headline -->
+      <h1 class="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight text-white mb-6">
+        Abdul Wahab <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-cyan via-teal-300 to-cyber-green">Saim</span>
+      </h1>
+
+      <p class="font-mono text-base sm:text-xl text-gray-300 max-w-3xl mx-auto mb-8 leading-relaxed">
+        Junior Network Engineer & NOC Specialist with hands-on expertise in enterprise routing architectures, campus Layer 2 security hardening, and resilient high-availability infrastructure.
+      </p>
+
+      <!-- Key Focus Chips -->
+      <div class="flex flex-wrap items-center justify-center gap-3 text-xs sm:text-sm font-mono mb-10 text-gray-300">
+        <span class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-cyber-card border border-cyber-border">
+          <i data-lucide="map-pin" class="w-4 h-4 text-cyber-cyan"></i> Netherlands 🇳🇱
+        </span>
+        <span class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-cyber-card border border-cyber-border">
+          <i data-lucide="router" class="w-4 h-4 text-cyber-green"></i> OSPF • EIGRP • HSRP
+        </span>
+        <span class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-cyber-card border border-cyber-border">
+          <i data-lucide="shield" class="w-4 h-4 text-cyber-amber"></i> STP Guards • Port Security
+        </span>
+        <span class="flex items-center gap-1.5 px-3.5 py-1.5 rounded-md bg-cyber-card border border-cyber-border">
+          <i data-lucide="terminal" class="w-4 h-4 text-cyber-blue"></i> Linux & Python Scripting
+        </span>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-wrap items-center justify-center gap-4 font-mono text-xs sm:text-sm">
+        <a href="#repositories" class="px-6 py-3 rounded-lg bg-cyber-cyan text-cyber-bg font-bold hover:bg-cyber-green transition-all transform hover:-translate-y-0.5 shadow-lg shadow-cyber-cyan/20 flex items-center gap-2">
+          <i data-lucide="layers" class="w-4 h-4"></i> View 11 Enterprise Labs
+        </a>
+        <a href="#terminal" class="px-6 py-3 rounded-lg bg-cyber-card border border-cyber-border hover:border-cyber-cyan text-white transition-all transform hover:-translate-y-0.5 flex items-center gap-2">
+          <i data-lucide="terminal" class="w-4 h-4 text-cyber-cyan"></i> Launch Interactive CLI
+        </a>
+        <a href="https://www.linkedin.com/in/abdulwahabsaim/" target="_blank" class="px-6 py-3 rounded-lg bg-[#0077B5]/15 border border-[#0077B5]/40 text-[#38bdf8] hover:bg-[#0077B5] hover:text-white transition-all flex items-center gap-2">
+          <i data-lucide="linkedin" class="w-4 h-4"></i> LinkedIn
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- TELEMETRY STATS BAR -->
+  <!-- ========================================================================= -->
+  <section class="border-y border-cyber-border bg-cyber-card/40 py-8 px-4 relative z-10">
+    <div class="max-w-7xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center font-mono">
+      <div>
+        <div class="text-3xl font-extrabold text-cyber-cyan">11</div>
+        <div class="text-xs text-gray-400 mt-1 uppercase tracking-wider">Verified Cisco Labs</div>
+      </div>
+      <div>
+        <div class="text-3xl font-extrabold text-cyber-green">100%</div>
+        <div class="text-xs text-gray-400 mt-1 uppercase tracking-wider">CCNA Domain Coverage</div>
+      </div>
+      <div>
+        <div class="text-3xl font-extrabold text-cyber-amber">3</div>
+        <div class="text-xs text-gray-400 mt-1 uppercase tracking-wider">Specialized Repositories</div>
+      </div>
+      <div>
+        <div class="text-3xl font-extrabold text-cyber-blue">IOS & Linux</div>
+        <div class="text-xs text-gray-400 mt-1 uppercase tracking-wider">Production Stacks</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- FEATURED REPOSITORIES -->
+  <!-- ========================================================================= -->
+  <section id="repositories" class="py-24 px-4 max-w-7xl mx-auto relative z-10">
+    <div class="text-center mb-16">
+      <div class="inline-block font-mono text-xs text-cyber-cyan bg-cyber-cyan/10 px-3 py-1 rounded-full border border-cyber-cyan/30 mb-3">
+        // PRODUCTION LAB CATALOG
+      </div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">
+        Featured Network Engineering Repositories
+      </h2>
+      <p class="text-gray-400 font-mono text-xs sm:text-sm mt-3 max-w-2xl mx-auto">
+        Complete enterprise architectures with verified running configurations, topology schematics, and CLI test matrices.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      
+      <!-- Card 1: Routing -->
+      <div class="bg-cyber-card border border-cyber-border rounded-xl p-6 flex flex-col justify-between glow-card">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-2.5 py-1 rounded bg-cyber-cyan/10 border border-cyber-cyan/30 text-cyber-cyan font-mono text-xs font-semibold">
+              AS-65001 // ENTERPRISE ROUTING
+            </span>
+            <span class="text-xs font-mono text-gray-400">5 Topologies</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">enterprise-routing-labs</h3>
+          <p class="text-gray-400 text-sm mb-6 leading-relaxed">
+            Hierarchical Multi-Area OSPFv2 (ABR Type-3 LSAs), EIGRP AS 7 DUAL convergence, 5-node full-mesh WAN with ECMP load balancing, multi-hop static transit routing, and dual-segment HSRP v2 failover.
+          </p>
+          <div class="flex flex-wrap gap-2 mb-6">
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-gray-800/80 text-gray-300">OSPFv2 Multi-Area</span>
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-gray-800/80 text-gray-300">EIGRP AS 7</span>
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-gray-800/80 text-gray-300">HSRP v2</span>
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-gray-800/80 text-gray-300">ECMP WAN</span>
+          </div>
+        </div>
+        <a href="https://github.com/abdulwahabsaim/enterprise-routing-labs" target="_blank" class="w-full py-2.5 rounded-lg bg-cyber-cyan/10 border border-cyber-cyan/40 text-cyber-cyan font-mono text-xs font-bold text-center hover:bg-cyber-cyan hover:text-cyber-bg transition-all flex items-center justify-center gap-2">
+          <span>Explore Repository</span> <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+
+      <!-- Card 2: Switching & Security -->
+      <div class="bg-cyber-card border border-cyber-border rounded-xl p-6 flex flex-col justify-between glow-card">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-2.5 py-1 rounded bg-cyber-green/10 border border-cyber-green/30 text-cyber-green font-mono text-xs font-semibold">
+              SEC-ZONE // CAMPUS SWITCHING
+            </span>
+            <span class="text-xs font-mono text-gray-400">5 Topologies</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">layer2-security-labs</h3>
+          <p class="text-gray-400 text-sm mb-6 leading-relaxed">
+            Campus switched infrastructure defense: STP Root Guard (Rogue Priority 0 attack mitigation), STP Loop Guard & BPDU Filtering, Port Security (Shutdown/Protect/Restrict, Sticky MACs), Extended ACLs (TCP 23), and 802.1Q VTP.
+          </p>
+          <div class="flex flex-wrap gap-2 mb-6">
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-gray-800/80 text-gray-300">STP Root Guard</span>
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-gray-800/80 text-gray-300">Loop Guard</span>
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-gray-800/80 text-gray-300">Port Security</span>
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-gray-800/80 text-gray-300">Extended ACLs</span>
+          </div>
+        </div>
+        <a href="https://github.com/abdulwahabsaim/layer2-security-labs" target="_blank" class="w-full py-2.5 rounded-lg bg-cyber-green/10 border border-cyber-green/40 text-cyber-green font-mono text-xs font-bold text-center hover:bg-cyber-green hover:text-cyber-bg transition-all flex items-center justify-center gap-2">
+          <span>Explore Repository</span> <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+
+      <!-- Card 3: Network Services -->
+      <div class="bg-cyber-card border border-cyber-border rounded-xl p-6 flex flex-col justify-between glow-card">
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-2.5 py-1 rounded bg-cyber-amber/10 border border-cyber-amber/30 text-cyber-amber font-mono text-xs font-semibold">
+              SRV-POOL // CORE SERVICES
+            </span>
+            <span class="text-xs font-mono text-gray-400">Verified Lifecycle</span>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-2">network-services-labs</h3>
+          <p class="text-gray-400 text-sm mb-6 leading-relaxed">
+            Multi-server application infrastructure: dynamic client lease allocation via DHCP (D.O.R.A negotiation with DNS options), authoritative domain name resolution via DNS (A-records), and HTTP/HTTPS web hosting.
+          </p>
+          <div class="flex flex-wrap gap-2 mb-6">
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-gray-800/80 text-gray-300">DHCP D.O.R.A</span>
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-gray-800/80 text-gray-300">DNS A-Record</span>
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-gray-800/80 text-gray-300">HTTP Web Server</span>
+            <span class="text-[11px] font-mono px-2 py-0.5 rounded bg-gray-800/80 text-gray-300">Catalyst 2960</span>
+          </div>
+        </div>
+        <a href="https://github.com/abdulwahabsaim/network-services-labs" target="_blank" class="w-full py-2.5 rounded-lg bg-cyber-amber/10 border border-cyber-amber/40 text-cyber-amber font-mono text-xs font-bold text-center hover:bg-cyber-amber hover:text-cyber-bg transition-all flex items-center justify-center gap-2">
+          <span>Explore Repository</span> <i data-lucide="arrow-up-right" class="w-3.5 h-3.5"></i>
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- INTERACTIVE NOC TERMINAL WITH 1-CLICK COMMAND CHIPS & ARROW HISTORY -->
+  <!-- ========================================================================= -->
+  <section id="terminal" class="py-16 px-4 max-w-5xl mx-auto relative z-20">
+    <div class="text-center mb-8">
+      <div class="inline-block font-mono text-xs text-cyber-green bg-cyber-green/10 px-3 py-1 rounded-full border border-cyber-green/30 mb-2">
+        // LIVE DIAGNOSTIC CONSOLE
+      </div>
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-white">Interactive Cisco IOS Console</h2>
+      <p class="text-gray-400 font-mono text-xs mt-1">Click a command chip or type in the console below (Supports Up/Down Arrow history).</p>
+      
+      <!-- 1-Click Command Chips -->
+      <div class="flex flex-wrap justify-center gap-2 mt-4 font-mono text-xs">
+        <button onclick="executeQuickCommand('show ip route')" class="px-2.5 py-1 rounded bg-cyber-card border border-cyber-border hover:border-cyber-cyan text-gray-300 hover:text-white transition-all">
+          show ip route
+        </button>
+        <button onclick="executeQuickCommand('show standby brief')" class="px-2.5 py-1 rounded bg-cyber-card border border-cyber-border hover:border-cyber-green text-gray-300 hover:text-white transition-all">
+          show standby brief
+        </button>
+        <button onclick="executeQuickCommand('show spanning-tree')" class="px-2.5 py-1 rounded bg-cyber-card border border-cyber-border hover:border-cyber-amber text-gray-300 hover:text-white transition-all">
+          show spanning-tree
+        </button>
+        <button onclick="executeQuickCommand('show port-security')" class="px-2.5 py-1 rounded bg-cyber-card border border-cyber-border hover:border-cyber-blue text-gray-300 hover:text-white transition-all">
+          show port-security
+        </button>
+        <button onclick="executeQuickCommand('whoami')" class="px-2.5 py-1 rounded bg-cyber-card border border-cyber-border hover:border-purple-400 text-gray-300 hover:text-white transition-all">
+          whoami
+        </button>
+        <button onclick="executeQuickCommand('clear')" class="px-2.5 py-1 rounded bg-gray-800 text-gray-400 hover:text-white transition-all">
+          clear
+        </button>
+      </div>
+    </div>
+
+    <!-- Terminal Box Container -->
+    <div id="terminal-container" class="bg-black border border-cyber-border rounded-xl overflow-hidden shadow-2xl font-mono text-sm cursor-text transition-all focus-within:border-cyber-cyan">
+      
+      <!-- Terminal Title Bar -->
+      <div class="bg-[#131822] px-4 py-3 border-b border-cyber-border flex items-center justify-between">
+        <div class="flex items-center gap-2">
+          <span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+          <span class="w-3 h-3 rounded-full bg-yellow-500/80 inline-block"></span>
+          <span class="w-3 h-3 rounded-full bg-green-500/80 inline-block"></span>
+          <span class="text-xs text-gray-400 ml-2">cisco-ios-core@noc-ams-01:~#</span>
+        </div>
+        <div class="text-xs text-cyber-cyan flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-cyber-green animate-pulse"></span>
+          <span>SSH v2 (ACTIVE)</span>
+        </div>
+      </div>
+
+      <!-- Terminal Output Body -->
+      <div id="terminal-body" class="p-4 h-96 overflow-y-auto terminal-scrollbar text-gray-300 text-xs sm:text-sm space-y-2">
+        <p class="text-cyber-cyan">Cisco IOS Software, 2900 Software (C2900-UNIVERSALK9-M), Version 15.1(4)M4</p>
+        <p class="text-gray-400">Type <span class="text-cyber-green font-bold">help</span> to view diagnostic commands, or click the quick command chips above.</p>
+        <div id="terminal-history"></div>
+      </div>
+
+      <!-- Terminal Active Input Line -->
+      <div class="bg-[#0A0E17] px-4 py-3 border-t border-cyber-border flex items-center gap-2 text-xs sm:text-sm">
+        <span class="text-cyber-green font-bold select-none">NOC-CORE#</span>
+        <input type="text" id="terminal-input" class="bg-transparent text-cyber-cyan focus:outline-none flex-1 font-mono w-full" placeholder="Click here or type 'help'..." autocomplete="off" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- TECHNICAL STACK & PROTOCOL MATRIX -->
+  <!-- ========================================================================= -->
+  <section id="skills" class="py-20 px-4 max-w-7xl mx-auto relative z-10">
+    <div class="text-center mb-16">
+      <div class="inline-block font-mono text-xs text-cyber-cyan bg-cyber-cyan/10 px-3 py-1 rounded-full border border-cyber-cyan/30 mb-3">
+        // DOMAIN COMPETENCIES
+      </div>
+      <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight">Technical Skills Matrix</h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 font-mono">
+      
+      <!-- Box 1 -->
+      <div class="bg-cyber-card border border-cyber-border rounded-xl p-6 glow-card">
+        <div class="flex items-center gap-3 text-cyber-cyan mb-4">
+          <i data-lucide="router" class="w-5 h-5"></i>
+          <h3 class="font-bold text-white text-base">Routing & High Availability</h3>
+        </div>
+        <ul class="text-xs text-gray-300 space-y-2.5">
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyber-green"></i> OSPFv2 (Multi-Area, ABR, Type-3 LSAs)</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyber-green"></i> EIGRP (AS 7, DUAL Convergence, Metrics)</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyber-green"></i> HSRP v1/v2 (Dual-Segment Redundancy, VIPs)</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyber-green"></i> Multi-Hop Static & Default Routing</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyber-green"></i> Equal-Cost Multi-Path (ECMP) WAN</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyber-green"></i> BGP Fundamentals (eBGP/iBGP/ASNs)</li>
+        </ul>
+      </div>
+
+      <!-- Box 2 -->
+      <div class="bg-cyber-card border border-cyber-border rounded-xl p-6 glow-card">
+        <div class="flex items-center gap-3 text-cyber-green mb-4">
+          <i data-lucide="shield" class="w-5 h-5"></i>
+          <h3 class="font-bold text-white text-base">L2 Switching & Hardening</h3>
+        </div>
+        <ul class="text-xs text-gray-300 space-y-2.5">
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyber-green"></i> IEEE 802.1Q VLAN Trunking & VTP</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyber-green"></i> STP Root Guard (ROOT_Inc Mitigation)</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyber-green"></i> STP Loop Guard & BPDU Filtering</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyber-green"></i> Port Security (Dynamic/Static/Sticky)</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyber-green"></i> Extended Access Control Lists (ACLs)</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyber-green"></i> Errdisable Automatic Port Recovery</li>
+        </ul>
+      </div>
+
+      <!-- Box 3 -->
+      <div class="bg-cyber-card border border-cyber-border rounded-xl p-6 glow-card">
+        <div class="flex items-center gap-3 text-cyber-amber mb-4">
+          <i data-lucide="terminal" class="w-5 h-5"></i>
+          <h3 class="font-bold text-white text-base">Systems, Tools & Dev</h3>
+        </div>
+        <ul class="text-xs text-gray-300 space-y-2.5">
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyber-green"></i> Ubuntu Linux CLI Diagnostics (mtr, dig, ss)</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyber-green"></i> Wireshark & TCPDump Packet Inspection</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyber-green"></i> Python 3 & Scapy Packet Manipulation</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyber-green"></i> Cisco Packet Tracer 9.0 & Cisco IOS</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyber-green"></i> Bash Shell Scripting & Git Version Control</li>
+          <li class="flex items-center gap-2"><i data-lucide="check" class="w-3.5 h-3.5 text-cyber-green"></i> Node.js, Express, MongoDB Stack</li>
+        </ul>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- NOC INCIDENT TROUBLESHOOTING RUNBOOK -->
+  <!-- ========================================================================= -->
+  <section class="py-16 px-4 max-w-5xl mx-auto relative z-10">
+    <div class="bg-cyber-card border border-cyber-border rounded-xl p-6 sm:p-8 font-mono glow-card">
+      <div class="flex items-center gap-2 text-cyber-cyan text-xs font-bold mb-3">
+        <i data-lucide="activity" class="w-4 h-4 text-cyber-green"></i>
+        <span>INCIDENT MANAGEMENT RUNBOOK</span>
+      </div>
+      <h3 class="text-xl font-bold text-white mb-6">Systematic OSI Layer 1-to-7 Troubleshooting Workflow</h3>
+
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-3 text-xs">
+        <div class="bg-[#111622] p-3.5 rounded-lg border border-gray-800">
+          <div class="text-cyber-cyan font-bold mb-1">L1 • Physical</div>
+          <p class="text-gray-400">show ip int bri, SFP optics, cable continuity, link lights</p>
+        </div>
+        <div class="bg-[#111622] p-3.5 rounded-lg border border-gray-800">
+          <div class="text-cyber-green font-bold mb-1">L2 • Data Link</div>
+          <p class="text-gray-400">show vlan, 802.1Q trunks, STP root consistency, err-disable</p>
+        </div>
+        <div class="bg-[#111622] p-3.5 rounded-lg border border-gray-800">
+          <div class="text-cyber-amber font-bold mb-1">L3 • Network</div>
+          <p class="text-gray-400">show ip route, ping, traceroute, HSRP VIP state, MTU</p>
+        </div>
+        <div class="bg-[#111622] p-3.5 rounded-lg border border-gray-800">
+          <div class="text-cyber-blue font-bold mb-1">L4 • Transport</div>
+          <p class="text-gray-400">TCP/UDP port reachability, ACL hit-counters, state tables</p>
+        </div>
+        <div class="bg-[#111622] p-3.5 rounded-lg border border-gray-800">
+          <div class="text-purple-400 font-bold mb-1">L7 • App</div>
+          <p class="text-gray-400">nslookup / dig DNS, HTTP status codes, service responsiveness</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- FOOTER -->
+  <!-- ========================================================================= -->
+  <footer id="connect" class="border-t border-cyber-border py-16 px-4 bg-black/40 relative z-10">
+    <div class="max-w-7xl mx-auto text-center font-mono">
+      <h3 class="text-2xl font-bold text-white mb-3">Let's Connect</h3>
+      <p class="text-gray-400 text-xs sm:text-sm max-w-lg mx-auto mb-8">
+        Open to Junior Network Engineer, NOC Engineer, and Infrastructure Specialist opportunities across the Netherlands.
+      </p>
+
+      <div class="flex flex-wrap justify-center gap-4 mb-12">
+        <a href="https://www.linkedin.com/in/abdulwahabsaim/" target="_blank" class="px-5 py-2.5 rounded-lg bg-cyber-card border border-cyber-border hover:border-cyber-cyan text-white text-xs flex items-center gap-2 transition-all">
+          <i data-lucide="linkedin" class="w-4 h-4 text-cyber-cyan"></i> LinkedIn Profile
+        </a>
+        <a href="mailto:saimwahab668@gmail.com" class="px-5 py-2.5 rounded-lg bg-cyber-card border border-cyber-border hover:border-cyber-green text-white text-xs flex items-center gap-2 transition-all">
+          <i data-lucide="mail" class="w-4 h-4 text-cyber-green"></i> saimwahab668@gmail.com
+        </a>
+        <a href="https://github.com/abdulwahabsaim" target="_blank" class="px-5 py-2.5 rounded-lg bg-cyber-card border border-cyber-border hover:border-cyber-amber text-white text-xs flex items-center gap-2 transition-all">
+          <i data-lucide="github" class="w-4 h-4 text-cyber-amber"></i> GitHub @abdulwahabsaim
+        </a>
+      </div>
+
+      <p class="text-gray-600 text-xs">
+        &copy; <span id="year"></span> Abdul Wahab Saim • Built with Cisco IOS & Network Automation principles.
+      </p>
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- JAVASCRIPT: TERMINAL + ARROW HISTORY + QUICK CHIPS + PARTICLE MESH -->
+  <!-- ========================================================================= -->
+  <script>
+    lucide.createIcons();
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // -------------------------------------------------------------------------
+    // CISCO TERMINAL WITH ARROW KEY HISTORY & QUICK CHIP RUNNER
+    // -------------------------------------------------------------------------
+    const terminalInput = document.getElementById('terminal-input');
+    const terminalHistory = document.getElementById('terminal-history');
+    const terminalBody = document.getElementById('terminal-body');
+    const terminalContainer = document.getElementById('terminal-container');
+
+    let cmdHistory = [];
+    let historyIndex = -1;
+
+    terminalContainer.addEventListener('click', () => {
+      terminalInput.focus();
+    });
+
+    const commands = {
+      'help': `
+<span class="text-cyber-cyan font-bold">AVAILABLE CISCO DIAGNOSTIC COMMANDS:</span>
+  <span class="text-cyber-green">show ip route</span>          - Display routing table (OSPF / EIGRP / Static / ECMP)
+  <span class="text-cyber-green">show standby brief</span>    - Display HSRP gateway redundancy state & VIPs
+  <span class="text-cyber-green">show spanning-tree</span>    - Display STP Root Bridge & Root Guard status
+  <span class="text-cyber-green">show port-security</span>    - Display MAC address limiting & violation modes
+  <span class="text-cyber-green">show ip dhcp snooping</span> - Display DHCP Snooping trust & rate limit table
+  <span class="text-cyber-green">whoami</span>                - Candidate profile, CCNA credential & domains
+  <span class="text-cyber-green">clear</span>                 - Clear terminal screen
+`,
+      'whoami': `
+<span class="text-cyber-cyan font-bold">OPERATOR PROFILE:</span>
+  Name:        Abdul Wahab Saim
+  Role:        Junior Network Engineer / NOC Specialist
+  Credentials: <span class="text-cyber-cyan">Cisco Certified Network Associate (CCNA 200-301)</span>
+  Education:   7th-Semester B.Sc. Computer Science
+  Location:    Netherlands 🇳🇱
+  Portfolio:   11 Verified Enterprise Labs across 3 Repositories
+`,
+      'show ip route': `
+Codes: C - connected, S - static, D - EIGRP, O - OSPF, IA - OSPF inter area
+
+Gateway of last resort is not set
+
+     10.0.0.0/8 is variably subnetted, 4 subnets, 2 masks
+C       10.1.1.0/24 is directly connected, GigabitEthernet0/0
+L       10.1.1.254/32 is directly connected, GigabitEthernet0/0
+<span class="text-cyber-cyan">O IA    192.168.100.0/24 [110/65] via 1.1.1.2, 00:04:12, Serial0/0/0</span>
+<span class="text-cyber-green">D       192.168.50.0/24 [90/2172416] via 1.1.1.1, 01:22:15, Serial0/0/1</span>
+<span class="text-cyber-amber">S       192.168.200.0/24 [1/0] via 11.0.0.3, Serial0/1/0</span>
+`,
+      'show standby brief': `
+                     P indicates configured to preempt.
+                     |
+Interface   Grp  Pri P State    Active          Standby         Virtual IP
+<span class="text-cyber-green">Gi0/0       1    110 P Active   local           10.1.1.252      10.1.1.1</span>
+<span class="text-cyber-cyan">Gi0/1       2    110 P Active   local           8.8.8.252       8.8.8.1</span>
+`,
+      'show spanning-tree': `
+VLAN0001
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    4097
+             Address     0001.42AC.06BB
+             <span class="text-cyber-green">This bridge is the root</span>
+             Hello Time 2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Gi1/0/1          Desg FWD 4         128.1    P2p
+Gi1/0/2          Desg FWD 4         128.2    P2p
+Gi1/0/4          Desg <span class="text-cyber-amber">ROOT_Inc</span> 4     128.4    P2p (Root Guard Blocking Rogue Prio 0)
+`,
+      'show port-security': `
+Secure Port MaxSecureAddr CurrentAddr SecurityViolation Security Action
+               (Count)       (Count)        (Count)
+--------------------------------------------------------------------
+<span class="text-cyber-cyan">     Gig1/0/1        1          1                 0         Shutdown</span>
+<span class="text-cyber-green">     Gig1/0/2        2          1                 0          Protect</span>
+<span class="text-cyber-amber">     Gig1/0/3        3          1                 0         Restrict</span>
+--------------------------------------------------------------------
+`,
+      'show ip dhcp snooping': `
+Switch DHCP snooping is enabled
+DHCP snooping operational on VLANs: 1,10,20
+Verification of hw-address is enabled
+
+Interface                    Trusted    Rate limit (pps)
+------------------------     -------    ----------------
+<span class="text-cyber-cyan">GigabitEthernet1/0/1         no         10</span>
+<span class="text-cyber-green">GigabitEthernet1/0/24        yes        unlimited</span>
+`
+    };
+
+    function processCommand(rawInput) {
+      const line = document.createElement('div');
+      line.className = 'mt-2';
+      line.innerHTML = `<span class="text-cyber-green font-bold">NOC-CORE#</span> <span class="text-white">${rawInput}</span>`;
+      terminalHistory.appendChild(line);
+
+      if (rawInput === 'clear') {
+        terminalHistory.innerHTML = '';
+      } else if (commands[rawInput]) {
+        const resp = document.createElement('div');
+        resp.className = 'text-gray-300 font-mono text-xs sm:text-sm pl-2 border-l-2 border-cyber-cyan/40 my-1';
+        resp.innerHTML = commands[rawInput];
+        terminalHistory.appendChild(resp);
+      } else if (rawInput !== '') {
+        const err = document.createElement('div');
+        err.className = 'text-red-400 text-xs pl-2';
+        err.textContent = `% Invalid command: "${rawInput}". Type 'help' for available commands.`;
+        terminalHistory.appendChild(err);
+      }
+
+      terminalBody.scrollTop = terminalBody.scrollHeight;
+    }
+
+    function executeQuickCommand(cmd) {
+      terminalInput.value = '';
+      processCommand(cmd);
+      cmdHistory.push(cmd);
+      historyIndex = cmdHistory.length;
+      terminalInput.focus();
+    }
+
+    terminalInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        const rawInput = this.value.trim().toLowerCase();
+        this.value = '';
+
+        if (rawInput !== '') {
+          cmdHistory.push(rawInput);
+          historyIndex = cmdHistory.length;
+        }
+
+        processCommand(rawInput);
+      } else if (e.key === 'ArrowUp') {
+        if (historyIndex > 0) {
+          historyIndex--;
+          this.value = cmdHistory[historyIndex];
+        }
+      } else if (e.key === 'ArrowDown') {
+        if (historyIndex < cmdHistory.length - 1) {
+          historyIndex++;
+          this.value = cmdHistory[historyIndex];
+        } else {
+          historyIndex = cmdHistory.length;
+          this.value = '';
+        }
+      }
+    });
+
+    // -------------------------------------------------------------------------
+    // PARTICLE GRAPH ENGINE
+    // -------------------------------------------------------------------------
+    const canvas = document.getElementById('network-canvas');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let particles = [];
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.6;
+        this.vy = (Math.random() - 0.5) * 0.6;
+        this.radius = Math.random() > 0.85 ? 2.5 : 1.5;
+        this.color = Math.random() > 0.6 ? '#00D2FF' : '#00FF88';
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        if (this.x < 0 || this.x > width) this.vx *= -1;
+        if (this.y < 0 || this.y > height) this.vy *= -1;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.shadowBlur = 4;
+        ctx.shadowColor = this.color;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      }
+    }
+
+    const count = Math.min(Math.floor(window.innerWidth / 20), 65);
+    for (let i = 0; i < count; i++) {
+      particles.push(new Particle());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, width, height);
+
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist < 125) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = '#00D2FF';
+            ctx.globalAlpha = (1 - dist / 125) * 0.18;
+            ctx.lineWidth = 1;
+            ctx.stroke();
+            ctx.globalAlpha = 1.0;
+          }
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
+</body>
+</html>
