@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark" class="scroll-smooth">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover"/>
 
   <!-- Primary Meta Tags -->
   <meta name="title" content="Abdul Wahab Saim | Junior Network & NOC Engineer">
@@ -25,14 +25,14 @@
   <meta name="twitter:image" content="https://abdulwahabsaim.github.io/assets/portfolio-preview.png">
 
   <title>Abdul Wahab Saim — Junior Network Engineer | CCNA</title>
-<meta name="description" content="CCNA-certified Junior Network Engineer. Enterprise routing, switching, and network hardening. Netherlands."/>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 <style>
-  /* ========== THEME VARIABLES ========== */
+  /* ========== THEME DESIGN TOKENS ========== */
   :root, [data-theme="dark"]{
     --bg:#070b14; --bg-2:#0c1220; --surface:#0f1521; --surface-2:#131b2c;
     --border:#1e293b; --border-bright:#334155;
@@ -41,6 +41,7 @@
     --emerald:#10b981; --emerald-b:#34d399;
     --amber:#f59e0b; --amber-b:#fbbf24;
     --rose:#f43f5e; --rose-b:#fb7185;
+    --violet:#a855f7;
     --grid:rgba(30,41,59,0.5); --grid-soft:rgba(30,41,59,0.3);
     --hero-line:rgba(51,65,85,0.7);
     --hero-node-bg:#0f1521;
@@ -62,6 +63,7 @@
     --emerald:#059669; --emerald-b:#047857;
     --amber:#c2410c; --amber-b:#9a3412;
     --rose:#be123c; --rose-b:#9f1239;
+    --violet:#7e22ce;
     --grid:rgba(148,163,184,0.35); --grid-soft:rgba(148,163,184,0.2);
     --hero-line:rgba(148,163,184,0.6);
     --hero-node-bg:#ffffff;
@@ -162,7 +164,9 @@
     transition:border-color .35s, transform .35s, box-shadow .35s;
     position:relative; overflow:hidden;
   }
-  .card:hover{border-color:var(--cyan); transform:translateY(-3px);}
+  @media(min-width:768px){
+    .card:hover{border-color:var(--cyan); transform:translateY(-3px);}
+  }
 
   .led{width:6px; height:6px; border-radius:50%; background:var(--emerald); box-shadow:0 0 8px var(--emerald); animation:pulse-glow 2.5s ease-in-out infinite; display:inline-block;}
   .led.amber{background:var(--amber); box-shadow:0 0 8px var(--amber);}
@@ -171,17 +175,17 @@
 
   .tag{
     display:inline-flex; align-items:center; gap:6px;
-    padding:5px 11px; font-family:'JetBrains Mono',monospace; font-size:11px;
+    padding:4px 9px; font-family:'JetBrains Mono',monospace; font-size:11px;
     border:1px solid var(--border); background:var(--surface-2); color:var(--text);
     font-weight:600; border-radius:4px; transition:all .3s;
   }
   .tag:hover{border-color:var(--cyan); color:var(--cyan);}
 
   .btn{
-    display:inline-flex; align-items:center; justify-content:center; gap:10px;
-    padding:12px 20px; font-family:'JetBrains Mono',monospace; font-size:12px;
-    font-weight:700; letter-spacing:0.06em; text-transform:uppercase;
-    transition:all .3s; border-radius:6px; position:relative; overflow:hidden;
+    display:inline-flex; align-items:center; justify-content:center; gap:8px;
+    padding:12px 18px; font-family:'JetBrains Mono',monospace; font-size:12px;
+    font-weight:700; letter-spacing:0.04em; text-transform:uppercase;
+    transition:all .25s ease; border-radius:8px; position:relative; overflow:hidden;
     text-decoration:none; cursor:pointer; border:none; min-height:44px;
     touch-action:manipulation;
   }
@@ -190,21 +194,21 @@
   .btn-primary:hover{background:var(--cyan-b); box-shadow:0 0 25px var(--glow-cyan); transform:translateY(-1px);}
   .btn-ghost{background:var(--surface); color:var(--text); border:1px solid var(--border-bright);}
   .btn-ghost:hover{border-color:var(--cyan); color:var(--cyan); background:rgba(34,211,238,0.06); transform:translateY(-1px);}
-  .btn-sm{padding:8px 14px; font-size:11px; min-height:36px;}
+  .btn-sm{padding:7px 12px; font-size:11px; min-height:34px; border-radius:6px;}
 
-  .section-label{display:inline-flex; align-items:center; gap:10px; font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--cyan); letter-spacing:0.2em; text-transform:uppercase; font-weight:700;}
-  .section-label::before{content:''; width:24px; height:1px; background:var(--cyan);}
+  .section-label{display:inline-flex; align-items:center; gap:8px; font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--cyan); letter-spacing:0.18em; text-transform:uppercase; font-weight:700;}
+  .section-label::before{content:''; width:18px; height:1px; background:var(--cyan);}
   .section-label.center{justify-content:center;}
 
   .stat-num{
     font-family:'Space Grotesk',sans-serif; font-weight:700;
-    font-size:clamp(1.75rem,3.5vw,3rem); line-height:1;
+    font-size:clamp(1.6rem,3.2vw,2.8rem); line-height:1;
     background:linear-gradient(180deg, var(--text), var(--muted));
     -webkit-background-clip:text; background-clip:text; color:transparent;
   }
 
-  .section{padding:70px 0; position:relative;}
-  @media(min-width:768px){ .section{padding:95px 0;} }
+  .section{padding:54px 0; position:relative;}
+  @media(min-width:768px){ .section{padding:90px 0;} }
 
   .text-glow-cyan{text-shadow:0 0 24px var(--glow-cyan);}
   [data-theme="light"] .text-glow-cyan{text-shadow:none;}
@@ -219,17 +223,17 @@
   .hop-row::before{content:''; position:absolute; left:18px; top:36px; bottom:-12px; width:1px; background:linear-gradient(180deg, var(--cyan), transparent);}
   .hop-row:last-child::before{display:none;}
 
-  .marquee-track{display:flex; gap:48px; animation:marquee 40s linear infinite; width:max-content;}
-  .terminal-scrollbar::-webkit-scrollbar{width:6px;}
-  .terminal-scrollbar::-webkit-scrollbar-thumb{background:var(--border-bright);}
+  .marquee-track{display:flex; gap:36px; animation:marquee 38s linear infinite; width:max-content;}
+  .terminal-scrollbar::-webkit-scrollbar{width:5px;}
+  .terminal-scrollbar::-webkit-scrollbar-thumb{background:var(--border-bright); border-radius:4px;}
 
-  /* ========== SEGMENTED SWITCH CONTROLS (MOBILE-FIRST) ========== */
+  /* ========== SEGMENTED PILL SWITCH CONTROLS ========== */
   .segmented-switch{
     display:flex; background:var(--surface-2); border:1px solid var(--border-bright);
     padding:3px; border-radius:9999px; position:relative;
   }
   .segmented-switch button{
-    flex:1; padding:8px 12px; font-family:'JetBrains Mono',monospace; font-size:11px;
+    flex:1; padding:7px 14px; font-family:'JetBrains Mono',monospace; font-size:11px;
     font-weight:700; border-radius:9999px; border:none; background:transparent;
     color:var(--muted); transition:all .25s ease; cursor:pointer; min-height:36px;
     display:flex; align-items:center; justify-content:center; gap:6px;
@@ -245,7 +249,7 @@
   .mobile-snap-track{
     display:flex; overflow-x:auto; scroll-snap-type:x mandatory;
     scroll-behavior:smooth; -webkit-overflow-scrolling:touch;
-    gap:16px; padding:8px 4px 16px 4px;
+    gap:14px; padding:6px 4px 14px 4px;
   }
   .mobile-snap-item{
     scroll-snap-align:center; scroll-snap-stop:always; flex-shrink:0;
@@ -257,16 +261,16 @@
 
   /* ========== CAROUSEL PAGINATION DOTS ========== */
   .carousel-dot{
-    width:7px; height:7px; border-radius:9999px; background:var(--border-bright);
+    width:6px; height:6px; border-radius:9999px; background:var(--border-bright);
     transition:all .3s ease; cursor:pointer;
   }
   .carousel-dot.active{
-    width:22px; background:var(--cyan); box-shadow:0 0 8px var(--cyan);
+    width:20px; background:var(--cyan); box-shadow:0 0 8px var(--cyan);
   }
 
   /* ========== THEME TOGGLE ========== */
   .theme-toggle{
-    width:44px; height:24px; background:var(--surface-2); border:1px solid var(--border-bright);
+    width:42px; height:24px; background:var(--surface-2); border:1px solid var(--border-bright);
     border-radius:14px; position:relative; cursor:pointer; transition:background .3s; overflow:hidden;
     flex-shrink:0;
   }
@@ -279,23 +283,23 @@
     z-index:2; pointer-events:none;
   }
   .theme-toggle.is-light .toggle-knob{
-    transform:translateX(20px) !important;
+    transform:translateX(18px) !important;
     background:var(--amber) !important;
   }
   .theme-toggle i{
     position:absolute; top:50%; transform:translateY(-50%);
     font-size:9px; z-index:1; transition:opacity .3s; pointer-events:none;
   }
-  .theme-toggle .icon-moon{left:6px; color:var(--cyan-b); opacity:1;}
-  .theme-toggle .icon-sun{right:6px; color:var(--amber); opacity:0;}
+  .theme-toggle .icon-moon{left:5px; color:var(--cyan-b); opacity:1;}
+  .theme-toggle .icon-sun{right:5px; color:var(--amber); opacity:0;}
   .theme-toggle.is-light .icon-moon{opacity:0;}
   .theme-toggle.is-light .icon-sun{opacity:1;}
 
   .chip{
-    padding:8px 14px; font-family:'JetBrains Mono',monospace; font-size:12px; font-weight:600;
+    padding:6px 12px; font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:600;
     border-radius:6px; border:1px solid var(--border-bright); background:var(--surface);
     color:var(--text); cursor:pointer; transition:all .2s; white-space:nowrap; flex-shrink:0;
-    min-height:38px; display:inline-flex; align-items:center; justify-content:center;
+    min-height:34px; display:inline-flex; align-items:center; justify-content:center;
   }
   .chip:hover{border-color:var(--cyan); color:var(--cyan);}
   .chip.primary{border-color:var(--emerald); background:rgba(16,185,129,0.12); color:var(--emerald); font-weight:700;}
@@ -304,37 +308,39 @@
   /* Floating Bottom Navigation (Mobile Only) */
   .mobile-bottom-dock{
     position:fixed; bottom:12px; left:50%; transform:translateX(-50%);
-    width:calc(100% - 24px); max-width:420px; z-index:45;
-    background:color-mix(in srgb, var(--surface) 85%, transparent);
-    backdrop-filter:blur(18px); -webkit-backdrop-filter:blur(18px);
+    width:calc(100% - 24px); max-width:380px; z-index:45;
+    background:color-mix(in srgb, var(--surface) 88%, transparent);
+    backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px);
     border:1px solid var(--border-bright); border-radius:9999px;
-    box-shadow:0 12px 36px rgba(0,0,0,0.5);
+    box-shadow:0 14px 40px rgba(0,0,0,0.55);
   }
   .mobile-dock-btn{
-    flex:1; display:flex; flex-col; align-items:center; justify-content:center;
-    padding:8px 0; font-family:'JetBrains Mono',monospace; font-size:10px;
+    flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:7px 0; font-family:'JetBrains Mono',monospace; font-size:10px;
     color:var(--muted); transition:color .2s, transform .2s; text-decoration:none;
   }
   .mobile-dock-btn.active{
     color:var(--cyan); font-weight:bold;
   }
-  .mobile-dock-btn i{font-size:14px; margin-bottom:2px;}
+  .mobile-dock-btn i{font-size:13px; margin-bottom:2px;}
 
   @media (prefers-reduced-motion:reduce){
     *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
   }
 </style>
 </head>
-<body class="pb-24 md:pb-0">
+<body class="pb-28 md:pb-0">
 <div id="cursor-dot"></div>
 <div id="cursor-ring"></div>
 
 <!-- ===================== DESKTOP & TOP NAVIGATION ===================== -->
 <nav class="fixed top-0 left-0 right-0 z-50 backdrop-blur-xl border-b" style="background:color-mix(in srgb, var(--bg) 85%, transparent); border-color:var(--border)">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 sm:py-4 flex items-center justify-between">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
     <a href="#top" class="font-mono text-xs sm:text-sm font-bold tracking-wider flex items-center" data-hover>
       <span style="color:var(--cyan)">aws</span><span style="color:var(--dim)">//</span><span style="color:var(--text)">saim</span><span class="inline-block w-1.5 sm:w-2 h-3.5 sm:h-4 ml-1 blink" style="background:var(--cyan)"></span>
     </a>
+    
+    <!-- Desktop Navigation Links -->
     <div class="hidden md:flex items-center gap-7 text-xs font-mono">
       <a href="#about" class="nav-link transition-colors" style="color:var(--muted)" data-hover>~/about</a>
       <a href="#cli" class="nav-link transition-colors" style="color:var(--muted)" data-hover>~/terminal_os</a>
@@ -343,9 +349,12 @@
       <a href="#certs" class="nav-link transition-colors" style="color:var(--muted)" data-hover>~/certs</a>
       <a href="#contact" class="nav-link transition-colors" style="color:var(--muted)" data-hover>~/contact</a>
     </div>
+
+    <!-- Status & Theme Controller -->
     <div class="flex items-center gap-2.5 sm:gap-3">
-      <div class="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 rounded-full" style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3)" data-hover>
-        <span class="led"></span><span class="font-mono text-[9px] sm:text-[10px] tracking-wider font-bold" style="color:var(--emerald-b)">NL · LINK UP</span>
+      <div class="flex items-center gap-1.5 px-2.5 py-1 rounded-full" style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3)" data-hover>
+        <span class="led"></span>
+        <span class="font-mono text-[9px] sm:text-[10px] tracking-wider font-bold" style="color:var(--emerald-b)">NL · LINK UP</span>
       </div>
 
       <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme" data-hover>
@@ -353,31 +362,19 @@
         <i class="fa-solid fa-moon icon-moon"></i>
         <i class="fa-solid fa-sun icon-sun"></i>
       </button>
-
-      <button id="menu-btn" class="md:hidden text-lg p-1.5 focus:outline-none" style="color:var(--text)" aria-label="menu"><i class="fa-solid fa-bars"></i></button>
-    </div>
-  </div>
-  <div id="mobile-menu" class="hidden md:hidden border-t" style="border-color:var(--border); background:var(--bg)">
-    <div class="px-6 py-4 flex flex-col gap-3 font-mono text-sm">
-      <a href="#about" class="nav-link py-1" style="color:var(--muted)">~/about</a>
-      <a href="#cli" class="nav-link py-1" style="color:var(--muted)">~/terminal_os</a>
-      <a href="#skills" class="nav-link py-1" style="color:var(--muted)">~/skills</a>
-      <a href="#projects" class="nav-link py-1" style="color:var(--muted)">~/topologies</a>
-      <a href="#certs" class="nav-link py-1" style="color:var(--muted)">~/certs</a>
-      <a href="#contact" class="nav-link py-1" style="color:var(--muted)">~/contact</a>
     </div>
   </div>
 </nav>
 
 <!-- ===================== HERO SECTION ===================== -->
-<section id="top" class="relative min-h-[92vh] sm:min-h-screen pt-24 sm:pt-28 pb-12 sm:pb-16 overflow-hidden flex items-center">
-  <!-- Full Background Topology SVG -->
+<section id="top" class="relative min-h-[88vh] md:min-h-screen pt-20 sm:pt-28 pb-10 sm:pb-16 overflow-hidden flex items-center">
+  <!-- Desktop & Tablet Full Background Topology SVG -->
   <div class="absolute inset-0 pointer-events-none z-0">
-    <div class="absolute inset-0 grid-bg opacity-40 sm:opacity-50"></div>
-    <div class="absolute top-0 left-1/4 w-[320px] sm:w-[500px] h-[320px] sm:h-[500px] rounded-full blur-[90px] sm:blur-[120px]" style="background:rgba(6,182,212,0.1)"></div>
-    <div class="absolute bottom-0 right-1/4 w-[320px] sm:w-[500px] h-[320px] sm:h-[500px] rounded-full blur-[90px] sm:blur-[120px]" style="background:rgba(16,185,129,0.08)"></div>
+    <div class="absolute inset-0 grid-bg opacity-30 sm:opacity-50"></div>
+    <div class="absolute top-0 left-1/4 w-[280px] sm:w-[500px] h-[280px] sm:h-[500px] rounded-full blur-[80px] sm:blur-[120px]" style="background:rgba(6,182,212,0.1)"></div>
+    <div class="absolute bottom-0 right-1/4 w-[280px] sm:w-[500px] h-[280px] sm:h-[500px] rounded-full blur-[80px] sm:blur-[120px]" style="background:rgba(16,185,129,0.08)"></div>
 
-    <svg class="absolute inset-0 w-full h-full opacity-35 sm:opacity-45" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
+    <svg class="absolute inset-0 w-full h-full opacity-25 md:opacity-45" viewBox="0 0 1400 900" preserveAspectRatio="xMidYMid slice">
       <g stroke="var(--hero-line)" stroke-width="1.2" fill="none">
         <line x1="700" y1="120" x2="450" y2="280"/><line x1="700" y1="120" x2="950" y2="280"/>
         <line x1="450" y1="280" x2="250" y2="480"/><line x1="450" y1="280" x2="650" y2="480"/>
@@ -387,7 +384,6 @@
         <line x1="650" y1="480" x2="560" y2="700"/><line x1="650" y1="480" x2="720" y2="700"/>
         <line x1="850" y1="480" x2="900" y2="700"/><line x1="1150" y1="480" x2="1080" y2="700"/><line x1="1150" y1="480" x2="1220" y2="700"/>
       </g>
-      <!-- Flowing Packets -->
       <g>
         <circle r="3.2" fill="var(--cyan-b)"><animateMotion dur="3s" repeatCount="indefinite" path="M700,120 L450,280"/></circle>
         <circle r="3.2" fill="var(--cyan-b)"><animateMotion dur="4s" repeatCount="indefinite" path="M950,280 L1150,480" begin="0.5s"/></circle>
@@ -396,7 +392,6 @@
         <circle r="3.2" fill="var(--cyan-b)"><animateMotion dur="3.5s" repeatCount="indefinite" path="M250,480 L180,700" begin="0.8s"/></circle>
         <circle r="3.2" fill="var(--cyan-b)"><animateMotion dur="3.2s" repeatCount="indefinite" path="M850,480 L900,700" begin="2s"/></circle>
       </g>
-      <!-- Nodes -->
       <g font-family="JetBrains Mono" font-size="8">
         <g><circle cx="700" cy="120" r="14" fill="var(--hero-node-bg)" stroke="var(--cyan)" stroke-width="2"/><text x="700" y="123" text-anchor="middle" fill="var(--cyan)" font-weight="bold">INET</text></g>
         <g><rect x="438" y="268" width="24" height="24" rx="3" fill="var(--hero-node-bg)" stroke="var(--cyan)" stroke-width="2"/><text x="450" y="283" text-anchor="middle" fill="var(--cyan)" font-weight="bold">R1</text></g>
@@ -405,71 +400,111 @@
         <g><rect x="638" y="468" width="24" height="24" rx="3" fill="var(--hero-node-bg)" stroke="var(--emerald)" stroke-width="2"/><text x="650" y="483" text-anchor="middle" fill="var(--emerald)" font-weight="bold">SW2</text></g>
         <g><rect x="838" y="468" width="24" height="24" rx="3" fill="var(--hero-node-bg)" stroke="var(--emerald)" stroke-width="2"/><text x="850" y="483" text-anchor="middle" fill="var(--emerald)" font-weight="bold">SW3</text></g>
         <g><rect x="1138" y="468" width="24" height="24" rx="3" fill="var(--hero-node-bg)" stroke="var(--emerald)" stroke-width="2"/><text x="1150" y="483" text-anchor="middle" fill="var(--emerald)" font-weight="bold">SW4</text></g>
-        <g><circle cx="180" cy="700" r="7" fill="var(--hero-node-bg)" stroke="var(--dim)" stroke-width="1.5"/><text x="180" y="722" text-anchor="middle" fill="var(--dim)" font-size="8" font-weight="bold">PC1</text></g>
-        <g><circle cx="320" cy="700" r="7" fill="var(--hero-node-bg)" stroke="var(--dim)" stroke-width="1.5"/><text x="320" y="722" text-anchor="middle" fill="var(--dim)" font-size="8" font-weight="bold">PC2</text></g>
-        <g><circle cx="560" cy="700" r="7" fill="var(--hero-node-bg)" stroke="var(--cyan)" stroke-width="1.5"/><text x="560" y="722" text-anchor="middle" fill="var(--cyan)" font-size="8" font-weight="bold">SRV</text></g>
-        <g><circle cx="720" cy="700" r="7" fill="var(--hero-node-bg)" stroke="var(--dim)" stroke-width="1.5"/><text x="720" y="722" text-anchor="middle" fill="var(--dim)" font-size="8" font-weight="bold">PC3</text></g>
-        <g><circle cx="900" cy="700" r="7" fill="var(--hero-node-bg)" stroke="var(--dim)" stroke-width="1.5"/><text x="900" y="722" text-anchor="middle" fill="var(--dim)" font-size="8" font-weight="bold">PC4</text></g>
-        <g><circle cx="1080" cy="700" r="7" fill="var(--hero-node-bg)" stroke="var(--dim)" stroke-width="1.5"/><text x="1080" y="722" text-anchor="middle" fill="var(--dim)" font-size="8" font-weight="bold">PC5</text></g>
-        <g><circle cx="1220" cy="700" r="7" fill="var(--hero-node-bg)" stroke="var(--dim)" stroke-width="1.5"/><text x="1220" y="722" text-anchor="middle" fill="var(--dim)" font-size="8" font-weight="bold">PC6</text></g>
       </g>
     </svg>
   </div>
 
-  <!-- Hero Content -->
   <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 w-full">
     
-    <!-- Mobile Segmented View Switcher (Visible on small screens, hidden on desktop) -->
-    <div class="lg:hidden mb-6">
-      <div class="segmented-switch max-w-xs mx-auto">
-        <button id="hero-tab-bio" class="active" onclick="switchHeroTab('bio')"><i class="fa-solid fa-bolt"></i> Bio & Focus</button>
-        <button id="hero-tab-term" onclick="switchHeroTab('term')"><i class="fa-solid fa-terminal"></i> Live Config</button>
+    <!-- ================= MOBILE APP-HEADER PARADIGM (<768px) ================= -->
+    <div class="block md:hidden space-y-4">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full" style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3)">
+        <span class="led"></span>
+        <span class="font-mono text-[9px] tracking-[0.16em] font-bold" style="color:var(--cyan)">AVAILABLE FOR WORK · NL 🇳🇱</span>
+      </div>
+
+      <div>
+        <p class="font-mono text-[10px] tracking-[0.2em] font-bold" style="color:var(--cyan)">// operator_id</p>
+        <h1 class="font-display font-bold text-4xl tracking-tight leading-[1.05]" style="color:var(--text)">
+          ABDUL WAHAB <span style="color:var(--cyan)" class="text-glow-cyan">SAIM</span>
+        </h1>
+        <p class="font-mono text-xs mt-1 font-semibold" style="color:var(--muted)">
+          Junior Network & NOC Engineer
+        </p>
+      </div>
+
+      <!-- Compact 3-Pill Quick Spec Badge Row -->
+      <div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+        <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold whitespace-nowrap" style="background:rgba(16,185,129,0.12); color:var(--emerald); border:1px solid rgba(16,185,129,0.35)">
+          <i class="fa-solid fa-certificate text-[9px] mr-1"></i>CCNA 200-301
+        </span>
+        <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold whitespace-nowrap" style="background:rgba(6,182,212,0.12); color:var(--cyan); border:1px solid rgba(6,182,212,0.35)">
+          <i class="fa-solid fa-graduation-cap text-[9px] mr-1"></i>BSc CS (3.58)
+        </span>
+        <span class="px-2.5 py-1 rounded-full text-[10px] font-mono font-bold whitespace-nowrap" style="background:var(--surface-2); color:var(--muted); border:1px solid var(--border-bright)">
+          <i class="fa-solid fa-location-dot text-[9px] mr-1"></i>Goes, NL
+        </span>
+      </div>
+
+      <p class="text-xs leading-relaxed" style="color:var(--muted); font-weight:500;">
+        I design, configure, and harden multi-node network topologies — building redundant core routing with HSRP, segmenting traffic with VLANs/ACLs, and stress-testing failover across Cisco IOS and Linux environments.
+      </p>
+
+      <!-- Thumb-Friendly Mobile Primary Action Row -->
+      <div class="flex items-center gap-2 pt-1">
+        <a href="#projects" class="btn btn-primary flex-1 !py-2.5 !text-xs justify-center"><i class="fa-solid fa-bolt"></i>Explore Labs</a>
+        <a href="#contact" class="btn btn-ghost flex-1 !py-2.5 !text-xs justify-center"><i class="fa-solid fa-plug"></i>Connect</a>
+        <button onclick="toggleMobileConfig()" id="btn-inspect-cfg" class="btn btn-ghost !px-3 !py-2.5 !text-xs" aria-label="inspect config"><i class="fa-solid fa-terminal" style="color:var(--cyan)"></i></button>
+      </div>
+
+      <!-- Collapsible Mobile Running Config Drawer -->
+      <div id="mobile-config-drawer" class="hidden terminal rounded-lg p-3 text-[10px] font-mono space-y-1 crt mt-3 border" style="border-color:var(--border-bright)">
+        <div class="flex items-center justify-between pb-1.5 mb-1.5 border-b" style="border-color:var(--border)">
+          <span style="color:var(--emerald)" class="font-bold">core-rtr-01# show running-config</span>
+          <span style="color:var(--dim)">IOS 15.x</span>
+        </div>
+        <p><span style="color:var(--cyan)">hostname</span> abdul-wahab-saim</p>
+        <p><span style="color:var(--cyan)">credential</span> CCNA 200-301 [VERIFIED]</p>
+        <p><span style="color:var(--cyan)">location</span> Goes, Zeeland, NL 🇳🇱 (W-Doc legal)</p>
+        <p class="text-cyan-400">standby 1 ip 10.10.10.254 (preempt)</p>
+        <p class="text-emerald-400">router ospf 7 area 0</p>
       </div>
     </div>
 
-    <div class="grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+    <!-- ================= DESKTOP PARADIGM (≥ 768px) ================= -->
+    <div class="hidden md:grid lg:grid-cols-12 gap-8 lg:gap-10 items-center">
       
       <!-- Left Column: Hero Bio & Actions -->
-      <div id="hero-panel-bio" class="lg:col-span-7 space-y-5 sm:space-y-6 p-4 sm:p-6 rounded-2xl" style="background:var(--hero-spotlight)">
+      <div class="lg:col-span-7 space-y-6 p-6 rounded-2xl" style="background:var(--hero-spotlight)">
         <div class="inline-flex items-center gap-2.5 px-3 py-1 rounded-full" style="background:rgba(6,182,212,0.12); border:1px solid rgba(6,182,212,0.35)">
           <span class="led"></span>
-          <span class="font-mono text-[9px] sm:text-[10px] tracking-[0.2em] font-bold" style="color:var(--cyan)">AVAILABLE FOR WORK · NL 🇳🇱</span>
+          <span class="font-mono text-[10px] tracking-[0.2em] font-bold" style="color:var(--cyan)">AVAILABLE FOR WORK · NL 🇳🇱</span>
         </div>
 
         <div>
-          <p class="font-mono text-[11px] sm:text-xs tracking-[0.25em] mb-1.5 font-bold" style="color:var(--cyan)">// junior_network_engineer</p>
-          <h1 class="font-display font-bold leading-[0.95] tracking-tight" style="font-size:clamp(2.4rem,6vw,5.2rem)">
+          <p class="font-mono text-xs tracking-[0.25em] mb-1.5 font-bold" style="color:var(--cyan)">// junior_network_engineer</p>
+          <h1 class="font-display font-bold leading-[0.95] tracking-tight" style="font-size:clamp(2.5rem,5.5vw,5rem)">
             <span class="block" style="color:var(--text)">ABDUL WAHAB</span>
             <span class="block text-glow-cyan" style="color:var(--cyan)">SAIM</span>
           </h1>
         </div>
 
-        <div class="flex flex-wrap items-center gap-2 sm:gap-3 font-mono text-xs sm:text-sm" style="color:var(--muted)">
+        <div class="flex flex-wrap items-center gap-3 font-mono text-sm" style="color:var(--muted)">
           <span style="color:var(--emerald)">●</span><span style="color:var(--text)" class="font-bold">CCNA-certified</span>
           <span style="color:var(--dim)">|</span><span style="color:var(--text)">NOC Specialist</span>
           <span style="color:var(--dim)">|</span><span style="color:var(--text)">Goes, Zeeland, NL</span>
         </div>
 
-        <p class="max-w-xl text-sm sm:text-base leading-relaxed" style="color:var(--muted); font-weight:600;">
+        <p class="max-w-xl text-base leading-relaxed" style="color:var(--muted); font-weight:600;">
           I design, configure, and harden multi-node network topologies — building redundant core routing with HSRP, segmenting traffic with VLANs and ACLs, and stress-testing failover until the packets keep flowing. Hands-on across Cisco IOS and Linux platforms in verified enterprise labs.
         </p>
 
-        <div class="flex flex-wrap gap-1.5 sm:gap-2">
+        <div class="flex flex-wrap gap-2">
           <span class="tag"><span class="led cyan"></span>Enterprise Routing</span>
           <span class="tag"><span class="led cyan"></span>L2 Campus Security</span>
           <span class="tag"><span class="led cyan"></span>High Availability</span>
           <span class="tag"><span class="led cyan"></span>Cisco IOS</span>
         </div>
 
-        <div class="flex flex-wrap gap-2.5 sm:gap-3 pt-2">
-          <a href="#projects" class="btn btn-primary flex-1 sm:flex-initial" data-hover-btn><i class="fa-solid fa-diagram-project"></i>View Topologies</a>
-          <a href="#cli" class="btn btn-ghost flex-1 sm:flex-initial" data-hover-btn><i class="fa-solid fa-terminal" style="color:var(--cyan)"></i>CLI Terminal</a>
-          <a href="#contact" class="btn btn-ghost w-full sm:w-auto" data-hover-btn><i class="fa-solid fa-plug"></i>Connect</a>
+        <div class="flex flex-wrap gap-3 pt-2">
+          <a href="#projects" class="btn btn-primary" data-hover-btn><i class="fa-solid fa-diagram-project"></i>View Topologies</a>
+          <a href="#cli" class="btn btn-ghost" data-hover-btn><i class="fa-solid fa-terminal" style="color:var(--cyan)"></i>CLI Terminal</a>
+          <a href="#contact" class="btn btn-ghost" data-hover-btn><i class="fa-solid fa-plug"></i>Connect</a>
         </div>
       </div>
 
       <!-- Right Column: Running Config Terminal -->
-      <div id="hero-panel-term" class="hidden lg:block lg:col-span-5">
+      <div class="lg:col-span-5">
         <div class="terminal rounded-lg overflow-hidden crt relative shadow-2xl">
           <div class="flex items-center gap-2 px-4 py-3 border-b" style="border-color:var(--border); background:var(--terminal-bar)">
             <span class="w-3 h-3 rounded-full" style="background:rgba(244,63,94,0.85)"></span>
@@ -478,7 +513,7 @@
             <span class="font-mono text-[11px] ml-3 font-semibold" style="color:var(--dim)">core-rtr-01 — ssh — 92.51.x.x</span>
             <span class="ml-auto font-mono text-[10px]" style="color:var(--dim)">uptime 247d 14h</span>
           </div>
-          <div class="p-4 sm:p-5 font-mono text-[11px] sm:text-[12px] leading-relaxed space-y-1" style="color:var(--term-text)">
+          <div class="p-5 font-mono text-[12px] leading-relaxed space-y-1" style="color:var(--term-text)">
             <p><span style="color:var(--emerald)" class="font-bold">core-rtr-01#</span> <span>show running-config</span></p>
             <p style="color:var(--dim)">! NVRAM config verified</p>
             <p style="color:var(--dim)">!</p>
@@ -500,7 +535,7 @@
             <p style="color:var(--dim)">!</p>
             <p><span style="color:var(--emerald)" class="font-bold">core-rtr-01#</span> <span class="blink" style="color:var(--cyan)">█</span></p>
           </div>
-          <div class="px-4 py-2 border-t flex items-center gap-3 sm:gap-4 font-mono text-[10px]" style="border-color:var(--border); background:var(--terminal-bar); color:var(--dim)">
+          <div class="px-4 py-2 border-t flex items-center gap-4 font-mono text-[10px]" style="border-color:var(--border); background:var(--terminal-bar); color:var(--dim)">
             <span class="flex items-center gap-1.5 font-bold"><span class="led"></span>PORT UP</span>
             <span class="flex items-center gap-1.5 font-bold"><span class="led cyan"></span>OSPF FULL</span>
             <span class="flex items-center gap-1.5 font-bold"><span class="led amber"></span>HSRP ACT</span>
@@ -512,16 +547,16 @@
     </div>
   </div>
 
-  <div class="hidden sm:flex absolute bottom-4 left-1/2 -translate-x-1/2 flex-col items-center gap-2 pointer-events-none" style="color:var(--dim)">
+  <div class="hidden md:flex absolute bottom-4 left-1/2 -translate-x-1/2 flex-col items-center gap-2 pointer-events-none" style="color:var(--dim)">
     <span class="font-mono text-[9px] tracking-[0.3em]">SCROLL</span>
     <div class="w-[1px] h-8" style="background:linear-gradient(180deg, var(--cyan), transparent)"></div>
   </div>
 </section>
 
 <!-- ===================== MARQUEE ===================== -->
-<div class="border-y py-3 sm:py-3.5 overflow-hidden select-none" style="border-color:var(--border); background:var(--bg-2)">
+<div class="border-y py-2.5 sm:py-3.5 overflow-hidden select-none" style="border-color:var(--border); background:var(--bg-2)">
   <div class="marquee-track">
-    <div class="flex items-center gap-8 sm:gap-12 font-mono text-xs sm:text-sm px-4 sm:px-6" style="color:var(--muted)">
+    <div class="flex items-center gap-6 sm:gap-12 font-mono text-xs sm:text-sm px-4 sm:px-6" style="color:var(--muted)">
       <span style="color:var(--cyan)">●</span><span>OSPFv2 MULTI-AREA</span>
       <span style="color:var(--cyan)">●</span><span>EIGRP AS 7</span>
       <span style="color:var(--cyan)">●</span><span>HSRP v2 GATEWAY HA</span>
@@ -535,7 +570,7 @@
       <span style="color:var(--cyan)">●</span><span>DNS AUTHORITATIVE</span>
       <span style="color:var(--cyan)">●</span><span>UBUNTU LINUX NETWORKING</span>
     </div>
-    <div class="flex items-center gap-8 sm:gap-12 font-mono text-xs sm:text-sm px-4 sm:px-6" style="color:var(--muted)" aria-hidden="true">
+    <div class="flex items-center gap-6 sm:gap-12 font-mono text-xs sm:text-sm px-4 sm:px-6" style="color:var(--muted)" aria-hidden="true">
       <span style="color:var(--cyan)">●</span><span>OSPFv2 MULTI-AREA</span>
       <span style="color:var(--cyan)">●</span><span>EIGRP AS 7</span>
       <span style="color:var(--cyan)">●</span><span>HSRP v2 GATEWAY HA</span>
@@ -552,29 +587,29 @@
   </div>
 </div>
 
-<!-- ===================== COMPACT HIGH-DENSITY METRICS ===================== -->
-<section class="py-8 sm:py-12 border-b" style="border-color:var(--border); background:var(--bg-2)">
+<!-- ===================== COMPACT METRICS BAR ===================== -->
+<section class="py-6 sm:py-10 border-b" style="border-color:var(--border); background:var(--bg-2)">
   <div class="max-w-7xl mx-auto px-4 sm:px-6">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-6">
-      <div class="card p-3.5 sm:p-5 rounded-xl reveal">
-        <div class="flex items-center gap-1.5 mb-1.5"><span class="led"></span><span class="font-mono text-[9px] sm:text-[10px] tracking-widest uppercase font-bold" style="color:var(--dim)">PROTOCOLS</span></div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-2.5 sm:gap-6">
+      <div class="card p-3 sm:p-5 rounded-xl reveal">
+        <div class="flex items-center gap-1.5 mb-1"><span class="led"></span><span class="font-mono text-[9px] tracking-widest uppercase font-bold" style="color:var(--dim)">PROTOCOLS</span></div>
         <div class="stat-num" data-count="15">0</div>
-        <p class="text-[11px] sm:text-xs mt-1" style="color:var(--dim)">Layer 2 & 3 mastered</p>
+        <p class="text-[10px] sm:text-xs mt-0.5" style="color:var(--dim)">Layer 2 & 3 mastered</p>
       </div>
-      <div class="card p-3.5 sm:p-5 rounded-xl reveal">
-        <div class="flex items-center gap-1.5 mb-1.5"><span class="led cyan"></span><span class="font-mono text-[9px] sm:text-[10px] tracking-widest uppercase font-bold" style="color:var(--dim)">LABS</span></div>
+      <div class="card p-3 sm:p-5 rounded-xl reveal">
+        <div class="flex items-center gap-1.5 mb-1"><span class="led cyan"></span><span class="font-mono text-[9px] tracking-widest uppercase font-bold" style="color:var(--dim)">LABS</span></div>
         <div class="stat-num" data-count="11">0</div>
-        <p class="text-[11px] sm:text-xs mt-1" style="color:var(--dim)">Enterprise Cisco IOS</p>
+        <p class="text-[10px] sm:text-xs mt-0.5" style="color:var(--dim)">Enterprise Cisco IOS</p>
       </div>
-      <div class="card p-3.5 sm:p-5 rounded-xl reveal">
-        <div class="flex items-center gap-1.5 mb-1.5"><span class="led amber"></span><span class="font-mono text-[9px] sm:text-[10px] tracking-widest uppercase font-bold" style="color:var(--dim)">FAILOVER</span></div>
+      <div class="card p-3 sm:p-5 rounded-xl reveal">
+        <div class="flex items-center gap-1.5 mb-1"><span class="led amber"></span><span class="font-mono text-[9px] tracking-widest uppercase font-bold" style="color:var(--dim)">FAILOVER</span></div>
         <div class="stat-num" data-count="100">0</div>
-        <p class="text-[11px] sm:text-xs mt-1" style="color:var(--dim)">% HSRP & STP tested</p>
+        <p class="text-[10px] sm:text-xs mt-0.5" style="color:var(--dim)">% HSRP & STP tested</p>
       </div>
-      <div class="card p-3.5 sm:p-5 rounded-xl reveal">
-        <div class="flex items-center gap-1.5 mb-1.5"><span class="led"></span><span class="font-mono text-[9px] sm:text-[10px] tracking-widest uppercase font-bold" style="color:var(--dim)">CGPA</span></div>
+      <div class="card p-3 sm:p-5 rounded-xl reveal">
+        <div class="flex items-center gap-1.5 mb-1"><span class="led"></span><span class="font-mono text-[9px] tracking-widest uppercase font-bold" style="color:var(--dim)">CGPA</span></div>
         <div class="stat-num">3.58</div>
-        <p class="text-[11px] sm:text-xs mt-1" style="color:var(--dim)">BSc CS — 7th sem</p>
+        <p class="text-[10px] sm:text-xs mt-0.5" style="color:var(--dim)">BSc CS — 7th sem</p>
       </div>
     </div>
   </div>
@@ -583,13 +618,77 @@
 <!-- ===================== SECTION 01: ABOUT / OPERATOR DOSSIER ===================== -->
 <section id="about" class="section">
   <div class="max-w-7xl mx-auto px-4 sm:px-6">
-    <div class="grid lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
-      
-      <!-- Left Column: Narrative & Engineering Tenets -->
-      <div class="lg:col-span-7 space-y-5 sm:space-y-6 reveal flex flex-col justify-between">
+    
+    <!-- MOBILE VIEW (< 768px) -->
+    <div class="block md:hidden space-y-4">
+      <span class="section-label">// 01_operator_dossier</span>
+      <h2 class="font-display text-2xl font-bold leading-tight" style="color:var(--text)">
+        Routing packets is what I do — <span style="color:var(--cyan)">reliability is my protocol.</span>
+      </h2>
+      <p class="text-xs leading-relaxed" style="color:var(--muted); font-weight:500;">
+        CCNA-certified Computer Science student (7th sem, CGPA 3.58) based in Goes, NL. I specialize in resilient L3 routing fabrics (Multi-Area OSPF, EIGRP, HSRP) and hardening Layer 2 campus switches against loops and rogue root bridges.
+      </p>
+
+      <!-- Ultra-Compact 2x2 Telemetry HUD Grid -->
+      <div class="grid grid-cols-2 gap-2 pt-1">
+        <div class="card p-2.5 rounded-lg">
+          <div class="flex items-center justify-between text-[9px] font-mono text-dim font-bold mb-0.5"><span>LOCATION</span><i class="fa-solid fa-location-dot text-cyan-400"></i></div>
+          <p class="font-display font-bold text-xs" style="color:var(--text)">Goes, Zeeland</p>
+          <p class="text-[9px] font-mono" style="color:var(--dim)">NL (Remote/On-site)</p>
+        </div>
+        <div class="card p-2.5 rounded-lg">
+          <div class="flex items-center justify-between text-[9px] font-mono text-dim font-bold mb-0.5"><span>CREDENTIAL</span><i class="fa-solid fa-certificate text-emerald-400"></i></div>
+          <p class="font-display font-bold text-xs" style="color:var(--emerald)">CCNA 200-301</p>
+          <p class="text-[9px] font-mono" style="color:var(--dim)">Cisco ID [Verified]</p>
+        </div>
+        <div class="card p-2.5 rounded-lg">
+          <div class="flex items-center justify-between text-[9px] font-mono text-dim font-bold mb-0.5"><span>ACADEMICS</span><i class="fa-solid fa-graduation-cap text-cyan-400"></i></div>
+          <p class="font-display font-bold text-xs" style="color:var(--text)">BSc CS (7th)</p>
+          <p class="text-[9px] font-mono" style="color:var(--dim)">CGPA: 3.58 / 4.0</p>
+        </div>
+        <div class="card p-2.5 rounded-lg">
+          <div class="flex items-center justify-between text-[9px] font-mono text-dim font-bold mb-0.5"><span>TARGET ROLE</span><i class="fa-solid fa-briefcase text-amber-400"></i></div>
+          <p class="font-display font-bold text-xs" style="color:var(--amber)">Junior NetEng</p>
+          <p class="text-[9px] font-mono" style="color:var(--dim)">NOC / Enterprise</p>
+        </div>
+      </div>
+
+      <!-- Work Authorization Badge -->
+      <div class="card p-2.5 rounded-lg border flex items-center justify-between" style="background:rgba(16,185,129,0.06); border-color:rgba(16,185,129,0.35)">
+        <div class="flex items-center gap-2 font-mono text-[10px]">
+          <i class="fa-solid fa-passport text-xs text-emerald-400"></i>
+          <span style="color:var(--text)"><strong>W-Doc:</strong> Legally authorized to work in NL</span>
+        </div>
+        <span class="font-mono text-[8px] px-1.5 py-0.5 rounded font-bold" style="background:var(--emerald); color:#001019">LEGAL</span>
+      </div>
+
+      <!-- Progressive Disclosure: Engineering Tenets -->
+      <button onclick="toggleTenets()" class="w-full card p-2.5 rounded-lg flex items-center justify-between text-xs font-mono font-bold" style="color:var(--cyan); background:var(--surface-2)">
+        <span><i class="fa-solid fa-code-branch mr-1.5"></i>Engineering Tenets</span>
+        <i id="tenets-chevron" class="fa-solid fa-chevron-down text-[10px] transition-transform"></i>
+      </button>
+      <div id="mobile-tenets-body" class="hidden space-y-2 pt-1 font-mono text-[11px]">
+        <div class="p-2.5 rounded border card" style="border-color:var(--border)">
+          <span class="text-emerald-400 font-bold block mb-0.5">01. ROUTING FABRIC</span>
+          Deterministic OSPF/EIGRP convergence & WAN ECMP.
+        </div>
+        <div class="p-2.5 rounded border card" style="border-color:var(--border)">
+          <span class="text-cyan-400 font-bold block mb-0.5">02. HIGH AVAILABILITY</span>
+          Sub-second HSRP active/standby failover with preemption.
+        </div>
+        <div class="p-2.5 rounded border card" style="border-color:var(--border)">
+          <span class="text-rose-400 font-bold block mb-0.5">03. LAYER 2 DEFENSE</span>
+          STP Root/Loop Guard & MAC limit flood mitigation.
+        </div>
+      </div>
+    </div>
+
+    <!-- DESKTOP VIEW (≥ 768px) -->
+    <div class="hidden md:grid lg:grid-cols-12 gap-8 lg:gap-10 items-stretch">
+      <div class="lg:col-span-7 space-y-6 reveal flex flex-col justify-between">
         <div>
           <span class="section-label">// 01_operator_dossier</span>
-          <h2 class="font-display text-2xl sm:text-3xl md:text-5xl font-bold leading-tight mt-2" style="color:var(--text)">
+          <h2 class="font-display text-3xl md:text-5xl font-bold leading-tight mt-2" style="color:var(--text)">
             Routing packets is what I do —<br/>
             <span style="color:var(--cyan)">reliability is the protocol I live by.</span>
           </h2>
@@ -597,17 +696,16 @@
           <p class="leading-relaxed text-sm sm:text-base mt-3.5" style="color:var(--muted); font-weight:500;">
             I'm a CCNA-certified Computer Science student (7th semester, CGPA 3.58) based in Goes, Zeeland, Netherlands. My hands-on lab work focuses on building resilient Layer 3 routing fabrics (Multi-Area OSPF, EIGRP, HSRP) and hardening Layer 2 campus networks against loops and rogue switches.
           </p>
-          <p class="leading-relaxed text-xs sm:text-sm mt-2.5" style="color:var(--muted);">
+          <p class="leading-relaxed text-sm mt-2.5" style="color:var(--muted);">
             Beyond standard configuration, I specialize in <strong style="color:var(--text)">deterministic failure mitigation</strong>: ensuring HSRP preemption functions symmetrically across WAN boundaries, STP Root Guard insulates core topologies from rogue priority 0 bridges, and Port Security locks down CAM tables against flood exhaustion.
           </p>
         </div>
 
-        <!-- Engineering Tenets Box -->
-        <div class="card p-3.5 sm:p-4 rounded-xl border mt-2" style="background:var(--surface-2)">
+        <div class="card p-4 rounded-xl border mt-2" style="background:var(--surface-2)">
           <div class="text-xs font-mono font-bold mb-2.5 flex items-center gap-2" style="color:var(--cyan)">
             <i class="fa-solid fa-code-branch"></i> CORE ENGINEERING TENETS
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-3 font-mono text-xs" style="color:var(--muted)">
+          <div class="grid grid-cols-3 gap-3 font-mono text-xs" style="color:var(--muted)">
             <div class="p-2.5 rounded border flex flex-col justify-center" style="background:var(--surface); border-color:var(--border)">
               <span class="text-emerald-400 font-bold block mb-0.5">01. ROUTING</span>
               Deterministic OSPF/EIGRP convergence & ECMP.
@@ -624,96 +722,89 @@
         </div>
       </div>
 
-      <!-- Right Column: High-Density Telemetry HUD Cards -->
       <div class="lg:col-span-5 flex flex-col justify-between gap-3 reveal">
-        
-        <!-- Live Status Bar -->
-        <div class="card p-3 sm:p-4 rounded-xl flex items-center justify-between border" style="background:var(--surface)">
+        <div class="card p-4 rounded-xl flex items-center justify-between border" style="background:var(--surface)">
           <div class="flex items-center gap-2.5">
             <span class="led"></span>
             <div>
               <span class="font-mono text-[9px] tracking-widest block font-bold" style="color:var(--dim)">OPERATOR TELEMETRY</span>
-              <span class="font-display font-bold text-xs sm:text-sm" style="color:var(--text)">STATUS: ACTIVE / READY FOR WORK</span>
+              <span class="font-display font-bold text-sm" style="color:var(--text)">STATUS: ACTIVE / READY FOR WORK</span>
             </div>
           </div>
           <span class="font-mono text-[10px] font-bold px-2 py-0.5 rounded" style="background:rgba(6,182,212,0.1); color:var(--cyan); border:1px solid rgba(6,182,212,0.3)">NL 🇳🇱</span>
         </div>
 
-        <!-- 2x2 High-Density HUD Cards -->
-        <div class="grid grid-cols-2 gap-2.5 sm:gap-3 flex-1">
-          <div class="card p-3 sm:p-4 rounded-xl flex flex-col justify-between">
+        <div class="grid grid-cols-2 gap-3 flex-1">
+          <div class="card p-4 rounded-xl flex flex-col justify-between">
             <div class="flex items-center justify-between mb-1.5">
               <span class="font-mono text-[9px] tracking-widest font-bold" style="color:var(--dim)">LOCATION</span>
               <i class="fa-solid fa-location-dot text-xs" style="color:var(--cyan)"></i>
             </div>
             <div>
-              <p class="font-display font-bold text-sm sm:text-base" style="color:var(--text)">Goes, Zeeland</p>
+              <p class="font-display font-bold text-base" style="color:var(--text)">Goes, Zeeland</p>
               <p class="text-[11px] font-mono mt-0.5" style="color:var(--muted)">NL (Randstad / Remote)</p>
             </div>
           </div>
 
-          <div class="card p-3 sm:p-4 rounded-xl flex flex-col justify-between">
+          <div class="card p-4 rounded-xl flex flex-col justify-between">
             <div class="flex items-center justify-between mb-1.5">
               <span class="font-mono text-[9px] tracking-widest font-bold" style="color:var(--dim)">CREDENTIAL</span>
               <i class="fa-solid fa-certificate text-xs" style="color:var(--emerald)"></i>
             </div>
             <div>
-              <p class="font-display font-bold text-sm sm:text-base" style="color:var(--emerald)">CCNA 200-301</p>
+              <p class="font-display font-bold text-base" style="color:var(--emerald)">CCNA 200-301</p>
               <p class="text-[11px] font-mono mt-0.5" style="color:var(--muted)">Cisco ID [Verified]</p>
             </div>
           </div>
 
-          <div class="card p-3 sm:p-4 rounded-xl flex flex-col justify-between">
+          <div class="card p-4 rounded-xl flex flex-col justify-between">
             <div class="flex items-center justify-between mb-1.5">
               <span class="font-mono text-[9px] tracking-widest font-bold" style="color:var(--dim)">ACADEMICS</span>
               <i class="fa-solid fa-graduation-cap text-xs" style="color:var(--cyan)"></i>
             </div>
             <div>
-              <p class="font-display font-bold text-sm sm:text-base" style="color:var(--text)">B.Sc. CS (7th)</p>
+              <p class="font-display font-bold text-base" style="color:var(--text)">B.Sc. CS (7th)</p>
               <p class="text-[11px] font-mono mt-0.5" style="color:var(--muted)">CGPA: 3.58 / 4.00</p>
             </div>
           </div>
 
-          <div class="card p-3 sm:p-4 rounded-xl flex flex-col justify-between">
+          <div class="card p-4 rounded-xl flex flex-col justify-between">
             <div class="flex items-center justify-between mb-1.5">
               <span class="font-mono text-[9px] tracking-widest font-bold" style="color:var(--dim)">TARGET ROLE</span>
               <i class="fa-solid fa-briefcase text-xs" style="color:var(--amber)"></i>
             </div>
             <div>
-              <p class="font-display font-bold text-sm sm:text-base" style="color:var(--amber)">Junior NetEng</p>
+              <p class="font-display font-bold text-base" style="color:var(--amber)">Junior NetEng</p>
               <p class="text-[11px] font-mono mt-0.5" style="color:var(--muted)">Enterprise / NOC / MSP</p>
             </div>
           </div>
         </div>
 
-        <!-- Work Authorization Banner -->
         <div class="card p-3 rounded-xl border flex items-center justify-between" style="background:rgba(16,185,129,0.06); border-color:rgba(16,185,129,0.35)">
-          <div class="flex items-center gap-2 font-mono text-[11px] sm:text-xs">
+          <div class="flex items-center gap-2 font-mono text-xs">
             <i class="fa-solid fa-passport text-xs text-emerald-400"></i>
             <span style="color:var(--text)"><strong>W-Doc:</strong> Legally authorized to work in NL</span>
           </div>
           <span class="font-mono text-[9px] px-2 py-0.5 rounded font-bold" style="background:var(--emerald); color:#001019">LEGAL</span>
         </div>
-
       </div>
-
     </div>
+
   </div>
 </section>
 
 <!-- ===================== SECTION 02: INTERACTIVE CLI ===================== -->
 <section id="cli" class="section border-y relative overflow-hidden" style="background:var(--bg-2); border-color:var(--border)">
-  <!-- Canvas particle background -->
   <canvas id="terminal-canvas" class="absolute inset-0 w-full h-full pointer-events-none z-0"></canvas>
 
   <div class="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 font-mono text-xs sm:text-sm">
-    <div class="text-center mb-6 sm:mb-8 reveal">
+    <div class="text-center mb-5 sm:mb-8 reveal">
       <span class="section-label center">// 02_portfolio_os</span>
-      <h2 class="font-display text-2xl sm:text-3xl md:text-5xl font-bold mt-2 leading-tight" style="color:var(--text)">Interactive Terminal Console</h2>
-      <p class="text-xs sm:text-sm mt-1.5 font-mono" style="color:var(--muted)">Explore my bio, technical skills, 11 enterprise labs, and credentials via command line.</p>
+      <h2 class="font-display text-2xl sm:text-4xl md:text-5xl font-bold mt-1.5 leading-tight" style="color:var(--text)">Interactive Terminal Console</h2>
+      <p class="text-xs sm:text-sm mt-1 font-mono" style="color:var(--muted)">Query credentials, protocols, topologies & career history via command line.</p>
 
-      <!-- Horizontal Touch-Scrolling Command Rail for Mobile -->
-      <div class="mt-5 flex gap-2 overflow-x-auto no-scrollbar py-1 px-1 -mx-2 sm:mx-0 sm:flex-wrap sm:justify-center">
+      <!-- Command Chips Rail -->
+      <div class="mt-4 flex gap-1.5 overflow-x-auto no-scrollbar py-1 px-1 -mx-2 sm:mx-0 sm:flex-wrap sm:justify-center">
         <button onclick="executeQuickCommand('about')" class="chip">about</button>
         <button onclick="executeQuickCommand('skills')" class="chip">skills</button>
         <button onclick="executeQuickCommand('projects')" class="chip">projects</button>
@@ -725,28 +816,28 @@
       </div>
     </div>
 
-    <!-- Terminal Window -->
+    <!-- Terminal Container -->
     <div class="terminal rounded-xl overflow-hidden shadow-2xl reveal border" style="border-color:var(--border-bright)">
-      <div class="flex items-center justify-between px-3.5 sm:px-4 py-2.5 sm:py-3 border-b" style="border-color:var(--border); background:var(--terminal-bar)">
+      <div class="flex items-center justify-between px-3.5 sm:px-4 py-2.5 border-b" style="border-color:var(--border); background:var(--terminal-bar)">
         <div class="flex items-center gap-2">
-          <span class="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full" style="background:rgba(244,63,94,0.85)"></span>
-          <span class="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full" style="background:rgba(245,158,11,0.85)"></span>
-          <span class="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full" style="background:rgba(16,185,129,0.85)"></span>
+          <span class="w-2.5 h-2.5 rounded-full" style="background:rgba(244,63,94,0.85)"></span>
+          <span class="w-2.5 h-2.5 rounded-full" style="background:rgba(245,158,11,0.85)"></span>
+          <span class="w-2.5 h-2.5 rounded-full" style="background:rgba(16,185,129,0.85)"></span>
           <span class="font-mono text-[10px] sm:text-[11px] ml-2 font-semibold" style="color:var(--dim)">saim@portfolio-os:~#</span>
         </div>
-        <span class="text-[9px] sm:text-[10px] flex items-center gap-1.5 font-bold" style="color:var(--cyan)"><span class="led"></span>SESSION ONLINE</span>
+        <span class="text-[9px] sm:text-[10px] flex items-center gap-1.5 font-bold" style="color:var(--cyan)"><span class="led"></span>ONLINE</span>
       </div>
 
-      <div id="terminal-body" class="p-3.5 sm:p-5 h-72 sm:h-80 overflow-y-auto terminal-scrollbar space-y-1.5 text-xs sm:text-sm" style="background:var(--terminal-bg); color:var(--term-text)">
+      <div id="terminal-body" class="p-3.5 sm:p-5 h-64 sm:h-80 overflow-y-auto terminal-scrollbar space-y-1.5 text-xs sm:text-sm" style="background:var(--terminal-bg); color:var(--term-text)">
         <p style="color:var(--cyan)" class="font-bold">Abdul Wahab Saim // Portfolio Terminal v2.6</p>
         <p style="color:var(--dim)">Type <span style="color:var(--emerald)" class="font-bold">help</span> or tap any command chip above.</p>
         <div id="terminal-history" class="mt-2"></div>
       </div>
 
-      <div class="px-3.5 sm:px-4 py-2.5 sm:py-3 border-t flex items-center gap-2" style="border-color:var(--border); background:var(--terminal-bar)">
+      <div class="px-3.5 sm:px-4 py-2.5 border-t flex items-center gap-2" style="border-color:var(--border); background:var(--terminal-bar)">
         <span class="font-bold select-none text-xs sm:text-sm" style="color:var(--emerald)">saim@portfolio:~$</span>
-        <!-- font-size 16px on mobile prevents auto zoom in iOS Safari -->
-        <input type="text" id="terminal-input" class="bg-transparent flex-1 font-mono text-base sm:text-sm focus:outline-none" style="color:var(--text)" placeholder="type 'about', 'skills', or 'projects'..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+        <!-- 16px on mobile prevents auto-zoom in iOS Safari -->
+        <input type="text" id="terminal-input" class="bg-transparent flex-1 font-mono text-base md:text-sm focus:outline-none" style="color:var(--text)" placeholder="type 'about', 'skills', or 'projects'..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
       </div>
     </div>
   </div>
@@ -755,10 +846,10 @@
 <!-- ===================== SECTION 03: SKILLS ===================== -->
 <section id="skills" class="section">
   <div class="max-w-7xl mx-auto px-4 sm:px-6">
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-8 sm:mb-12 reveal">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 sm:gap-6 mb-6 sm:mb-12 reveal">
       <div>
         <span class="section-label">// 03_technical_stack</span>
-        <h2 class="font-display text-2xl sm:text-4xl md:text-5xl font-bold mt-2 leading-tight" style="color:var(--text)">Protocol Suite &<br/><span style="color:var(--cyan)">Configuration Domains</span></h2>
+        <h2 class="font-display text-2xl sm:text-4xl md:text-5xl font-bold mt-1.5 leading-tight" style="color:var(--text)">Protocol Suite &<br/><span style="color:var(--cyan)">Configuration Domains</span></h2>
       </div>
       <p class="max-w-md text-xs sm:text-sm leading-relaxed" style="color:var(--muted)">Every domain below has been configured, stress-tested, and verified at the packet level in Cisco IOS lab environments.</p>
     </div>
@@ -767,43 +858,43 @@
     <div id="skills-carousel" class="mobile-snap-track no-scrollbar md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-5">
       
       <!-- Card 1 -->
-      <div class="mobile-snap-item card p-5 sm:p-6 rounded-xl w-[85vw] max-w-[340px] md:w-auto md:max-w-none" data-tilt>
-        <div class="flex items-start justify-between mb-4"><div class="w-10 h-10 rounded-lg flex items-center justify-center text-base" style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); color:var(--cyan)"><i class="fa-solid fa-route"></i></div><span class="font-mono text-[10px] sm:text-xs font-bold" style="color:var(--cyan)">L3 ROUTING</span></div>
+      <div class="mobile-snap-item card p-4 sm:p-6 rounded-xl w-[82vw] max-w-[320px] md:w-auto md:max-w-none" data-tilt>
+        <div class="flex items-start justify-between mb-3"><div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center text-sm sm:text-base" style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); color:var(--cyan)"><i class="fa-solid fa-route"></i></div><span class="font-mono text-[10px] font-bold" style="color:var(--cyan)">L3 ROUTING</span></div>
         <h3 class="font-display font-semibold text-base sm:text-lg mb-0.5" style="color:var(--text)">Routing & High Availability</h3><p class="text-xs mb-3 font-mono" style="color:var(--dim)">// dynamic_transit</p>
         <div class="flex flex-wrap gap-1.5"><span class="tag"><span class="led"></span>OSPFv2 Multi-Area</span><span class="tag"><span class="led"></span>EIGRP AS 7</span><span class="tag"><span class="led"></span>HSRP v1/v2</span><span class="tag"><span class="led"></span>Multi-Hop Static</span><span class="tag"><span class="led"></span>ECMP Full-Mesh</span><span class="tag"><span class="led"></span>BGP Basics</span></div>
       </div>
 
       <!-- Card 2 -->
-      <div class="mobile-snap-item card p-5 sm:p-6 rounded-xl w-[85vw] max-w-[340px] md:w-auto md:max-w-none" data-tilt>
-        <div class="flex items-start justify-between mb-4"><div class="w-10 h-10 rounded-lg flex items-center justify-center text-base" style="background:rgba(244,63,94,0.1); border:1px solid rgba(244,63,94,0.3); color:var(--rose)"><i class="fa-solid fa-shield-halved"></i></div><span class="font-mono text-[10px] sm:text-xs font-bold" style="color:var(--rose)">L2 HARDENING</span></div>
+      <div class="mobile-snap-item card p-4 sm:p-6 rounded-xl w-[82vw] max-w-[320px] md:w-auto md:max-w-none" data-tilt>
+        <div class="flex items-start justify-between mb-3"><div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center text-sm sm:text-base" style="background:rgba(244,63,94,0.1); border:1px solid rgba(244,63,94,0.3); color:var(--rose)"><i class="fa-solid fa-shield-halved"></i></div><span class="font-mono text-[10px] font-bold" style="color:var(--rose)">L2 HARDENING</span></div>
         <h3 class="font-display font-semibold text-base sm:text-lg mb-0.5" style="color:var(--text)">Switching & Security</h3><p class="text-xs mb-3 font-mono" style="color:var(--dim)">// campus_defense</p>
         <div class="flex flex-wrap gap-1.5"><span class="tag"><span class="led amber"></span>802.1Q VLANs</span><span class="tag"><span class="led amber"></span>VTP Sync</span><span class="tag"><span class="led amber"></span>STP Root Guard</span><span class="tag"><span class="led amber"></span>STP Loop Guard</span><span class="tag"><span class="led amber"></span>Port Security</span><span class="tag"><span class="led amber"></span>Extended ACLs</span></div>
       </div>
 
       <!-- Card 3 -->
-      <div class="mobile-snap-item card p-5 sm:p-6 rounded-xl w-[85vw] max-w-[340px] md:w-auto md:max-w-none" data-tilt>
-        <div class="flex items-start justify-between mb-4"><div class="w-10 h-10 rounded-lg flex items-center justify-center text-base" style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); color:var(--emerald)"><i class="fa-solid fa-server"></i></div><span class="font-mono text-[10px] sm:text-xs font-bold" style="color:var(--emerald)">SERVICES</span></div>
+      <div class="mobile-snap-item card p-4 sm:p-6 rounded-xl w-[82vw] max-w-[320px] md:w-auto md:max-w-none" data-tilt>
+        <div class="flex items-start justify-between mb-3"><div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center text-sm sm:text-base" style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3); color:var(--emerald)"><i class="fa-solid fa-server"></i></div><span class="font-mono text-[10px] font-bold" style="color:var(--emerald)">SERVICES</span></div>
         <h3 class="font-display font-semibold text-base sm:text-lg mb-0.5" style="color:var(--text)">Core Network Services</h3><p class="text-xs mb-3 font-mono" style="color:var(--dim)">// app_infrastructure</p>
         <div class="flex flex-wrap gap-1.5"><span class="tag"><span class="led"></span>DHCP (D.O.R.A)</span><span class="tag"><span class="led"></span>DNS A-Records</span><span class="tag"><span class="led"></span>HTTP / HTTPS</span><span class="tag"><span class="led"></span>Option 82</span><span class="tag"><span class="led"></span>Catalyst 2960</span></div>
       </div>
 
       <!-- Card 4 -->
-      <div class="mobile-snap-item card p-5 sm:p-6 rounded-xl w-[85vw] max-w-[340px] md:w-auto md:max-w-none" data-tilt>
-        <div class="flex items-start justify-between mb-4"><div class="w-10 h-10 rounded-lg flex items-center justify-center text-base" style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); color:var(--amber)"><i class="fa-brands fa-linux"></i></div><span class="font-mono text-[10px] sm:text-xs font-bold" style="color:var(--amber)">LINUX / CLI</span></div>
+      <div class="mobile-snap-item card p-4 sm:p-6 rounded-xl w-[82vw] max-w-[320px] md:w-auto md:max-w-none" data-tilt>
+        <div class="flex items-start justify-between mb-3"><div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center text-sm sm:text-base" style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.3); color:var(--amber)"><i class="fa-brands fa-linux"></i></div><span class="font-mono text-[10px] font-bold" style="color:var(--amber)">LINUX / CLI</span></div>
         <h3 class="font-display font-semibold text-base sm:text-lg mb-0.5" style="color:var(--text)">Systems & Diagnostics</h3><p class="text-xs mb-3 font-mono" style="color:var(--dim)">// host_tooling</p>
         <div class="flex flex-wrap gap-1.5"><span class="tag"><span class="led cyan"></span>Ubuntu Linux</span><span class="tag"><span class="led cyan"></span>Wireshark</span><span class="tag"><span class="led cyan"></span>TCPDump</span><span class="tag"><span class="led cyan"></span>MTR / Traceroute</span><span class="tag"><span class="led cyan"></span>dig / nslookup</span></div>
       </div>
 
       <!-- Card 5 -->
-      <div class="mobile-snap-item card p-5 sm:p-6 rounded-xl w-[85vw] max-w-[340px] md:w-auto md:max-w-none" data-tilt>
-        <div class="flex items-start justify-between mb-4"><div class="w-10 h-10 rounded-lg flex items-center justify-center text-base" style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); color:var(--cyan)"><i class="fa-solid fa-code"></i></div><span class="font-mono text-[10px] sm:text-xs font-bold" style="color:var(--cyan)">DEVELOPMENT</span></div>
+      <div class="mobile-snap-item card p-4 sm:p-6 rounded-xl w-[82vw] max-w-[320px] md:w-auto md:max-w-none" data-tilt>
+        <div class="flex items-start justify-between mb-3"><div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center text-sm sm:text-base" style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.3); color:var(--cyan)"><i class="fa-solid fa-code"></i></div><span class="font-mono text-[10px] font-bold" style="color:var(--cyan)">DEVELOPMENT</span></div>
         <h3 class="font-display font-semibold text-base sm:text-lg mb-0.5" style="color:var(--text)">Scripting & Automation</h3><p class="text-xs mb-3 font-mono" style="color:var(--dim)">// automation_stack</p>
         <div class="flex flex-wrap gap-1.5"><span class="tag"><span class="led"></span>Python 3</span><span class="tag"><span class="led"></span>Scapy L2 Crafting</span><span class="tag"><span class="led"></span>Bash Scripting</span><span class="tag"><span class="led"></span>Git / GitHub</span><span class="tag"><span class="led"></span>Node.js</span></div>
       </div>
 
       <!-- Card 6 -->
-      <div class="mobile-snap-item card p-5 sm:p-6 rounded-xl w-[85vw] max-w-[340px] md:w-auto md:max-w-none" data-tilt>
-        <div class="flex items-start justify-between mb-4"><div class="w-10 h-10 rounded-lg flex items-center justify-center text-base" style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); color:var(--violet)"><i class="fa-solid fa-language"></i></div><span class="font-mono text-[10px] sm:text-xs font-bold" style="color:var(--violet)">COMMUNICATION</span></div>
+      <div class="mobile-snap-item card p-4 sm:p-6 rounded-xl w-[82vw] max-w-[320px] md:w-auto md:max-w-none" data-tilt>
+        <div class="flex items-start justify-between mb-3"><div class="w-9 h-9 sm:w-10 sm:h-10 rounded-lg flex items-center justify-center text-sm sm:text-base" style="background:rgba(168,85,247,0.1); border:1px solid rgba(168,85,247,0.3); color:var(--violet)"><i class="fa-solid fa-language"></i></div><span class="font-mono text-[10px] font-bold" style="color:var(--violet)">COMMUNICATION</span></div>
         <h3 class="font-display font-semibold text-base sm:text-lg mb-0.5" style="color:var(--text)">Languages</h3><p class="text-xs mb-3 font-mono" style="color:var(--dim)">// international</p>
         <div class="space-y-2.5 pt-1">
           <div><div class="flex justify-between text-xs mb-1 font-mono"><span style="color:var(--text)">English</span><span class="font-bold" style="color:var(--emerald)">B2 (Professional)</span></div><div class="h-1 rounded-full overflow-hidden" style="background:var(--border)"><div class="h-full" style="width:80%; background:var(--emerald)"></div></div></div>
@@ -814,8 +905,8 @@
 
     </div>
 
-    <!-- Mobile Carousel Indicator Bar -->
-    <div class="flex md:hidden items-center justify-between pt-2 px-2">
+    <!-- Mobile Indicator Dots -->
+    <div class="flex md:hidden items-center justify-between pt-1 px-1">
       <div id="skills-dots" class="flex gap-1.5">
         <span class="carousel-dot active"></span>
         <span class="carousel-dot"></span>
@@ -824,7 +915,7 @@
         <span class="carousel-dot"></span>
         <span class="carousel-dot"></span>
       </div>
-      <span id="skills-counter" class="font-mono text-[11px] font-bold" style="color:var(--dim)">01 / 06</span>
+      <span id="skills-counter" class="font-mono text-[10px] font-bold" style="color:var(--dim)">01 / 06</span>
     </div>
   </div>
 </section>
@@ -832,19 +923,19 @@
 <!-- ===================== SECTION 04: LAB TOPOLOGIES ===================== -->
 <section id="projects" class="section border-y" style="background:var(--bg-2); border-color:var(--border)">
   <div class="max-w-7xl mx-auto px-4 sm:px-6">
-    <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6 mb-8 sm:mb-12 reveal">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-3 sm:gap-6 mb-6 sm:mb-12 reveal">
       <div>
         <span class="section-label">// 04_deployed_topologies</span>
-        <h2 class="font-display text-2xl sm:text-4xl md:text-5xl font-bold mt-2 leading-tight" style="color:var(--text)">Lab Topologies &<br/><span style="color:var(--cyan)">Hardened Architectures</span></h2>
+        <h2 class="font-display text-2xl sm:text-4xl md:text-5xl font-bold mt-1.5 leading-tight" style="color:var(--text)">Lab Topologies &<br/><span style="color:var(--cyan)">Hardened Architectures</span></h2>
       </div>
-      <p class="max-w-md text-xs sm:text-sm leading-relaxed font-mono" style="color:var(--muted)">Each topology below was designed, configured, and stress-tested across Cisco IOS devices. The interactive diagrams represent verified production configurations.</p>
+      <p class="max-w-md text-xs sm:text-sm leading-relaxed font-mono" style="color:var(--muted)">Each topology was designed, configured, and stress-tested across Cisco IOS devices in production-grade labs.</p>
     </div>
 
     <!-- Mobile Scroll-Snap Carousel / Desktop 3-Card Grid -->
     <div id="projects-carousel" class="mobile-snap-track no-scrollbar lg:grid lg:grid-cols-3 lg:gap-6">
 
       <!-- CARD 1: ENTERPRISE ROUTING -->
-      <article class="mobile-snap-item card rounded-xl overflow-hidden flex flex-col justify-between w-[88vw] max-w-[420px] lg:w-auto lg:max-w-none" data-tilt>
+      <article class="mobile-snap-item card rounded-xl overflow-hidden flex flex-col justify-between w-[85vw] max-w-[380px] lg:w-auto lg:max-w-none" data-tilt>
         <div class="relative border-b aspect-[16/10] overflow-hidden" style="background:var(--topo-box); border-color:var(--border)">
           <div class="absolute inset-0 grid-bg opacity-40"></div>
           <svg viewBox="0 0 400 270" class="absolute inset-0 w-full h-full">
@@ -879,39 +970,38 @@
               <g><circle cx="320" cy="220" r="6" fill="var(--hero-node-bg)" stroke="var(--cyan)" stroke-width="1.5"/><text x="320" y="238" text-anchor="middle" fill="var(--cyan)" font-weight="bold">SRV</text></g>
             </g>
           </svg>
-          <div class="absolute top-2.5 left-3 font-mono text-[9px] tracking-widest font-semibold" style="color:var(--dim)">TOPOLOGY_ID: 001</div>
-          <div class="absolute top-2.5 right-3 flex items-center gap-1 px-2 py-0.5 rounded" style="background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.35)">
-            <span class="led"></span><span class="font-mono text-[9px] font-bold" style="color:var(--emerald)">CONVERGED</span>
+          <div class="absolute top-2 left-2.5 font-mono text-[9px] tracking-widest font-semibold" style="color:var(--dim)">TOPOLOGY_ID: 001</div>
+          <div class="absolute top-2 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded" style="background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.35)">
+            <span class="led"></span><span class="font-mono text-[8px] font-bold" style="color:var(--emerald)">CONVERGED</span>
           </div>
         </div>
-        <div class="p-5 sm:p-6 space-y-4 flex-1 flex flex-col justify-between">
+        <div class="p-4 sm:p-6 space-y-3.5 flex-1 flex flex-col justify-between">
           <div>
-            <div class="flex items-start justify-between gap-2 mb-2">
+            <div class="flex items-start justify-between gap-2 mb-1.5">
               <div>
-                <h3 class="font-display text-lg sm:text-xl font-bold" style="color:var(--text)">Enterprise High-Availability & Routing</h3>
-                <p class="text-xs font-mono mt-0.5" style="color:var(--dim)">// multi-node redundant core</p>
+                <h3 class="font-display text-base sm:text-xl font-bold" style="color:var(--text)">Enterprise High-Availability & Routing</h3>
+                <p class="text-[11px] font-mono" style="color:var(--dim)">// multi-node redundant core</p>
               </div>
-              <span class="font-mono text-[9px] sm:text-[10px] px-2 py-0.5 rounded whitespace-nowrap font-bold" style="color:var(--cyan); border:1px solid rgba(6,182,212,0.35)">HSRP/OSPF</span>
+              <span class="font-mono text-[9px] px-1.5 py-0.5 rounded whitespace-nowrap font-bold" style="color:var(--cyan); border:1px solid rgba(6,182,212,0.35)">HSRP/OSPF</span>
             </div>
-            <ul class="space-y-2 text-xs sm:text-sm my-3 font-sans" style="color:var(--muted)">
-              <li class="flex items-start gap-2"><span style="color:var(--cyan)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">Multi-Area OSPFv2:</strong> Hierarchical Area 0/1 backbone with ABR Type-3 LSAs.</span></li>
-              <li class="flex items-start gap-2"><span style="color:var(--cyan)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">EIGRP AS 7:</strong> Composite metric calculation and DUAL loop-free convergence.</span></li>
-              <li class="flex items-start gap-2"><span style="color:var(--cyan)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">Dual-Segment HSRPv2:</strong> Active/Standby gateway failover with preemption.</span></li>
-              <li class="flex items-start gap-2"><span style="color:var(--cyan)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">5-Node WAN Mesh:</strong> Equal-Cost Multi-Path (ECMP) traffic load balancing.</span></li>
-              <li class="flex items-start gap-2"><span style="color:var(--cyan)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">Multi-Hop Static:</strong> Symmetrical return paths & recursive lookups.</span></li>
+            <ul class="space-y-1.5 text-xs font-sans" style="color:var(--muted)">
+              <li class="flex items-start gap-1.5"><span style="color:var(--cyan)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">Multi-Area OSPFv2:</strong> Hierarchical Area 0/1 backbone with Type-3 LSAs.</span></li>
+              <li class="flex items-start gap-1.5"><span style="color:var(--cyan)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">EIGRP AS 7:</strong> Composite metric calculation & DUAL convergence.</span></li>
+              <li class="flex items-start gap-1.5"><span style="color:var(--cyan)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">Dual HSRPv2:</strong> Active/Standby gateway failover with preemption.</span></li>
+              <li class="flex items-start gap-1.5"><span style="color:var(--cyan)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">5-Node WAN Mesh:</strong> ECMP traffic load balancing.</span></li>
             </ul>
           </div>
           <div>
-            <div class="flex flex-wrap gap-1.5 pt-3 border-t mb-3" style="border-color:var(--border)">
-              <span class="tag">OSPFv2</span><span class="tag">EIGRP AS 7</span><span class="tag">HSRP v2</span><span class="tag">ECMP WAN</span><span class="tag">Static</span><span class="tag">5 Labs</span>
+            <div class="flex flex-wrap gap-1 pt-2.5 border-t mb-2.5" style="border-color:var(--border)">
+              <span class="tag">OSPFv2</span><span class="tag">EIGRP AS 7</span><span class="tag">HSRP v2</span><span class="tag">ECMP</span><span class="tag">5 Labs</span>
             </div>
-            <a href="https://github.com/abdulwahabsaim/enterprise-routing-labs" target="_blank" rel="noopener" class="btn btn-ghost btn-sm w-full justify-center" data-hover-btn>Launch Repository <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i></a>
+            <a href="https://github.com/abdulwahabsaim/enterprise-routing-labs" target="_blank" rel="noopener" class="btn btn-ghost btn-sm w-full justify-center" data-hover-btn>Launch Repository <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1"></i></a>
           </div>
         </div>
       </article>
 
       <!-- CARD 2: LAYER 2 SECURITY -->
-      <article class="mobile-snap-item card rounded-xl overflow-hidden flex flex-col justify-between w-[88vw] max-w-[420px] lg:w-auto lg:max-w-none" data-tilt>
+      <article class="mobile-snap-item card rounded-xl overflow-hidden flex flex-col justify-between w-[85vw] max-w-[380px] lg:w-auto lg:max-w-none" data-tilt>
         <div class="relative border-b aspect-[16/10] overflow-hidden" style="background:var(--topo-box); border-color:var(--border)">
           <div class="absolute inset-0 grid-bg opacity-40"></div>
           <svg viewBox="0 0 400 270" class="absolute inset-0 w-full h-full">
@@ -934,42 +1024,40 @@
               <g><circle cx="140" cy="210" r="6" fill="var(--hero-node-bg)" stroke="var(--dim)" stroke-width="1.2"/><text x="140" y="228" text-anchor="middle" fill="var(--dim)">PC2</text></g>
               <g><circle cx="260" cy="210" r="6" fill="var(--hero-node-bg)" stroke="var(--dim)" stroke-width="1.2"/><text x="260" y="228" text-anchor="middle" fill="var(--dim)">PC3</text></g>
               <g><circle cx="330" cy="210" r="6" fill="var(--hero-node-bg)" stroke="var(--dim)" stroke-width="1.2"/><text x="330" y="228" text-anchor="middle" fill="var(--dim)">PC4</text></g>
-              <g transform="translate(200,165)"><path d="M0,-9 L7,-5 L7,2 L0,9 L-7,2 L-7,-5 Z" fill="var(--hero-node-bg)" stroke="#f43f5e" stroke-width="1.2"/></g>
             </g>
           </svg>
-          <div class="absolute top-2.5 left-3 font-mono text-[9px] tracking-widest font-semibold" style="color:var(--dim)">TOPOLOGY_ID: 002</div>
-          <div class="absolute top-2.5 right-3 flex items-center gap-1 px-2 py-0.5 rounded" style="background:rgba(244,63,94,0.12); border:1px solid rgba(244,63,94,0.35)">
-            <span class="led rose"></span><span class="font-mono text-[9px] font-bold" style="color:var(--rose)">HARDENED</span>
+          <div class="absolute top-2 left-2.5 font-mono text-[9px] tracking-widest font-semibold" style="color:var(--dim)">TOPOLOGY_ID: 002</div>
+          <div class="absolute top-2 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded" style="background:rgba(244,63,94,0.12); border:1px solid rgba(244,63,94,0.35)">
+            <span class="led rose"></span><span class="font-mono text-[8px] font-bold" style="color:var(--rose)">HARDENED</span>
           </div>
         </div>
-        <div class="p-5 sm:p-6 space-y-4 flex-1 flex flex-col justify-between">
+        <div class="p-4 sm:p-6 space-y-3.5 flex-1 flex flex-col justify-between">
           <div>
-            <div class="flex items-start justify-between gap-2 mb-2">
+            <div class="flex items-start justify-between gap-2 mb-1.5">
               <div>
-                <h3 class="font-display text-lg sm:text-xl font-bold" style="color:var(--text)">Layer 2 Campus Security & Hardening</h3>
-                <p class="text-xs font-mono mt-0.5" style="color:var(--dim)">// stp defense · rogue mitigation</p>
+                <h3 class="font-display text-base sm:text-xl font-bold" style="color:var(--text)">Layer 2 Campus Security & Hardening</h3>
+                <p class="text-[11px] font-mono" style="color:var(--dim)">// stp defense · rogue mitigation</p>
               </div>
-              <span class="font-mono text-[9px] sm:text-[10px] px-2 py-0.5 rounded whitespace-nowrap font-bold" style="color:var(--rose); border:1px solid rgba(244,63,94,0.35)">STP/PORT-SEC</span>
+              <span class="font-mono text-[9px] px-1.5 py-0.5 rounded whitespace-nowrap font-bold" style="color:var(--rose); border:1px solid rgba(244,63,94,0.35)">STP/PORT-SEC</span>
             </div>
-            <ul class="space-y-2 text-xs sm:text-sm my-3 font-sans" style="color:var(--muted)">
-              <li class="flex items-start gap-2"><span style="color:var(--rose)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">STP Root Guard:</strong> Defends against rogue Priority 0 Root Bridge hijacking (`ROOT_Inc`).</span></li>
-              <li class="flex items-start gap-2"><span style="color:var(--rose)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">STP Loop Guard:</strong> Prevents loops from unidirectional link failure & BPDU filter.</span></li>
-              <li class="flex items-start gap-2"><span style="color:var(--rose)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">Port Security:</strong> Dynamic, Static & Sticky MAC limits (Shutdown, Protect, Restrict).</span></li>
-              <li class="flex items-start gap-2"><span style="color:var(--rose)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">Extended ACL 105:</strong> Port-level filtering blocking insecure Telnet (TCP 23).</span></li>
-              <li class="flex items-start gap-2"><span style="color:var(--rose)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">802.1Q VLANs & VTP:</strong> Broadcast segmentation with Server/Client sync.</span></li>
+            <ul class="space-y-1.5 text-xs font-sans" style="color:var(--muted)">
+              <li class="flex items-start gap-1.5"><span style="color:var(--rose)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">STP Root Guard:</strong> Defends against rogue Priority 0 root hijacking.</span></li>
+              <li class="flex items-start gap-1.5"><span style="color:var(--rose)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">STP Loop Guard:</strong> Prevents loops from unidirectional link failure.</span></li>
+              <li class="flex items-start gap-1.5"><span style="color:var(--rose)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">Port Security:</strong> Sticky MAC limits (Shutdown, Protect, Restrict).</span></li>
+              <li class="flex items-start gap-1.5"><span style="color:var(--rose)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">Extended ACLs:</strong> Port filtering blocking Telnet (TCP 23).</span></li>
             </ul>
           </div>
           <div>
-            <div class="flex flex-wrap gap-1.5 pt-3 border-t mb-3" style="border-color:var(--border)">
-              <span class="tag">STP Root Guard</span><span class="tag">Loop Guard</span><span class="tag">Port Security</span><span class="tag">Extended ACLs</span><span class="tag">802.1Q VTP</span><span class="tag">5 Labs</span>
+            <div class="flex flex-wrap gap-1 pt-2.5 border-t mb-2.5" style="border-color:var(--border)">
+              <span class="tag">Root Guard</span><span class="tag">Loop Guard</span><span class="tag">Port Sec</span><span class="tag">ACL 105</span><span class="tag">5 Labs</span>
             </div>
-            <a href="https://github.com/abdulwahabsaim/layer2-security-labs" target="_blank" rel="noopener" class="btn btn-ghost btn-sm w-full justify-center" data-hover-btn>Launch Repository <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i></a>
+            <a href="https://github.com/abdulwahabsaim/layer2-security-labs" target="_blank" rel="noopener" class="btn btn-ghost btn-sm w-full justify-center" data-hover-btn>Launch Repository <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1"></i></a>
           </div>
         </div>
       </article>
 
       <!-- CARD 3: NETWORK SERVICES -->
-      <article class="mobile-snap-item card rounded-xl overflow-hidden flex flex-col justify-between w-[88vw] max-w-[420px] lg:w-auto lg:max-w-none" data-tilt>
+      <article class="mobile-snap-item card rounded-xl overflow-hidden flex flex-col justify-between w-[85vw] max-w-[380px] lg:w-auto lg:max-w-none" data-tilt>
         <div class="relative border-b aspect-[16/10] overflow-hidden" style="background:var(--topo-box); border-color:var(--border)">
           <div class="absolute inset-0 grid-bg opacity-40"></div>
           <svg viewBox="0 0 400 270" class="absolute inset-0 w-full h-full">
@@ -991,47 +1079,46 @@
               <g><circle cx="90" cy="180" r="8" fill="var(--hero-node-bg)" stroke="var(--dim)" stroke-width="1.2"/><text x="90" y="183" text-anchor="middle" fill="var(--dim)">PC1</text></g>
             </g>
           </svg>
-          <div class="absolute top-2.5 left-3 font-mono text-[9px] tracking-widest font-semibold" style="color:var(--dim)">TOPOLOGY_ID: 003</div>
-          <div class="absolute top-2.5 right-3 flex items-center gap-1 px-2 py-0.5 rounded" style="background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.35)">
-            <span class="led amber"></span><span class="font-mono text-[9px] font-bold" style="color:var(--amber)">ACTIVE</span>
+          <div class="absolute top-2 left-2.5 font-mono text-[9px] tracking-widest font-semibold" style="color:var(--dim)">TOPOLOGY_ID: 003</div>
+          <div class="absolute top-2 right-2.5 flex items-center gap-1 px-2 py-0.5 rounded" style="background:rgba(245,158,11,0.12); border:1px solid rgba(245,158,11,0.35)">
+            <span class="led amber"></span><span class="font-mono text-[8px] font-bold" style="color:var(--amber)">ACTIVE</span>
           </div>
         </div>
-        <div class="p-5 sm:p-6 space-y-4 flex-1 flex flex-col justify-between">
+        <div class="p-4 sm:p-6 space-y-3.5 flex-1 flex flex-col justify-between">
           <div>
-            <div class="flex items-start justify-between gap-2 mb-2">
+            <div class="flex items-start justify-between gap-2 mb-1.5">
               <div>
-                <h3 class="font-display text-lg sm:text-xl font-bold" style="color:var(--text)">Core Network Services & Infrastructure</h3>
-                <p class="text-xs font-mono mt-0.5" style="color:var(--dim)">// client lifecycle · dhcp & dns</p>
+                <h3 class="font-display text-base sm:text-xl font-bold" style="color:var(--text)">Core Network Services & Infrastructure</h3>
+                <p class="text-[11px] font-mono" style="color:var(--dim)">// client lifecycle · dhcp & dns</p>
               </div>
-              <span class="font-mono text-[9px] sm:text-[10px] px-2 py-0.5 rounded whitespace-nowrap font-bold" style="color:var(--amber); border:1px solid rgba(245,158,11,0.35)">SERVICES</span>
+              <span class="font-mono text-[9px] px-1.5 py-0.5 rounded whitespace-nowrap font-bold" style="color:var(--amber); border:1px solid rgba(245,158,11,0.35)">SERVICES</span>
             </div>
-            <ul class="space-y-2 text-xs sm:text-sm my-3 font-sans" style="color:var(--muted)">
-              <li class="flex items-start gap-2"><span style="color:var(--amber)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">Full Client Lifecycle:</strong> Dynamic lease negotiation, DNS resolution & HTTP rendering.</span></li>
-              <li class="flex items-start gap-2"><span style="color:var(--amber)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">DHCP Server:</strong> Automated pool distribution (<code class="font-mono text-xs">192.168.0.0/24</code>) with DNS options.</span></li>
-              <li class="flex items-start gap-2"><span style="color:var(--amber)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">DNS Authoritative Server:</strong> A-Record mapping <code class="font-mono text-xs">cisco.com</code> → <code class="font-mono text-xs">192.168.0.102</code>.</span></li>
-              <li class="flex items-start gap-2"><span style="color:var(--amber)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">HTTP/HTTPS Web Delivery:</strong> Application hosting over L2 Catalyst switched fabric.</span></li>
-              <li class="flex items-start gap-2"><span style="color:var(--amber)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">Verification Evidence:</strong> Validated with <code class="font-mono text-xs">ipconfig</code>, <code class="font-mono text-xs">nslookup</code>, browser GET.</span></li>
+            <ul class="space-y-1.5 text-xs font-sans" style="color:var(--muted)">
+              <li class="flex items-start gap-1.5"><span style="color:var(--amber)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">Client Lifecycle:</strong> Dynamic lease negotiation & HTTP rendering.</span></li>
+              <li class="flex items-start gap-1.5"><span style="color:var(--amber)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">DHCP Server:</strong> Automated pool distribution (<code class="font-mono text-[11px]">192.168.0.0/24</code>).</span></li>
+              <li class="flex items-start gap-1.5"><span style="color:var(--amber)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">DNS Authoritative:</strong> A-Record mapping for local domains.</span></li>
+              <li class="flex items-start gap-1.5"><span style="color:var(--amber)" class="font-bold shrink-0">▸</span><span><strong style="color:var(--text)">Verification:</strong> Validated with <code class="font-mono text-[11px]">ipconfig</code>, <code class="font-mono text-[11px]">nslookup</code>, browser GET.</span></li>
             </ul>
           </div>
           <div>
-            <div class="flex flex-wrap gap-1.5 pt-3 border-t mb-3" style="border-color:var(--border)">
-              <span class="tag">DHCP Pool</span><span class="tag">DNS A-Record</span><span class="tag">HTTP / HTTPS</span><span class="tag">Catalyst 2960</span><span class="tag">Client Lifecycle</span><span class="tag">Verified</span>
+            <div class="flex flex-wrap gap-1 pt-2.5 border-t mb-2.5" style="border-color:var(--border)">
+              <span class="tag">DHCP Pool</span><span class="tag">DNS A-Record</span><span class="tag">HTTP GET</span><span class="tag">Catalyst 2960</span><span class="tag">Verified</span>
             </div>
-            <a href="https://github.com/abdulwahabsaim/network-services-labs" target="_blank" rel="noopener" class="btn btn-ghost btn-sm w-full justify-center" data-hover-btn>Launch Repository <i class="fa-solid fa-arrow-up-right-from-square text-xs ml-1"></i></a>
+            <a href="https://github.com/abdulwahabsaim/network-services-labs" target="_blank" rel="noopener" class="btn btn-ghost btn-sm w-full justify-center" data-hover-btn>Launch Repository <i class="fa-solid fa-arrow-up-right-from-square text-[10px] ml-1"></i></a>
           </div>
         </div>
       </article>
 
     </div>
 
-    <!-- Mobile Projects Indicator Bar -->
-    <div class="flex lg:hidden items-center justify-between pt-2 px-2">
+    <!-- Mobile Indicator Dots -->
+    <div class="flex lg:hidden items-center justify-between pt-1 px-1">
       <div id="projects-dots" class="flex gap-1.5">
         <span class="carousel-dot active"></span>
         <span class="carousel-dot"></span>
         <span class="carousel-dot"></span>
       </div>
-      <span id="projects-counter" class="font-mono text-[11px] font-bold" style="color:var(--dim)">01 / 03</span>
+      <span id="projects-counter" class="font-mono text-[10px] font-bold" style="color:var(--dim)">01 / 03</span>
     </div>
   </div>
 </section>
@@ -1040,78 +1127,82 @@
 <section id="certs" class="section">
   <div class="max-w-7xl mx-auto px-4 sm:px-6">
     
-    <!-- Mobile Segment Switcher for Certs / Education -->
-    <div class="lg:hidden mb-6">
+    <!-- Mobile Segmented Switcher Pill -->
+    <div class="lg:hidden mb-5">
       <div class="segmented-switch max-w-xs mx-auto">
-        <button id="tab-btn-cert" class="active" onclick="switchCertTab('cert')"><i class="fa-solid fa-certificate"></i> CCNA Cert</button>
+        <button id="tab-btn-cert" class="active" onclick="switchCertTab('cert')"><i class="fa-solid fa-certificate"></i> CCNA 200-301</button>
         <button id="tab-btn-edu" onclick="switchCertTab('edu')"><i class="fa-solid fa-graduation-cap"></i> Academic CS</button>
       </div>
     </div>
 
-    <div class="grid lg:grid-cols-2 gap-8 lg:gap-10">
+    <div class="grid lg:grid-cols-2 gap-6 lg:gap-10">
       
       <!-- Panel 1: Certifications -->
       <div id="panel-certs" class="reveal">
         <span class="section-label">// 05_certification</span>
-        <h2 class="font-display text-2xl sm:text-4xl md:text-5xl font-bold mt-2 mb-6 sm:mb-8 leading-tight">Credentials &<br/><span style="color:var(--cyan)">Certifications</span></h2>
-        <div class="card rounded-xl p-5 sm:p-6 relative overflow-hidden">
+        <h2 class="font-display text-2xl sm:text-4xl md:text-5xl font-bold mt-1.5 mb-4 sm:mb-8 leading-tight">Credentials &<br/><span style="color:var(--cyan)">Certifications</span></h2>
+        
+        <div class="card rounded-xl p-4 sm:p-6 relative overflow-hidden">
           <div class="absolute -top-10 -right-10 w-40 h-40 rounded-full blur-3xl" style="background:rgba(6,182,212,0.1)"></div>
-          <div class="relative flex items-start gap-4 sm:gap-5">
-            <div class="shrink-0 w-16 sm:w-20 h-16 sm:h-20 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg, rgba(6,182,212,0.2), rgba(6,182,212,0.05)); border:1px solid rgba(6,182,212,0.4)">
-              <div class="text-center"><i class="fa-solid fa-certificate text-xl sm:text-2xl" style="color:var(--cyan)"></i><div class="font-mono text-[7px] sm:text-[8px] mt-1 tracking-widest" style="color:var(--cyan-b)">CERTIFIED</div></div>
+          <div class="relative flex items-start gap-3.5 sm:gap-5">
+            <div class="shrink-0 w-14 sm:w-20 h-14 sm:h-20 rounded-xl flex items-center justify-center" style="background:linear-gradient(135deg, rgba(6,182,212,0.2), rgba(6,182,212,0.05)); border:1px solid rgba(6,182,212,0.4)">
+              <div class="text-center"><i class="fa-solid fa-certificate text-lg sm:text-2xl" style="color:var(--cyan)"></i><div class="font-mono text-[7px] sm:text-[8px] mt-0.5 tracking-widest font-bold" style="color:var(--cyan-b)">CERTIFIED</div></div>
             </div>
             <div class="flex-1">
-              <div class="flex items-center gap-2 mb-1"><span class="font-mono text-[9px] sm:text-[10px] tracking-widest" style="color:var(--dim)">CISCO</span><span class="led"></span></div>
-              <h3 class="font-display font-bold text-lg sm:text-xl">CCNA 200-301</h3>
+              <div class="flex items-center gap-2 mb-0.5"><span class="font-mono text-[9px] tracking-widest font-bold" style="color:var(--dim)">CISCO SYSTEMS</span><span class="led"></span></div>
+              <h3 class="font-display font-bold text-base sm:text-xl">CCNA 200-301</h3>
               <p class="text-xs sm:text-sm mt-0.5" style="color:var(--muted)">Cisco Certified Network Associate</p>
-              <div class="flex items-center gap-3 mt-3 pt-3" style="border-top:1px solid var(--border)"><span class="font-mono text-[9px] sm:text-[10px] px-2 py-0.5 rounded" style="color:var(--emerald); background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3)">VERIFIED</span><span class="font-mono text-xs" style="color:var(--dim)">Cisco ID Active · 2024</span></div>
+              <div class="flex items-center gap-3 mt-2.5 pt-2.5" style="border-top:1px solid var(--border)"><span class="font-mono text-[9px] px-2 py-0.5 rounded font-bold" style="color:var(--emerald); background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.3)">VERIFIED</span><span class="font-mono text-xs" style="color:var(--dim)">Cisco ID Active · 2024</span></div>
             </div>
           </div>
         </div>
-        <div class="mt-4 grid grid-cols-2 gap-2.5 sm:gap-3">
-          <div class="card p-3 sm:p-4 rounded-lg"><div class="font-mono text-[9px] sm:text-[10px] tracking-widest mb-1.5" style="color:var(--dim)">STATUS</div><p class="font-display font-semibold text-sm sm:text-base" style="color:var(--emerald)">Certified</p></div>
-          <div class="card p-3 sm:p-4 rounded-lg"><div class="font-mono text-[9px] sm:text-[10px] tracking-widest mb-1.5" style="color:var(--dim)">EXAM</div><p class="font-display font-semibold text-sm sm:text-base">200-301 CCNA</p></div>
+
+        <div class="mt-3 grid grid-cols-2 gap-2.5 sm:gap-3">
+          <div class="card p-3 sm:p-4 rounded-lg"><div class="font-mono text-[9px] tracking-widest mb-1 font-bold" style="color:var(--dim)">STATUS</div><p class="font-display font-semibold text-sm sm:text-base" style="color:var(--emerald)">Certified & Active</p></div>
+          <div class="card p-3 sm:p-4 rounded-lg"><div class="font-mono text-[9px] tracking-widest mb-1 font-bold" style="color:var(--dim)">EXAM</div><p class="font-display font-semibold text-sm sm:text-base">200-301 CCNA</p></div>
         </div>
       </div>
 
       <!-- Panel 2: Education -->
       <div id="panel-edu" class="hidden lg:block reveal">
         <span class="section-label">// 06_education</span>
-        <h2 class="font-display text-2xl sm:text-4xl md:text-5xl font-bold mt-2 mb-6 sm:mb-8 leading-tight">Academic<br/><span style="color:var(--dim)">Foundation</span></h2>
+        <h2 class="font-display text-2xl sm:text-4xl md:text-5xl font-bold mt-1.5 mb-4 sm:mb-8 leading-tight">Academic<br/><span style="color:var(--dim)">Foundation</span></h2>
+        
         <div class="relative pl-6 sm:pl-8">
           <div class="absolute left-1.5 sm:left-2 top-2 bottom-2 w-px" style="background:linear-gradient(180deg, var(--cyan), var(--border), transparent)"></div>
-          <div class="relative mb-6 sm:mb-8">
+          
+          <div class="relative mb-5 sm:mb-8">
             <div class="absolute -left-[27px] sm:-left-7 top-1 w-3.5 sm:w-4 h-3.5 sm:h-4 rounded-full" style="background:rgba(6,182,212,0.2); border:2px solid var(--cyan)"></div>
             <div class="card p-4 sm:p-5 rounded-xl">
-              <div class="flex items-start justify-between gap-2 mb-2 sm:mb-3">
+              <div class="flex items-start justify-between gap-2 mb-2">
                 <div>
-                  <h3 class="font-display font-bold text-base sm:text-lg">Bachelors in Computer Science</h3>
+                  <h3 class="font-display font-bold text-sm sm:text-lg">Bachelors in Computer Science</h3>
                   <p class="text-xs sm:text-sm mt-0.5" style="color:var(--muted)">University of Central Punjab</p>
                 </div>
-                <span class="font-mono text-[9px] sm:text-[10px] px-2 py-0.5 rounded whitespace-nowrap" style="color:var(--cyan); border:1px solid rgba(6,182,212,0.3)">7th SEM</span>
+                <span class="font-mono text-[9px] sm:text-[10px] px-2 py-0.5 rounded whitespace-nowrap font-bold" style="color:var(--cyan); border:1px solid rgba(6,182,212,0.3)">7th SEM</span>
               </div>
-              <div class="flex items-center gap-3 sm:gap-4 font-mono text-xs mb-3" style="color:var(--dim)">
+              <div class="flex items-center gap-3 sm:gap-4 font-mono text-xs mb-2.5" style="color:var(--dim)">
                 <span><i class="fa-solid fa-calendar mr-1.5" style="color:var(--cyan)"></i>2022 — Present</span>
                 <span><i class="fa-solid fa-star mr-1.5" style="color:var(--amber)"></i>CGPA 3.58</span>
               </div>
-              <div class="pt-3" style="border-top:1px solid var(--border)">
-                <p class="font-mono text-[9px] sm:text-[10px] tracking-widest mb-1.5" style="color:var(--dim)">// RELEVANT_COURSEWORK</p>
+              <div class="pt-2.5" style="border-top:1px solid var(--border)">
+                <p class="font-mono text-[9px] tracking-widest mb-1.5 font-bold" style="color:var(--dim)">// RELEVANT_COURSEWORK</p>
                 <div class="flex flex-wrap gap-1.5">
-                  <span class="tag">Data Structures & Algorithms</span>
+                  <span class="tag">Data Structures</span>
+                  <span class="tag">Networking</span>
                   <span class="tag">DBMS</span>
                   <span class="tag">OOP</span>
-                  <span class="tag">Software Engineering</span>
-                  <span class="tag">Computer Networking</span>
-                  <span class="tag">Web Programming</span>
+                  <span class="tag">Software Eng</span>
                 </div>
               </div>
             </div>
           </div>
+
           <div class="relative">
             <div class="absolute -left-[27px] sm:-left-7 top-1 w-3.5 sm:w-4 h-3.5 sm:h-4 rounded-full" style="background:var(--surface-2); border:2px solid var(--border-bright)"></div>
-            <div class="p-4 sm:p-5 rounded-xl" style="border:1px dashed var(--border-bright)">
-              <p class="font-mono text-[9px] sm:text-[10px] tracking-widest mb-1.5" style="color:var(--dim)">// NEXT_NODE</p>
-              <p class="text-xs sm:text-sm" style="color:var(--muted)">Final year — graduating with focus on network engineering & systems. Open to Junior Network Engineer / NOC roles across the Netherlands.</p>
+            <div class="p-3.5 sm:p-5 rounded-xl" style="border:1px dashed var(--border-bright)">
+              <p class="font-mono text-[9px] tracking-widest mb-1 font-bold" style="color:var(--dim)">// NEXT_NODE</p>
+              <p class="text-xs sm:text-sm" style="color:var(--muted)">Final year — graduating with focus on network infrastructure & systems. Open to Junior Network Engineer / NOC roles across the Netherlands.</p>
             </div>
           </div>
         </div>
@@ -1124,77 +1215,81 @@
 <!-- ===================== SECTION 07: TRACEROUTE CONTACT ===================== -->
 <section id="contact" class="section relative overflow-hidden" style="background:var(--bg-2)">
   <div class="absolute inset-0 grid-bg-radial opacity-30 pointer-events-none"></div>
-  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] sm:w-[600px] h-[350px] sm:h-[600px] rounded-full blur-3xl" style="background:rgba(6,182,212,0.05)"></div>
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] sm:w-[600px] h-[300px] sm:h-[600px] rounded-full blur-3xl" style="background:rgba(6,182,212,0.05)"></div>
+  
   <div class="relative max-w-5xl mx-auto px-4 sm:px-6">
-    <div class="text-center mb-8 sm:mb-12 reveal">
+    <div class="text-center mb-6 sm:mb-12 reveal">
       <span class="section-label center">// 07_connect</span>
-      <h2 class="font-display text-2xl sm:text-4xl md:text-6xl font-bold mt-2 leading-tight">Trace the route.<br/><span style="color:var(--cyan)" class="text-glow-cyan">Reach the destination.</span></h2>
-      <p class="max-w-xl mx-auto mt-3 sm:mt-5 text-sm sm:text-base leading-relaxed" style="color:var(--muted)">Every packet finds its way. Whether it's a Junior Network Engineer role, a NOC position, or just a conversation about topologies — I'm one hop away.</p>
+      <h2 class="font-display text-2xl sm:text-4xl md:text-6xl font-bold mt-1.5 leading-tight">Trace the route.<br/><span style="color:var(--cyan)" class="text-glow-cyan">Reach the destination.</span></h2>
+      <p class="max-w-xl mx-auto mt-2 sm:mt-4 text-xs sm:text-base leading-relaxed" style="color:var(--muted)">Every packet finds its way. Whether it's a Junior Network Engineer role, a NOC position, or a conversation about topologies — I'm one hop away.</p>
     </div>
     
     <div class="terminal rounded-xl overflow-hidden reveal shadow-2xl">
-      <div class="flex items-center gap-2 px-3.5 sm:px-4 py-2.5 sm:py-3 border-b" style="border-color:var(--border); background:var(--terminal-bar)">
-        <span class="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full" style="background:rgba(244,63,94,0.8)"></span>
-        <span class="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full" style="background:rgba(245,158,11,0.8)"></span>
-        <span class="w-2.5 sm:w-3 h-2.5 sm:h-3 rounded-full" style="background:rgba(16,185,129,0.8)"></span>
-        <span class="font-mono text-[10px] sm:text-[11px] ml-2" style="color:var(--muted)">admin@aws ~ traceroute --contact</span>
+      <div class="flex items-center gap-2 px-3.5 sm:px-4 py-2.5 border-b" style="border-color:var(--border); background:var(--terminal-bar)">
+        <span class="w-2.5 h-2.5 rounded-full" style="background:rgba(244,63,94,0.8)"></span>
+        <span class="w-2.5 h-2.5 rounded-full" style="background:rgba(245,158,11,0.8)"></span>
+        <span class="w-2.5 h-2.5 rounded-full" style="background:rgba(16,185,129,0.8)"></span>
+        <span class="font-mono text-[10px] sm:text-[11px] ml-2 font-semibold" style="color:var(--muted)">admin@aws ~ traceroute --contact</span>
       </div>
+
       <div class="p-4 sm:p-6 md:p-8 font-mono text-xs sm:text-sm">
-        <p class="mb-4 sm:mb-6 text-[10px] sm:text-[11px] break-all sm:break-normal" style="color:var(--dim)">traceroute to abdul-wahab-saim.nl (10.10.10.10), 30 hops max, 60 byte packets</p>
-        <div class="space-y-4 sm:space-y-5">
+        <p class="mb-3 sm:mb-6 text-[10px] sm:text-[11px]" style="color:var(--dim)">traceroute to abdul-wahab-saim.nl (10.10.10.10), 30 hops max, 60 byte packets</p>
+        
+        <!-- Native List Tiles on Mobile & Full Hop Lines on Desktop -->
+        <div class="space-y-3 sm:space-y-5">
           
-          <div class="hop-row flex gap-3 sm:gap-4">
+          <div class="hop-row flex gap-3 sm:gap-4 items-center">
             <div class="shrink-0 w-8 sm:w-9 h-8 sm:h-9 rounded-full flex items-center justify-center font-mono text-xs relative z-10" style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.4); color:var(--cyan)">01</div>
             <div class="flex-1 min-w-0">
-              <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+              <div class="flex flex-wrap items-center gap-2">
                 <span class="font-semibold" style="color:var(--text)">abdul-wahab-saim</span>
                 <span style="color:var(--dim)">(10.10.10.10)</span>
-                <span class="text-[10px] sm:text-[11px]" style="color:var(--emerald)">0.4ms</span>
+                <span class="text-[10px]" style="color:var(--emerald)">0.4ms</span>
               </div>
-              <p class="text-[11px] sm:text-xs mt-0.5" style="color:var(--dim)">Junior Network Engineer · CCNA · Goes, NL</p>
+              <p class="text-[10px] sm:text-xs mt-0.5" style="color:var(--dim)">Junior Network Engineer · CCNA · Goes, NL</p>
             </div>
           </div>
 
           <div class="hop-row flex gap-3 sm:gap-4 items-center">
             <div class="shrink-0 w-8 sm:w-9 h-8 sm:h-9 rounded-full flex items-center justify-center relative z-10" style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.4)"><i class="fa-solid fa-envelope text-xs" style="color:var(--emerald)"></i></div>
             <div class="flex-1 min-w-0">
-              <a href="mailto:abdulwahabsaim58.nl@gmail.com" class="text-xs sm:text-sm transition-colors hover:opacity-80 font-semibold block truncate" style="color:var(--text)" data-hover>abdulwahabsaim58.nl@gmail.com</a>
-              <p class="text-[11px] sm:text-xs mt-0.5" style="color:var(--dim)">Primary channel · response within 24h</p>
+              <a href="mailto:abdulwahabsaim58.nl@gmail.com" class="text-xs sm:text-sm font-semibold block truncate" style="color:var(--text)" data-hover>abdulwahabsaim58.nl@gmail.com</a>
+              <p class="text-[10px] sm:text-xs mt-0.5" style="color:var(--dim)">Primary channel · response within 24h</p>
             </div>
-            <a href="mailto:abdulwahabsaim58.nl@gmail.com" class="btn btn-ghost !py-1.5 !px-3 text-[10px] shrink-0" data-hover-btn><i class="fa-solid fa-paper-plane mr-1"></i>Send</a>
+            <a href="mailto:abdulwahabsaim58.nl@gmail.com" class="btn btn-ghost !py-1.5 !px-2.5 text-[10px] shrink-0" data-hover-btn><i class="fa-solid fa-paper-plane mr-1"></i>Send</a>
           </div>
 
           <div class="hop-row flex gap-3 sm:gap-4 items-center">
             <div class="shrink-0 w-8 sm:w-9 h-8 sm:h-9 rounded-full flex items-center justify-center relative z-10" style="background:rgba(6,182,212,0.1); border:1px solid rgba(6,182,212,0.4)"><i class="fa-brands fa-linkedin text-xs" style="color:var(--cyan)"></i></div>
             <div class="flex-1 min-w-0">
-              <a href="https://www.linkedin.com/in/abdulwahabsaim/" target="_blank" rel="noopener" class="text-xs sm:text-sm transition-colors hover:opacity-80 font-semibold block truncate" style="color:var(--text)" data-hover>linkedin.com/in/abdulwahabsaim</a>
-              <p class="text-[11px] sm:text-xs mt-0.5" style="color:var(--dim)">Professional profile · career history</p>
+              <a href="https://www.linkedin.com/in/abdulwahabsaim/" target="_blank" rel="noopener" class="text-xs sm:text-sm font-semibold block truncate" style="color:var(--text)" data-hover>linkedin.com/in/abdulwahabsaim</a>
+              <p class="text-[10px] sm:text-xs mt-0.5" style="color:var(--dim)">Professional profile · career history</p>
             </div>
-            <a href="https://www.linkedin.com/in/abdulwahabsaim/" target="_blank" rel="noopener" class="btn btn-ghost !py-1.5 !px-3 text-[10px] shrink-0" data-hover-btn><i class="fa-solid fa-arrow-up-right-from-square mr-1"></i>Open</a>
+            <a href="https://www.linkedin.com/in/abdulwahabsaim/" target="_blank" rel="noopener" class="btn btn-ghost !py-1.5 !px-2.5 text-[10px] shrink-0" data-hover-btn><i class="fa-solid fa-arrow-up-right-from-square mr-1"></i>Open</a>
           </div>
 
           <div class="hop-row flex gap-3 sm:gap-4 items-center">
             <div class="shrink-0 w-8 sm:w-9 h-8 sm:h-9 rounded-full flex items-center justify-center relative z-10" style="background:var(--surface-2); border:1px solid var(--border-bright)"><i class="fa-brands fa-github text-xs" style="color:var(--text)"></i></div>
             <div class="flex-1 min-w-0">
-              <a href="https://github.com/abdulwahabsaim" target="_blank" rel="noopener" class="text-xs sm:text-sm transition-colors hover:opacity-80 font-semibold block truncate" style="color:var(--text)" data-hover>github.com/abdulwahabsaim</a>
-              <p class="text-[11px] sm:text-xs mt-0.5" style="color:var(--dim)">Source · 11 Cisco lab configurations & topologies</p>
+              <a href="https://github.com/abdulwahabsaim" target="_blank" rel="noopener" class="text-xs sm:text-sm font-semibold block truncate" style="color:var(--text)" data-hover>github.com/abdulwahabsaim</a>
+              <p class="text-[10px] sm:text-xs mt-0.5" style="color:var(--dim)">Source · 11 Cisco lab configurations & topologies</p>
             </div>
-            <a href="https://github.com/abdulwahabsaim" target="_blank" rel="noopener" class="btn btn-ghost !py-1.5 !px-3 text-[10px] shrink-0" data-hover-btn><i class="fa-solid fa-arrow-up-right-from-square mr-1"></i>Open</a>
+            <a href="https://github.com/abdulwahabsaim" target="_blank" rel="noopener" class="btn btn-ghost !py-1.5 !px-2.5 text-[10px] shrink-0" data-hover-btn><i class="fa-solid fa-arrow-up-right-from-square mr-1"></i>Open</a>
           </div>
 
-          <div class="hop-row flex gap-3 sm:gap-4">
+          <div class="hop-row flex gap-3 sm:gap-4 items-center">
             <div class="shrink-0 w-8 sm:w-9 h-8 sm:h-9 rounded-full flex items-center justify-center relative z-10" style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.4)"><i class="fa-solid fa-location-dot text-xs" style="color:var(--amber)"></i></div>
             <div class="flex-1 min-w-0">
               <span class="text-xs sm:text-sm font-semibold" style="color:var(--text)">Goes, Zeeland, Netherlands</span>
-              <p class="text-[11px] sm:text-xs mt-0.5" style="color:var(--dim)">Timezone: CET (UTC+1)</p>
+              <p class="text-[10px] sm:text-xs mt-0.5" style="color:var(--dim)">Timezone: CET (UTC+1)</p>
             </div>
           </div>
 
-          <div class="flex gap-3 sm:gap-4 pt-3.5" style="border-top:1px solid var(--border)">
+          <div class="flex gap-3 sm:gap-4 pt-3" style="border-top:1px solid var(--border)">
             <div class="shrink-0 w-8 sm:w-9 h-8 sm:h-9 rounded-full flex items-center justify-center relative z-10" style="background:rgba(16,185,129,0.2); border:2px solid var(--emerald)"><i class="fa-solid fa-check text-xs" style="color:var(--emerald)"></i></div>
             <div class="flex-1 min-w-0">
               <p class="text-xs sm:text-sm font-bold" style="color:var(--emerald)">destination reached — connection established</p>
-              <p class="text-[11px] sm:text-xs mt-0.5" style="color:var(--dim)">// awaiting handshake from your side</p>
+              <p class="text-[10px] sm:text-xs mt-0.5" style="color:var(--dim)">// awaiting handshake from your side</p>
             </div>
           </div>
 
@@ -1218,21 +1313,21 @@
         <p class="text-xs font-mono" style="color:var(--dim)">// junior_network_engineer · ccna · netherlands</p>
       </div>
       <div class="flex items-center gap-5" style="color:var(--dim)">
-        <a href="https://www.linkedin.com/in/abdulwahabsaim/" target="_blank" rel="noopener" class="p-2 transition-colors hover:opacity-80" data-hover><i class="fa-brands fa-linkedin text-lg"></i></a>
-        <a href="https://github.com/abdulwahabsaim" target="_blank" rel="noopener" class="p-2 transition-colors hover:opacity-80" data-hover><i class="fa-brands fa-github text-lg"></i></a>
-        <a href="mailto:abdulwahabsaim58.nl@gmail.com" class="p-2 transition-colors hover:opacity-80" data-hover><i class="fa-solid fa-envelope text-lg"></i></a>
+        <a href="https://www.linkedin.com/in/abdulwahabsaim/" target="_blank" rel="noopener" class="p-1.5 transition-colors hover:opacity-80" data-hover><i class="fa-brands fa-linkedin text-lg"></i></a>
+        <a href="https://github.com/abdulwahabsaim" target="_blank" rel="noopener" class="p-1.5 transition-colors hover:opacity-80" data-hover><i class="fa-brands fa-github text-lg"></i></a>
+        <a href="mailto:abdulwahabsaim58.nl@gmail.com" class="p-1.5 transition-colors hover:opacity-80" data-hover><i class="fa-solid fa-envelope text-lg"></i></a>
       </div>
     </div>
-    <div class="mt-6 pt-4 sm:pt-6 flex flex-col sm:flex-row items-center justify-between gap-2" style="border-top:1px solid var(--border)">
-      <p class="text-[11px] sm:text-xs font-mono" style="color:var(--dim)">© 2026 abdul_wahab_saim — all packets routed</p>
-      <p class="text-[11px] sm:text-xs font-mono" style="color:var(--dim)">built with intent · typed with care</p>
+    <div class="mt-5 pt-4 sm:pt-6 flex flex-col sm:flex-row items-center justify-between gap-2" style="border-top:1px solid var(--border)">
+      <p class="text-[10px] sm:text-xs font-mono" style="color:var(--dim)">© 2026 abdul_wahab_saim — all packets routed</p>
+      <p class="text-[10px] sm:text-xs font-mono" style="color:var(--dim)">built with intent · typed with care</p>
     </div>
   </div>
 </footer>
 
 <!-- ===================== FLOATING MOBILE BOTTOM NAVIGATION DOCK ===================== -->
-<div class="mobile-bottom-dock md:hidden flex items-center justify-around py-1.5 px-3">
-  <a href="#about" class="mobile-dock-btn" data-dock="about"><i class="fa-solid fa-user"></i><span>Bio</span></a>
+<div class="mobile-bottom-dock md:hidden flex items-center justify-around py-1 px-3">
+  <a href="#top" class="mobile-dock-btn active" data-dock="top"><i class="fa-solid fa-user"></i><span>Bio</span></a>
   <a href="#cli" class="mobile-dock-btn" data-dock="cli"><i class="fa-solid fa-terminal"></i><span>CLI</span></a>
   <a href="#skills" class="mobile-dock-btn" data-dock="skills"><i class="fa-solid fa-layer-group"></i><span>Skills</span></a>
   <a href="#projects" class="mobile-dock-btn" data-dock="projects"><i class="fa-solid fa-diagram-project"></i><span>Labs</span></a>
@@ -1255,7 +1350,7 @@
     if(stored === 'light'){
       root.setAttribute('data-theme', 'light');
       btn.classList.add('is-light');
-      knob.style.transform = 'translateX(20px)';
+      knob.style.transform = 'translateX(18px)';
       knob.style.background = 'var(--amber)';
     } else {
       root.setAttribute('data-theme', 'dark');
@@ -1272,7 +1367,7 @@
       
       if(next === 'light'){
         btn.classList.add('is-light');
-        knob.style.transform = 'translateX(20px)';
+        knob.style.transform = 'translateX(18px)';
         knob.style.background = 'var(--amber)';
       } else {
         btn.classList.remove('is-light');
@@ -1336,17 +1431,6 @@
   } catch(e){ console.warn('cursor glow:', e); }
 })();
 
-// ============ MOBILE TOP MENU ============
-(function(){
-  try {
-    var menuBtn = document.getElementById('menu-btn');
-    var mobileMenu = document.getElementById('mobile-menu');
-    if(!menuBtn || !mobileMenu) return;
-    menuBtn.addEventListener('click', function(){ mobileMenu.classList.toggle('hidden'); });
-    mobileMenu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ mobileMenu.classList.add('hidden'); }); });
-  } catch(e){ console.warn('menu:', e); }
-})();
-
 // ============ REVEAL ON SCROLL ============
 (function(){
   try {
@@ -1400,25 +1484,19 @@
   } catch(e){}
 })();
 
-// ============ MOBILE SEGMENT SWITCHERS ============
-function switchHeroTab(tab){
-  var bioBtn = document.getElementById('hero-tab-bio');
-  var termBtn = document.getElementById('hero-tab-term');
-  var bioPanel = document.getElementById('hero-panel-bio');
-  var termPanel = document.getElementById('hero-panel-term');
-  if(!bioBtn || !termBtn || !bioPanel || !termPanel) return;
+// ============ MOBILE PROGRESSIVE DISCLOSURES ============
+function toggleTenets(){
+  var body = document.getElementById('mobile-tenets-body');
+  var chevron = document.getElementById('tenets-chevron');
+  if(!body || !chevron) return;
+  body.classList.toggle('hidden');
+  chevron.style.transform = body.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(180deg)';
+}
 
-  if(tab === 'bio'){
-    bioBtn.classList.add('active');
-    termBtn.classList.remove('active');
-    bioPanel.classList.remove('hidden');
-    termPanel.classList.add('hidden');
-  } else {
-    termBtn.classList.add('active');
-    bioBtn.classList.remove('active');
-    termPanel.classList.remove('hidden');
-    bioPanel.classList.add('hidden');
-  }
+function toggleMobileConfig(){
+  var drawer = document.getElementById('mobile-config-drawer');
+  if(!drawer) return;
+  drawer.classList.toggle('hidden');
 }
 
 function switchCertTab(tab){
@@ -1455,7 +1533,7 @@ function switchCertTab(tab){
         window.requestAnimationFrame(function(){
           var width = carousel.offsetWidth;
           var scrollLeft = carousel.scrollLeft;
-          var index = Math.round(scrollLeft / (width * 0.85));
+          var index = Math.round(scrollLeft / (width * 0.82));
           if(index < 0) index = 0;
           if(index >= totalItems) index = totalItems - 1;
 
@@ -1487,7 +1565,7 @@ function switchCertTab(tab){
     var sections = ids.map(function(id){ return document.getElementById(id); }).filter(Boolean);
 
     window.addEventListener('scroll', function(){
-      var y = window.scrollY + 140;
+      var y = window.scrollY + 160;
       var active = 'top';
       sections.forEach(function(s){ if(s.offsetTop <= y) active = s.id; });
       
@@ -1498,7 +1576,7 @@ function switchCertTab(tab){
 
       dockLinks.forEach(function(d){
         var dockTarget = d.getAttribute('data-dock');
-        if(dockTarget === active || (dockTarget === 'about' && active === 'top')){
+        if(dockTarget === active || (dockTarget === 'top' && (active === 'top' || active === 'about'))){
           d.classList.add('active');
         } else {
           d.classList.remove('active');
@@ -1527,9 +1605,9 @@ function switchCertTab(tab){
     function Particle(){
       this.x = Math.random() * width;
       this.y = Math.random() * height;
-      this.vx = (Math.random() - 0.5) * 0.5;
-      this.vy = (Math.random() - 0.5) * 0.5;
-      this.radius = Math.random() > 0.8 ? 2.4 : 1.6;
+      this.vx = (Math.random() - 0.5) * 0.45;
+      this.vy = (Math.random() - 0.5) * 0.45;
+      this.radius = Math.random() > 0.8 ? 2.2 : 1.4;
     }
     Particle.prototype.update = function(){
       this.x += this.vx; this.y += this.vy;
@@ -1543,7 +1621,7 @@ function switchCertTab(tab){
       ctx.fill();
     };
 
-    var count = Math.min(Math.floor(window.innerWidth / 26), 40);
+    var count = Math.min(Math.floor(window.innerWidth / 30), 36);
     for(var i = 0; i < count; i++) particles.push(new Particle());
 
     function animate(){
@@ -1556,13 +1634,13 @@ function switchCertTab(tab){
           var dx = particles[i].x - particles[j].x;
           var dy = particles[i].y - particles[j].y;
           var dist = Math.sqrt(dx * dx + dy * dy);
-          if(dist < 110){
+          if(dist < 100){
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
             ctx.strokeStyle = isDark ? '#22d3ee' : '#0284c7';
-            ctx.globalAlpha = (1 - dist / 110) * (isDark ? 0.2 : 0.3);
-            ctx.lineWidth = isDark ? 0.9 : 1.2;
+            ctx.globalAlpha = (1 - dist / 100) * (isDark ? 0.18 : 0.25);
+            ctx.lineWidth = isDark ? 0.8 : 1.1;
             ctx.stroke();
             ctx.globalAlpha = 1.0;
           }
