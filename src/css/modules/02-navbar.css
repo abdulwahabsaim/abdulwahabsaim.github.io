@@ -1,0 +1,163 @@
+/* ==========================================================================
+   NAVBAR CLEAN ENTERPRISE STYLING & ACTIVE HIGHLIGHT
+   ========================================================================== */
+.site-header a[href="#top"] {
+  flex-shrink: 0 !important;
+  white-space: nowrap !important;
+}
+
+.site-header a[href="#top"] span {
+  white-space: nowrap !important;
+}
+
+@media (max-width: 339px) {
+  .site-header a[href="#top"] span:last-child {
+    display: none !important;
+  }
+}
+
+.nav-link {
+  transition: background-color 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  background-color: color-mix(in srgb, var(--text) 6%, transparent);
+}
+
+/* Island Floating Nav Dock */
+.nav-island {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .nav-island {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.35rem;
+    border-radius: 9999px;
+    background: var(--panel-2);
+    border: 1px solid var(--line-strong);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+.nav-island .nav-link {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-2);
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.nav-island .nav-link:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+}
+
+.nav-island .nav-link.active-nav {
+  color: var(--text);
+  background: var(--surface-hover);
+  font-weight: 600;
+}
+
+.nav-island .nav-link.active-nav::after {
+  display: none !important;
+}
+
+#mobile-nav-menu {
+  position: absolute;
+  top: 100%;
+  inset-inline: 0;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.25);
+}
+
+.mobile-nav-link {
+  transition: background-color 0.15s ease, color 0.15s ease;
+  border-radius: var(--r-sm, 8px);
+}
+
+.mobile-nav-link:hover {
+  background-color: var(--panel-2) !important;
+}
+
+/* ==========================================================================
+   PROMINENT THEME TOGGLE PILL SWITCH
+   ========================================================================== */
+.theme-toggle-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 36px;
+  padding: 0 0.75rem 0 0.5rem;
+  border-radius: 9999px;
+  background: var(--panel-2);
+  border: 1px solid var(--line-strong);
+  color: var(--text);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  margin: 0 0.35rem;
+  flex-shrink: 0;
+}
+
+.theme-toggle-pill:hover {
+  border-color: var(--accent);
+  background: var(--surface-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(76, 141, 255, 0.18);
+}
+
+.theme-toggle-pill:active {
+  transform: translateY(0);
+}
+
+.theme-toggle-pill:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.theme-icon-slot {
+  width: 24px;
+  height: 24px;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.2s ease;
+}
+
+.theme-toggle-pill:hover .theme-icon-slot {
+  transform: scale(1.12) rotate(15deg);
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+}
+
+.theme-toggle-label {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  user-select: none;
+}
+
+@media (max-width: 639px) {
+  .theme-toggle-label {
+    display: none;
+  }
+
+  .theme-toggle-pill {
+    padding: 0;
+    width: 36px;
+    height: 36px;
+    justify-content: center;
+    gap: 0;
+    margin: 0 0.2rem;
+  }
+}

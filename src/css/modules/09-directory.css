@@ -1,0 +1,541 @@
+/* ==========================================================================
+   09. LAB DIRECTORY — ENTERPRISE DIRECTORY COMPONENT
+   Candidate: Abdul Wahab Saim — Junior Network & NOC Engineer (CCNA)
+   ========================================================================== */
+
+/* Directory Segmented Filter Bar */
+.apple-segmented-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem;
+  border-radius: var(--r-md);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  overflow-x: auto;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.apple-segmented-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.apple-segment {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.4rem 0.95rem;
+  border-radius: var(--r-sm);
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-2);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  user-select: none;
+}
+
+.apple-segment:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+}
+
+.apple-segment.filter-active {
+  background: var(--accent-fill);
+  color: #ffffff !important;
+  font-weight: 600;
+  border-color: var(--accent-fill);
+  box-shadow: 0 2px 8px -1px rgba(37, 99, 235, 0.4);
+}
+
+/* Spotlight Search Field */
+.apple-search-box {
+  position: relative;
+  width: 100%;
+  max-width: 22rem;
+}
+
+.apple-search-input {
+  width: 100%;
+  height: 2.5rem;
+  padding-left: 2.25rem;
+  padding-right: 2.25rem;
+  border-radius: var(--r-sm);
+  font-family: var(--font-sans);
+  font-size: 1rem; /* 16px to prevent iOS auto-zoom */
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--text);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  outline: none;
+}
+
+@media (min-width: 768px) {
+  .apple-search-input {
+    font-size: 0.875rem;
+  }
+}
+
+.apple-search-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* Protocol Filter Micro-Chips */
+.apple-proto-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.7rem;
+  border-radius: var(--r-sm);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label, 0.75rem);
+  font-weight: 500;
+  color: var(--muted);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  cursor: pointer;
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+  white-space: nowrap;
+}
+
+.apple-proto-chip:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+  border-color: var(--line-strong);
+}
+
+.apple-proto-chip.is-active {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 600;
+}
+
+/* Directory Canvas Window */
+.apple-directory-window {
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-card);
+}
+
+/* Outer scroll wrapper - strictly constrained to prevent horizontal scroll */
+.apple-table-outer-scroll {
+  position: relative;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+/* Inner scroll container (vertical only, zero horizontal overflow trap) */
+.apple-table-container {
+  position: relative;
+  width: 100%;
+  max-height: min(60vh, 520px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Proportional Table (100% width, fixed layout, fits container) */
+.apple-table {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  table-layout: fixed;
+  border-collapse: separate;
+  border-spacing: 0;
+  box-sizing: border-box;
+}
+
+/* Text alignment & sizing on cells */
+.apple-table th.col-idx, .apple-table td.col-idx {
+  width: 48px !important;
+  max-width: 48px !important;
+  padding: 0.75rem 0.25rem !important;
+  text-align: center;
+}
+
+.apple-table th.col-discipline, .apple-table td.col-discipline {
+  width: 170px !important;
+  max-width: 170px !important;
+  padding: 0.75rem 0.5rem !important;
+}
+
+.apple-table th.col-protocols, .apple-table td.col-protocols {
+  width: 260px !important;
+  max-width: 260px !important;
+  padding: 0.75rem 0.5rem !important;
+}
+
+.apple-table th.col-action, .apple-table td.col-action {
+  width: 136px !important;
+  max-width: 136px !important;
+  padding: 0.75rem 0.5rem !important;
+  text-align: right;
+}
+
+.apple-table thead {
+  position: static;
+}
+
+/* Sticky table header cells */
+.apple-table th {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  padding: 0.75rem 0.5rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label, 0.75rem);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+  background: var(--panel-2);
+  box-shadow: 0 1px 0 var(--line);
+}
+
+.apple-table tr.directory-row {
+  border-bottom: 1px solid var(--line);
+  transition: background-color 0.15s ease;
+}
+
+.apple-table td {
+  padding: 0.75rem 0.5rem;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--line);
+}
+
+.apple-table td.col-scenario {
+  padding: 0.75rem 0.75rem;
+}
+
+.apple-table td.col-scenario .font-display {
+  color: var(--text);
+}
+
+.apple-table tr.directory-row:hover {
+  background-color: var(--surface-hover);
+}
+
+/* Responsive Table Column Visibility */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .apple-table .col-protocols {
+    display: none !important;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 767px) {
+  .apple-table .col-discipline {
+    display: none !important;
+  }
+}
+
+@media (max-width: 767px) {
+  #protocol-chip-container {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    padding-bottom: 0.35rem !important;
+  }
+  #protocol-chip-container::-webkit-scrollbar {
+    display: none !important;
+  }
+  .apple-proto-chip {
+    flex-shrink: 0 !important;
+    min-height: 32px !important;
+    padding: 0.35rem 0.75rem !important;
+  }
+}
+
+@media (max-width: 639px) {
+  .apple-table thead {
+    display: none !important;
+  }
+  .apple-table,
+  .apple-table tbody {
+    display: block !important;
+    width: 100% !important;
+  }
+  .apple-table tr.directory-row {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    padding: 0.85rem 0.95rem !important;
+    margin-bottom: 0.65rem !important;
+    border-radius: var(--r-md, 12px) !important;
+    background: var(--panel) !important;
+    border: 1px solid var(--line) !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08) !important;
+    position: relative !important;
+    gap: 0.45rem !important;
+    transition: transform 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .apple-table tr.directory-row:active {
+    transform: scale(0.99);
+  }
+  .apple-table td {
+    padding: 0 !important;
+    border: none !important;
+    width: 100% !important;
+    max-width: none !important;
+  }
+
+  .apple-table td.col-discipline,
+  .apple-table td.col-protocols,
+  .apple-table td.col-action,
+  .apple-table td.col-scenario {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  
+  /* Top Right: Index badge */
+  .apple-table td.col-idx {
+    position: absolute !important;
+    top: 0.85rem !important;
+    right: 0.95rem !important;
+    width: auto !important;
+    max-width: none !important;
+    display: block !important;
+    z-index: 2;
+  }
+  .apple-table .apple-index-badge {
+    width: 1.5rem !important;
+    height: 1.5rem !important;
+    font-size: 0.6875rem !important;
+  }
+
+  /* Order 1: Discipline Pill (Header of the card) */
+  .apple-table td.col-discipline {
+    order: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding-right: 2.25rem !important; /* Space for index badge */
+  }
+
+  /* Order 2: Scenario Title */
+  .apple-table td.col-scenario {
+    order: 2 !important;
+    display: block !important;
+    width: 100% !important;
+    margin-top: 0.1rem !important;
+  }
+  .apple-table td.col-scenario .font-display {
+    color: var(--text) !important;
+    font-size: 0.875rem !important;
+    line-height: 1.35 !important;
+    font-weight: 600 !important;
+  }
+
+  /* Order 3: Protocol Micro-Chips */
+  .apple-table td.col-protocols {
+    order: 3 !important;
+    display: block !important;
+    width: 100% !important;
+    margin-top: 0.15rem !important;
+  }
+  .apple-table td.col-protocols .flex {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 0.25rem !important;
+  }
+  .apple-table .apple-tag-pill {
+    font-size: 0.65rem !important;
+    padding: 0.12rem 0.4rem !important;
+    margin: 0 !important;
+    background: var(--panel-2) !important;
+    border-color: var(--line) !important;
+    color: var(--text-2) !important;
+    border-radius: 4px !important;
+  }
+
+  /* Order 4: Sleek Footer Action Strip */
+  .apple-table td.col-action {
+    order: 4 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-end !important;
+    width: 100% !important;
+    padding-top: 0.4rem !important;
+    margin-top: 0.2rem !important;
+    border-top: 1px dashed var(--line) !important;
+  }
+  .apple-table .apple-action-btn {
+    width: auto !important;
+    background: transparent !important;
+    border: none !important;
+    color: var(--accent) !important;
+    padding: 0 !important;
+    font-size: 0.725rem !important;
+    font-weight: 600 !important;
+    height: auto !important;
+    min-height: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.25rem !important;
+    box-shadow: none !important;
+  }
+  .apple-table .apple-action-btn:hover {
+    background: transparent !important;
+    color: var(--accent-light, #60a5fa) !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Badges & Pills */
+.apple-index-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: var(--r-sm);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--muted);
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+}
+
+.apple-discipline-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--r-sm);
+  font-family: var(--font-sans);
+  font-size: var(--fs-label, 0.75rem);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.apple-discipline-campus {
+  background: rgba(56, 189, 248, 0.12);
+  color: var(--cat-campus);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+
+.apple-discipline-routing {
+  background: rgba(76, 141, 255, 0.12);
+  color: var(--cat-routing);
+  border: 1px solid rgba(76, 141, 255, 0.25);
+}
+
+.apple-discipline-security {
+  background: rgba(52, 211, 153, 0.12);
+  color: var(--cat-security);
+  border: 1px solid rgba(52, 211, 153, 0.25);
+}
+
+.apple-discipline-services {
+  background: rgba(251, 191, 36, 0.12);
+  color: var(--cat-services);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+}
+
+.apple-tag-pill {
+  display: inline-block;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--r-sm);
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  font-weight: 500;
+  background: var(--panel-2);
+  color: var(--text-2);
+  border: 1px solid var(--line);
+  margin-right: 0.25rem;
+  margin-bottom: 0.2rem;
+  white-space: nowrap;
+}
+
+.apple-action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--r-sm);
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  color: var(--text);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+}
+
+.apple-action-btn:hover {
+  background: var(--accent-fill);
+  border-color: var(--accent-fill);
+  color: #ffffff;
+  box-shadow: 0 4px 12px -2px rgba(37, 99, 235, 0.4);
+}
+
+/* Smooth Scrollbar */
+.apple-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.25) transparent;
+}
+
+.apple-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.apple-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.apple-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.25);
+  border-radius: 9999px;
+}
+.apple-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(148, 163, 184, 0.45);
+}
+
+/* Mobile Protocol Filter Track (<768px) */
+@media (max-width: 767px) {
+  #protocol-chip-container {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    gap: 0.375rem !important;
+    padding: 0.25rem 0.25rem 0.5rem !important;
+    width: 100% !important;
+  }
+
+  #protocol-chip-container::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  #protocol-chip-container > span {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    font-size: 0.72rem !important;
+  }
+
+  #protocol-chip-container .apple-proto-chip {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    padding: 0.25rem 0.65rem !important;
+    font-size: 0.72rem !important;
+  }
+}
+

@@ -1,0 +1,75 @@
+/* ==========================================================================
+   CARDS & CONTAINERS (Canonical Single Source)
+   Candidate: Abdul Wahab Saim — Junior Network & NOC Engineer (CCNA)
+   ========================================================================== */
+
+.card {
+  position: relative;
+  background: var(--panel);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: clamp(20px, 3vw, 32px);
+  border: 1px solid var(--line);
+  transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease);
+}
+
+html.light .card,
+[data-theme="light"] .card {
+  border: 1px solid var(--line-strong);
+}
+
+@media (hover: hover) {
+  .card:not(.card--static):hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card), var(--glow-blue);
+    border-color: var(--accent);
+  }
+}
+
+.card--static {
+  transform: none !important;
+}
+
+/* Master Enterprise Card Component */
+.card-enterprise {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  box-shadow: var(--shadow-card);
+  transition: transform .25s var(--ease), border-color .25s var(--ease), box-shadow .25s var(--ease);
+}
+
+html.dark .card-enterprise {
+  background: color-mix(in srgb, var(--panel) 88%, transparent);
+  border-top-color: rgba(255, 255, 255, 0.14);
+}
+
+@media (hover: hover) {
+  .card-enterprise:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+    box-shadow: var(--shadow-card), var(--glow-blue);
+  }
+}
+
+.card-enterprise::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s;
+  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), var(--accent-soft), transparent 60%);
+}
+
+@media (hover: hover) {
+  .card-enterprise:hover::before {
+    opacity: 1;
+  }
+}
+
+.card-enterprise > * {
+  position: relative;
+}

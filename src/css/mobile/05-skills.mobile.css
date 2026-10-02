@@ -1,0 +1,40 @@
+/* ==========================================================================
+   DEDICATED MOBILE MODULE: 05-SKILLS (§4.6: Skills Matrix Accordion)
+   Target: Mobile Devices (< 1024px)
+   ========================================================================== */
+
+@media (max-width: 1023px) {
+  #skills {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  .skills-row {
+    padding: 0.65rem 0.85rem !important;
+    min-height: 44px !important;
+  }
+
+  .skills-row .domain-title {
+    font-size: 0.8125rem !important;
+    letter-spacing: 0.02em !important;
+  }
+
+  .skills-content {
+    padding: 0.5rem 0.85rem 0.75rem !important;
+  }
+
+  .skills-content p {
+    font-size: 0.8125rem !important;
+    line-height: 1.4 !important;
+    margin-bottom: 0.5rem !important;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .skills-content .tag-badge {
+    font-size: 0.6875rem !important;
+    padding: 0.15rem 0.45rem !important;
+  }
+}

@@ -1,0 +1,807 @@
+[
+  {
+    "id": "campus",
+    "lab_num": 1,
+    "title": "Enterprise Campus Capstone: Multi-Tier Hierarchical Network",
+    "folder": "",
+    "category": "Flagship Campus",
+    "category_slug": "campus",
+    "summary": "Full-scale corporate campus architecture spanning 15 Cisco IOS devices: dual distribution blocks, wire-speed Layer 3 Core, Active-Active HSRPv2, Rapid-PVST+ root alignment, DAI/DHCP Snooping defense, Cisco 3504 WLC mobility, and dual-homed WAN failover.",
+    "tags": [
+      "15 Nodes",
+      "L3 Core & HSRPv2",
+      "OSPFv2 Multi-Area",
+      "DAI & Port Security",
+      "Cisco 3504 WLC"
+    ],
+    "topology_img": "assets/labs/campus/mega-lab.png",
+    "has_pkt": false,
+    "pkt_file": "",
+    "configs": [],
+    "github_url": "https://github.com/abdulwahabsaim/cisco-enterprise-campus-mega-lab",
+    "problem_and_fix": "### Part 1: Baseline Administration & Device Hardening\n- **Cryptographic Password Protection:** Modern Type 9 scrypt hashing (fallback to Type 5 PBKDF2/MD5) applied across privileged EXEC secrets (`enable secret`) and local administrator accounts (`username cisco secret ccna`).\n- **Interactive Session Hardening:** Configured `exec-timeout 30 0` on console and VTY lines to prevent unattended privilege hijacking. Synchronous logging (`logging synchronous`) prevents terminal prompt corruption during asynchronous syslog events.\n- **Remote Access Transport:** Suppressed telnet in favor of SSHv2 (`transport input ssh`) paired with standard ACL 1 restricting terminal access exclusively to the secure Office A administrative workstation subnet (`10.1.0.0/24`).\n\n### Part 2: Layer 2 Infrastructure, 802.1Q Trunks & EtherChannels\n- **Distribution Interconnect EtherChannels:**\n  - **Office A:** Cisco-proprietary PAgP PortChannel 1 between DSW-A1 and DSW-A2 (`channel-protocol pagp`, `channel-group 1 mode desirable`).\n  - **Office B:** IEEE 802.3ad standard LACP PortChannel 1 between DSW-B1 and DSW-B2 (`channel-protocol lacp`, `channel-group 1 mode active`).\n- **VLAN Trunking Protocol (VTPv2):** DSW-A1 and DSW-B1 operate as VTP Servers in domain `JeremysITLab`, while DSW-A2, DSW-B2, and all Access switches operate as VTP Clients, ensuring automated, consistent VLAN propagation.\n- **Trunk Port Hardening:** Explicit Dynamic Trunking Protocol suppression (`switchport nonegotiate`), native VLAN ",
+    "addressing_table": "| Slide | Topic | Visual Infographic Focus | Link |\n|---|---|---|:---:|\n| **01** | **Campus Topology Blueprint** | 15-node complete physical & logical interconnect map | [View Slide](slides/slide-01-network-topology-architecture.png) |\n| **02** | **Dual EtherChannel Protocols** | PAgP vs IEEE LACP protocol battlecard & packet exchange | [View Slide](slides/slide-02-dual-etherchannel-pagp-vs-lacp.png) |\n| **03** | **Wire-Speed Layer 3 Core** | Legacy L2 STP vs Modern L3 CEF duel & `/30` transit diagram | [View Slide](slides/slide-03-layer3-routed-core-cef-switching.png) |\n| **04** | **HSRPv2 & Rapid-PVST+ Alignment**| 4-Stat KPI banner & straight-line zero-hairpinning vectors | [View Slide](slides/slide-04-hsrpv2-rapid-pvst-root-alignment.png) |\n| **05** | **OSPFv2 Backbone & WAN Failover** | 3-stage pipeline & floating static route state machine | [View Slide](slides/slide-05-ospfv2-area0-floating-static-wan.png) |\n| **06** | **Centralized DHCP & Telemetry** | 5-step visual DORA sequence & millisecond SIEM logging | [View Slide](slides/slide-06-centralized-dhcp-relay-telemetry.png) |\n| **07** | **Perimeter NAT & PAT Overload** | RFC 3022 NAT engine flow (Inside \u2794 NAT Router \u2794 Public) | [View Slide](slides/slide-07-perimeter-static-nat-dynamic-pat.png) |\n| **08** | **Layer 2 Security Suite** | 3-tier security citadel & ingress threat mitigation pipeline | [View Slide](slides/slide-08-layer2-access-security-citadel.png) |\n| **09** | **Dual-Stack IPv6 & WLC Mobility** | Split-MAC functional division & CAPWAP tunnel architecture | [View Slide](slides/slide-09-dual-stack-ipv6-wlc-mobility.png) |\n| **10** | **NOC Audit Runbook Matrix** | 10-row CLI verification table with PASS badges & sign-off | [View Slide](slides/slide-10-noc-audit-verification-runbook.png) |\n",
+    "verification": "This enterprise lab was 100% completed and fully validated within the Cisco Packet Tracer grading assessment engine:\n\n```\n================================================================================\nCISCO PACKET TRACER ASSESSMENT ENGINE - COMPLETION CERTIFICATE\n================================================================================\nActivity: Cisco CCNA Mega Lab (Jeremy's IT Lab)\nCandidate: Abdul Wahab Saim (CCNA 200-301)\nAssessment Status: 100% COMPLETE // ALL ASSESSMENT ITEMS PASSED\nConnectivity Tests: 100% PASSED (Dual-ISP Failover, Inter-VLAN Routing, Wireless Join)\n================================================================================\nCongratulations! You have successfully completed the lab.\n================================================================================\n```\n\n\n```cisco\nR1# show ip ospf neighbor\nNeighbor ID     Pri   State           Dead Time   Address         Interface\n10.0.0.77         0   FULL/  -        00:00:37    10.0.0.34       GigabitEthernet0/0\n10.0.0.78         0   FULL/  -        00:00:32    10.0.0.38       GigabitEthernet0/1\n\nDSW-A1# show standby brief\n                     P indicates configured to preempt.\n                     |\nInterface   Grp  Pri P State   Active          Standby         Virtual IP\nVl10        2    105 P Active  local           10.1.0.3        10.1.0.1\nVl20        3    100   Standby 10.2.0.3        local           10.2.0.1\nVl40        4    100   Standby 10.6.0.3        local           10.6.0.1\nVl99   "
+  },
+  {
+    "id": "routing-01-dynamic-routing-eigrp",
+    "lab_num": 1,
+    "title": "Enterprise Dynamic Routing: EIGRP Autonomous System",
+    "folder": "01-dynamic-routing-eigrp",
+    "category": "Enterprise Routing",
+    "category_slug": "routing",
+    "summary": "This lab implements an Enhanced Interior Gateway Routing Protocol (EIGRP) domain under Autonomous System 7 (AS 7) between two enterprise edge routers: LHR (Lahore Branch) and KHI (Karachi Hub). The primary objective is to configure classles...",
+    "tags": [
+      "EIGRP AS 7",
+      "DUAL Metric",
+      "Feasible Successor"
+    ],
+    "topology_img": "assets/labs/routing-01-dynamic-routing-eigrp/topology.png",
+    "has_pkt": true,
+    "pkt_file": "dynamic-routing-eigrp.pkt",
+    "configs": [
+      "lhr-router-config.ios",
+      "khi-router-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/enterprise-routing-labs/tree/main/01-dynamic-routing-eigrp",
+    "problem_and_fix": "",
+    "addressing_table": "| Device | Interface | IP Address | Subnet Mask | Default Gateway | Function / Role |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **LHR** | `Fa0/0` | `200.100.51.101` | `255.255.255.0` | N/A | Branch LAN 1 Gateway |\n| **LHR** | `Fa0/1` | `200.100.50.101` | `255.255.255.0` | N/A | Branch LAN 2 Gateway |\n| **LHR** | `Se0/0/0` | `1.1.1.1` | `255.0.0.0` | N/A | WAN Uplink (to KHI) |\n| **KHI** | `Fa0/0` | `200.100.100.101` | `255.255.255.0` | N/A | Hub LAN 3 Gateway |\n| **KHI** | `Fa0/1` | `200.100.101.101` | `255.255.255.0` | N/A | Hub LAN 4 Gateway |\n| **KHI** | `Se0/0/0` | `1.1.1.2` | `255.0.0.0` | N/A | WAN Uplink (DCE Clocked) |\n| **PC0** | `NIC` | `200.100.51.100` | `255.255.255.0` | `200.100.51.101` | Engineering Host (LAN 1) |\n| **PC2** | `NIC` | `200.100.50.100` | `255.255.255.0` | `200.100.50.101` | Server Host (LAN 2) |\n| **PC3** | `NIC` | `200.100.100.100` | `255.255.255.0` | `200.100.100.101` | Management Host (LAN 3) |\n| **PC1** | `NIC` | `200.100.101.100` | `255.255.255.0` | `200.100.101.101` | Operations Host (LAN 4) |\n",
+    "verification": "```text\nLHR# show ip route\nGateway of last resort is not set\n\n     1.0.0.0/8 is variably subnetted, 2 subnets, 2 masks\nC       1.0.0.0/8 is directly connected, Serial0/0/0\nL       1.1.1.1/32 is directly connected, Serial0/0/0\n     200.100.50.0/24 is variably subnetted, 2 subnets, 2 masks\nC       200.100.50.0/24 is directly connected, FastEthernet0/1\nL       200.100.50.101/32 is directly connected, FastEthernet0/1\n     200.100.51.0/24 is variably subnetted, 2 subnets, 2 masks\nC       200.100.51.0/24 is directly connected, FastEthernet0/0\nL       200.100.51.101/32 is directly connected, FastEthernet0/0\nD    200.100.100.0/24 [90/2172416] via 1.1.1.2, 01:51:21, Serial0/0/0\nD    200.100.101.0/24 [90/2172416] via 1.1.1.2, 01:51:21, Serial0/0/0\n```\n\n> [!TIP]\n> **Key CLI Output Decoding:**\n> - **`D`**: Identifies routes discovered and maintained by DUAL (EIGRP).\n> - **`90`**: Internal Administrative Distance (AD), establishing higher precedence over OSPF (110) and RIP (120).\n> - **`2172416`**: Feasible Distance (metric calculated to destination).\n\n---"
+  },
+  {
+    "id": "routing-02-dynamic-routing-multi-area-ospf",
+    "lab_num": 2,
+    "title": "Enterprise Dynamic Routing: Multi-Area OSPF & ABR Architecture",
+    "folder": "02-dynamic-routing-multi-area-ospf",
+    "category": "Enterprise Routing",
+    "category_slug": "routing",
+    "summary": "In enterprise campus networks, flat single-area networks increase SPF calculation overhead and routing table bloat. This lab implements a Hierarchical Multi-Area OSPF topology connecting Backbone Area 0 and Standard Area 1 using Cisco 2811 routers ...",
+    "tags": [
+      "OSPFv2 Multi--Area",
+      "OSPFv2",
+      "Area 0/1",
+      "LSA Types"
+    ],
+    "topology_img": "assets/labs/routing-02-dynamic-routing-multi-area-ospf/topology.png",
+    "has_pkt": true,
+    "pkt_file": "dynamic-routing-multi-area-ospf.pkt",
+    "configs": [
+      "lhr-area0-config.ios",
+      "khi-abr-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/enterprise-routing-labs/tree/main/02-dynamic-routing-multi-area-ospf",
+    "problem_and_fix": "",
+    "addressing_table": "| Device | Interface | IP Address | Subnet Mask | Default Gateway | OSPF Area | Area Type / Description |\n| :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n| **LHR** | `Fa0/1` | `200.100.50.101` | `255.255.255.0` | N/A | **Area 0** | Backbone LAN Gateway |\n| **LHR** | `Se0/0/0` | `1.1.1.1` | `255.0.0.0` | N/A | **Area 0** | Backbone WAN Uplink (to KHI) |\n| **KHI** | `Se0/0/0` | `1.1.1.2` | `255.0.0.0` | N/A | **Area 0** | Backbone WAN Uplink (DCE Provider) |\n| **KHI** | `Fa0/0` | `200.100.100.101` | `255.255.255.0` | N/A | **Area 1** | Standard Branch LAN Gateway |\n| **PC (Area 0)** | `NIC` | `200.100.50.100` | `255.255.255.0` | `200.100.50.101` | **Area 0** | Backbone Engineering Host |\n| **PC (Area 1)** | `NIC` | `200.100.100.100` | `255.255.255.0` | `200.100.100.101` | **Area 1** | Branch Operations Host |\n",
+    "verification": "### 1. Routing Table on Router `LHR` (Area 0)\n```text\nLHR# show ip route\nGateway of last resort is not set\n\n     1.0.0.0/8 is variably subnetted, 2 subnets, 2 masks\nC       1.0.0.0/8 is directly connected, Serial0/0/0\nL       1.1.1.1/32 is directly connected, Serial0/0/0\n     200.100.50.0/24 is variably subnetted, 2 subnets, 2 masks\nC       200.100.50.0/24 is directly connected, FastEthernet0/1\nL       200.100.50.101/32 is directly connected, FastEthernet0/1\nO IA 200.100.100.0/24 [110/65] via 1.1.1.2, 00:01:18, Serial0/0/0\n```\n\n> [!TIP]\n> **Key CLI Output Decoding:**\n> - **`O IA`**: OSPF Inter-Area route (generated via Type-3 Summary LSA from ABR `KHI`).\n> - **`110`**: Administrative Distance for OSPF.\n> - **`65`**: Total path metric ($64 \\text{ Serial Cost} + 1 \\text{ FastEthernet Cost}$).\n\n---\n\n### 2. Routing Table on Router `KHI` (ABR)\n```text\nKHI# show ip route\nGateway of last resort is not set\n\n     1.0.0.0/8 is variably subnetted, 2 subnets, 2 masks\nC       1.0.0.0/8 is directly connected, Serial0/0/0\nL       1.1.1.2/32 is directly connected, Serial0/0/0\nO    200.100.50.0/24 [110/65] via 1.1.1.1, 00:02:03, Serial0/0/0\n     200.100.100.0/24 is variably subnetted, 2 subnets, 2 masks\nC       200.100.100.0/24 is directly connected, FastEthernet0/0\nL       200.100.100.101/32 is directly connected, FastEthernet0/0\n```\n\n---\n\n### 3. End-to-End Ping Reachability Test Matrix\n\n| Source Device | Destination Host | Target IP | Source Area | Destination Area | Loss Rate | Status |\n| "
+  },
+  {
+    "id": "routing-03-multi-router-wan-mesh-ecmp",
+    "lab_num": 3,
+    "title": "Enterprise WAN Architecture: 5-Node Full-Mesh & ECMP Load Balancing",
+    "folder": "03-multi-router-wan-mesh-ecmp",
+    "category": "Enterprise Routing",
+    "category_slug": "routing",
+    "summary": "In mission-critical enterprise WAN topologies, single points of failure cannot be tolerated. This lab implements a Complete Graph Full-Mesh WAN Topology ($K_5$) comprising five interconnected core routers (Router 0 through Router 4), five distribution ...",
+    "tags": [
+      "RIP Dynamic Routing"
+    ],
+    "topology_img": "assets/labs/routing-03-multi-router-wan-mesh-ecmp/topology.png",
+    "has_pkt": true,
+    "pkt_file": "multi-router-full-mesh-ecmp.pkt",
+    "configs": [],
+    "github_url": "https://github.com/abdulwahabsaim/enterprise-routing-labs/tree/main/03-multi-router-wan-mesh-ecmp",
+    "problem_and_fix": "",
+    "addressing_table": "| Node | Gateway Interface | Gateway IP | Subnet Mask | Connected Switch | Attached Subnet | Branch ID |\n| :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n| **Router 0** | `Fa0/0` | `192.168.1.1` | `255.255.255.0` | `Switch 0` | `192.168.1.0/24` | Branch 1 (Hosts PC0, PC1) |\n| **Router 1** | `Fa0/0` | `192.168.2.1` | `255.255.255.0` | `Switch 1` | `192.168.2.0/24` | Branch 2 (Hosts PC2, PC3) |\n| **Router 2** | `Fa0/0` | `192.168.3.1` | `255.255.255.0` | `Switch 2` | `192.168.3.0/24` | Branch 3 (Hosts PC4, PC5) |\n| **Router 4** | `Fa0/0` | `192.168.4.1` | `255.255.255.0` | `Switch 4` | `192.168.4.0/24` | Branch 4 (Hosts PC6, PC7) |\n| **Router 3** | `Fa0/0` | `192.168.5.1` | `255.255.255.0` | `Switch 3` | `192.168.5.0/24` | Branch 5 (Hosts PC6, PC8) |\n",
+    "verification": "### \ud83d\udd39 Evidence of Equal-Cost Multi-Path (ECMP) on `Router 4`\n```text\nRouter# show ip route\nGateway of last resort is not set\n\nR    11.0.0.0/8 [120/1] via 16.0.0.2, 00:00:11, Serial0/1/1\n                [120/1] via 19.0.0.2, 00:00:17, Serial0/0/1\nR    12.0.0.0/8 [120/1] via 19.0.0.2, 00:00:17, Serial0/0/1\n                [120/1] via 15.0.0.2, 00:00:09, Serial0/0/0\nR    13.0.0.0/8 [120/1] via 16.0.0.2, 00:00:11, Serial0/1/1\n                [120/1] via 15.0.0.2, 00:00:09, Serial0/0/0\nC    14.0.0.0/8 is directly connected, Serial0/1/0\nC    15.0.0.0/8 is directly connected, Serial0/0/0\nC    16.0.0.0/8 is directly connected, Serial0/1/1\nR    17.0.0.0/8 [120/1] via 14.0.0.3, 00:00:13, Serial0/1/0\n                [120/1] via 15.0.0.2, 00:00:09, Serial0/0/0\nR    18.0.0.0/8 [120/1] via 16.0.0.2, 00:00:11, Serial0/1/1\n                [120/1] via 14.0.0.3, 00:00:13, Serial0/1/0\nC    19.0.0.0/8 is directly connected, Serial0/0/1\nR    20.0.0.0/8 [120/1] via 14.0.0.3, 00:00:13, Serial0/1/0\n                [120/1] via 19.0.0.2, 00:00:17, Serial0/0/1\nR    192.168.1.0/24 [120/1] via 16.0.0.2, 00:00:11, Serial0/1/1\nR    192.168.2.0/24 [120/1] via 19.0.0.2, 00:00:17, Serial0/0/1\nR    192.168.3.0/24 [120/1] via 15.0.0.2, 00:00:09, Serial0/0/0\nC    192.168.4.0/24 is directly connected, FastEthernet0/0\nR    192.168.5.0/24 [120/1] via 14.0.0.3, 00:00:13, Serial0/1/0\n```\n\n> [!TIP]\n> **ECMP Load Balancing Breakdown:**\n> Notice how subnet `11.0.0.0/8` has **two equal-cost next-hop entries** (`via 16.0."
+  },
+  {
+    "id": "routing-04-multi-hop-static-routing",
+    "lab_num": 4,
+    "title": "Enterprise Static Routing: Multi-Hop Transit WAN Architecture",
+    "folder": "04-multi-hop-static-routing",
+    "category": "Enterprise Routing",
+    "category_slug": "routing",
+    "summary": "Production Cisco IOS-XE networking lab covering Enterprise Static Routing: Multi-Hop Transit WAN Architecture with end-to-end Packet Tracer simulation and CLI telemetry verification.",
+    "tags": [
+      "Cisco IOS-XE",
+      "Packet Tracer",
+      "CLI Verified"
+    ],
+    "topology_img": "assets/labs/routing-04-multi-hop-static-routing/topology.png",
+    "has_pkt": true,
+    "pkt_file": "multi-hop-static-routing.pkt",
+    "configs": [],
+    "github_url": "https://github.com/abdulwahabsaim/enterprise-routing-labs/tree/main/04-multi-hop-static-routing",
+    "problem_and_fix": "",
+    "addressing_table": "| Device | Interface | IP Address | Subnet Mask | Default Gateway | Function / Description |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **Router 0** | `Fa0/0` | `192.168.1.1` | `255.255.255.0` | N/A | Branch 1 LAN Gateway |\n| **Router 0** | `Se0/1/0` | `11.0.0.2` | `255.0.0.0` | N/A | WAN Uplink to Router 1 |\n| **Router 1** | `Fa0/0` | `192.168.2.1` | `255.255.255.0` | N/A | Central Hub LAN Gateway |\n| **Router 1** | `Se0/1/0` | `11.0.0.3` | `255.0.0.0` | N/A | WAN Uplink to Router 0 (DCE) |\n| **Router 1** | `Se0/1/1` | `12.0.0.2` | `255.0.0.0` | N/A | WAN Uplink to Router 2 |\n| **Router 2** | `Fa0/0` | `192.168.3.1` | `255.255.255.0` | N/A | Branch 2 LAN Gateway |\n| **Router 2** | `Se0/1/0` | `12.0.0.3` | `255.0.0.0` | N/A | WAN Uplink to Router 1 (DCE) |\n| **PC0** | `NIC` | `192.168.1.101` | `255.255.255.0` | `192.168.1.1` | Branch 1 Host |\n| **PC2** | `NIC` | `192.168.2.101` | `255.255.255.0` | `192.168.2.1` | Central Hub Host |\n| **PC4** | `NIC` | `192.168.3.101` | `255.255.255.0` | `192.168.3.1` | Branch 2 Host |\n",
+    "verification": "### \ud83d\udd39 Router 0 Routing Table (`show ip route`)\n```text\nRouter0# show ip route\nGateway of last resort is not set\n\nC    11.0.0.0/8 is directly connected, Serial0/1/0\nC    192.168.1.0/24 is directly connected, FastEthernet0/0\nS    192.168.2.0/24 [1/0] via 11.0.0.3\nS    192.168.3.0/24 [1/0] via 11.0.0.3\n```\n\n### \ud83d\udd39 Router 1 Routing Table (`show ip route`)\n```text\nRouter1# show ip route\nGateway of last resort is not set\n\nC    11.0.0.0/8 is directly connected, Serial0/1/0\nC    12.0.0.0/8 is directly connected, Serial0/1/1\nS    192.168.1.0/24 [1/0] via 11.0.0.2\nC    192.168.2.0/24 is directly connected, FastEthernet0/0\nS    192.168.3.0/24 [1/0] via 12.0.0.3\n```\n\n### \ud83d\udd39 Router 2 Routing Table (`show ip route`)\n```text\nRouter2# show ip route\nGateway of last resort is not set\n\nC    12.0.0.0/8 is directly connected, Serial0/1/0\nS    192.168.1.0/24 [1/0] via 12.0.0.2\nS    192.168.2.0/24 [1/0] via 12.0.0.2\nC    192.168.3.0/24 is directly connected, FastEthernet0/0\n```\n\n> **CLI Decoding:**\n> * `S`: Route learned statically.\n> * `[1/0]`: Administrative Distance is **1** (higher preference than all dynamic routing protocols), metric is **0**.\n> * `via X.X.X.X`: Next-hop IP forwarding address.\n\n---"
+  },
+  {
+    "id": "routing-05-hsrp-gateway-redundancy",
+    "lab_num": 5,
+    "title": "Enterprise High Availability: Dual-Segment HSRP Gateway Redundancy",
+    "folder": "05-hsrp-gateway-redundancy",
+    "category": "Enterprise Routing",
+    "category_slug": "routing",
+    "summary": "Standard single-sided HSRP deployments often fail during outages due to asymmetrical return routing\u2014where outgoing packets reach their destination, but return replies are dropped by the failed gateway. This lab configures an enterprise Dual-Segment ...",
+    "tags": [
+      "HSRP v2",
+      "HSRPv2",
+      "Virtual VIP",
+      "Preempt Failover"
+    ],
+    "topology_img": "assets/labs/routing-05-hsrp-gateway-redundancy/topology.png",
+    "has_pkt": true,
+    "pkt_file": "hsrp-gateway-redundancy.pkt",
+    "configs": [
+      "router2-active-config.ios",
+      "router3-standby-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/enterprise-routing-labs/tree/main/05-hsrp-gateway-redundancy",
+    "problem_and_fix": "### 1. Active / Standby Gateway Election\n* **Priority Value:** The router with the higher configured priority wins the election (`Router2` with priority `110` becomes Active; `Router3` with priority `100` becomes Standby).\n* **Preemption (`standby preempt`):** Allows a recovered primary router (`Router2`) to immediately reclaim the Active role after a reboot or link recovery.\n\n### 2. Eliminating Asymmetrical Return Path Failures\nRouting is strictly unidirectional. If only the LAN interface runs HSRP, remote hosts will send return traffic to the failed physical WAN IP of the down router. Running **HSRP Group 2 on the WAN segment (`8.8.8.1`)** ensures return traffic dynamically follows the newly elected Active router (`Router3`).\n\n---",
+    "addressing_table": "| Device | Interface | Physical IP | Subnet Mask | HSRP Group | HSRP Role | Priority | Virtual IP (VIP) |\n| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n| **Router2** | `Gig0/0` | `10.1.1.254` | `255.255.255.0` | **Group 1** | **Active Gateway** | `110` (Preempt) | `10.1.1.1` |\n| **Router2** | `Gig0/1` | `8.8.8.251` | `255.255.255.0` | **Group 2** | **Active Gateway** | `110` (Preempt) | `8.8.8.1` |\n| **Router3** | `Gig0/0` | `10.1.1.252` | `255.255.255.0` | **Group 1** | **Standby Gateway**| `100` (Preempt) | `10.1.1.1` |\n| **Router3** | `Gig0/1` | `8.8.8.252` | `255.255.255.0` | **Group 2** | **Standby Gateway**| `100` (Preempt) | `8.8.8.1` |\n| **PC0 (Client)** | `NIC` | `10.1.1.10` | `255.255.255.0` | N/A | LAN Host | N/A | Gateway: **`10.1.1.1`** |\n| **PC1 (Server)** | `NIC` | `8.8.8.10` | `255.255.255.0` | N/A | WAN Server | N/A | Gateway: **`8.8.8.1`** |\n",
+    "verification": "### \ud83d\udd39 Router2 HSRP Summary (`show standby brief`)\n```text\nRouter2# show standby brief\n                     P indicates configured to preempt.\n                     |\nInterface   Grp  Pri P State    Active          Standby         Virtual IP\nGig0/0      1    110 P Active   local           10.1.1.252      10.1.1.1\nGig0/1      2    110 P Active   local           8.8.8.252       8.8.8.1\n```\n\n### \ud83d\udd39 Router3 HSRP Summary (`show standby brief`)\n```text\nRouter3# show standby brief\n                     P indicates configured to preempt.\n                     |\nInterface   Grp  Pri P State    Active          Standby         Virtual IP\nGig0/0      1    100 P Standby  10.1.1.254      local           10.1.1.1\nGig0/1      2    100 P Standby  8.8.8.251       local           8.8.8.1\n```\n\n---\n\n\n| Command | Execution Level | Diagnostic Output & Operational Purpose |\n| :--- | :--- | :--- |\n| `show standby brief` | Privileged EXEC (`#`) | Displays summary line of group, priority, state (Active/Standby), active router IP, standby router IP, and virtual IP. |\n| `show standby` | Privileged EXEC (`#`) | Detailed output displaying Hello/Hold timers, Virtual MAC address, preemption status, and failover state counters. |\n| `show standby GigabitEthernet0/0` | Privileged EXEC (`#`) | Filters HSRP output exclusively for the specified interface. |\n| `show ip arp` | Privileged EXEC (`#`) | Displays ARP cache to verify resolution of VIP `10.1.1.1` to Virtual MAC `0000.0c9f.f001`. |\n| `debug standby events` | Pr"
+  },
+  {
+    "id": "routing-06-intervlan-routing-multilayer-svi",
+    "lab_num": 6,
+    "title": "Layer 3 Campus Architecture: Multilayer Switching & SVI Inter-VLAN Routing",
+    "folder": "06-intervlan-routing-multilayer-svi",
+    "category": "Enterprise Routing",
+    "category_slug": "routing",
+    "summary": "In modern enterprise campus networks, relying on an edge router for inter-VLAN routing (Router-on-a-Stick) creates a severe bandwidth bottleneck (\"router-on-a-stick hair-pinning\"). This lab demonstrates the architectural shift to Multilayer Switching. By m...",
+    "tags": [
+      "802.1Q Trunk",
+      "Inter-VLAN SVI",
+      "VTPv3"
+    ],
+    "topology_img": "assets/labs/routing-06-intervlan-routing-multilayer-svi/topology.png",
+    "has_pkt": true,
+    "pkt_file": "intervlan-routing-multilayer-svi.pkt",
+    "configs": [
+      "sw2-config.ios",
+      "sw1-config.ios",
+      "r1-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/enterprise-routing-labs/tree/main/06-intervlan-routing-multilayer-svi",
+    "problem_and_fix": "| Diagnostic Command | Execution Mode | Purpose & Application |\n| :--- | :--- | :--- |\n| `show ip route` | Privileged EXEC (`#`) | Verifies that SVIs are injected into the routing table as `C` (Connected) routes and the default route `S*` is active. |\n| `show ip interface brief` | Privileged EXEC (`#`) | Quick check to ensure SVIs are `up/up`. If an SVI is `up/down`, check if the VLAN is allowed on an active trunk or access port. |\n| `show vlan brief` | Privileged EXEC (`#`) | Ensures VLANs exist in the local database. *An SVI will not come up if the VLAN doesn't exist in the database.* |\n| `show interfaces trunk` | Privileged EXEC (`#`) | Confirms L2 topology paths are open for VLANs to traverse between Access and Distribution switches. |\n\n---",
+    "addressing_table": "| Device | Interface | Role / Zone | IP Address | Subnet Mask | Status |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **SW2 (L3)** | `Vlan 10` | Engineering Gateway | `10.0.0.62` | `255.255.255.192` | Active |\n| **SW2 (L3)** | `Vlan 20` | Sales/HR Gateway | `10.0.0.126` | `255.255.255.192` | Active |\n| **SW2 (L3)** | `Vlan 30` | Management Gateway | `10.0.0.190` | `255.255.255.192` | Active |\n| **SW2 (L3)** | `Gig1/0/2` | L3 Uplink to Router | `10.0.0.193` | `255.255.255.252` | Active (`no switchport`) |\n| **R1 (Edge)**| `Gig0/0` | Downlink to Core/Dist | `10.0.0.194` | `255.255.255.252` | Active |\n| **R1 (Edge)**| `Gig0/0/0` | WAN / Internet Uplink | `1.1.1.2` | `255.255.255.0` | Active |\n",
+    "verification": "### 1. Verifying SVIs and L3 Port Status on Multilayer Switch (SW2)\n```text\nSW2# show ip interface brief\nInterface              IP-Address      OK? Method Status                Protocol\nGigabitEthernet1/0/1   unassigned      YES unset  up                    up\nGigabitEthernet1/0/2   10.0.0.193      YES manual up                    up\nVlan10                 10.0.0.62       YES manual up                    up\nVlan20                 10.0.0.126      YES manual up                    up\nVlan30                 10.0.0.190      YES manual up                    up\n```\n*Validation:* SVIs are `up/up` and processing local inter-VLAN traffic. Physical port `Gig1/0/2` holds its own L3 address.\n\n### 2. Validating the Routing Table on SW2\n```text\nSW2# show ip route\nGateway of last resort is 10.0.0.194 to network 0.0.0.0\n\n      10.0.0.0/8 is variably subnetted, 8 subnets, 3 masks\nC        10.0.0.0/26 is directly connected, Vlan10\nC        10.0.0.64/26 is directly connected, Vlan20\nC        10.0.0.128/26 is directly connected, Vlan30\nC        10.0.0.192/30 is directly connected, GigabitEthernet1/0/2\nS*    0.0.0.0/0 [1/0] via 10.0.0.194\n```\n*Validation:* SW2 acts as a fully functional router. It has `Connected` routes for all local VLANs and a Gateway of Last Resort pointing to R1.\n\n---\n\n\n| Diagnostic Command | Execution Mode | Purpose & Application |\n| :--- | :--- | :--- |\n| `show ip route` | Privileged EXEC (`#`) | Verifies that SVIs are injected into the routing table as `C` (Connected) route"
+  },
+  {
+    "id": "routing-07-floating-static-routes-wan-failover",
+    "lab_num": 7,
+    "title": "Enterprise WAN Failover: Floating Static Routes & AD Tuning",
+    "folder": "07-floating-static-routes-wan-failover",
+    "category": "Enterprise Routing",
+    "category_slug": "routing",
+    "summary": "In enterprise WAN architectures, branches often utilize high-speed internal point-to-point links (running dynamic routing protocols like OSPF) alongside secondary Internet connections via standard ISPs. If the primary internal link fails, traffic must automati...",
+    "tags": [
+      "Cisco IOS-XE",
+      "Packet Tracer",
+      "CLI Verified"
+    ],
+    "topology_img": "assets/labs/routing-07-floating-static-routes-wan-failover/topology.png",
+    "has_pkt": true,
+    "pkt_file": "floating-static-routes-wan-failover.pkt",
+    "configs": [
+      "r2-config.ios",
+      "r1-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/enterprise-routing-labs/tree/main/07-floating-static-routes-wan-failover",
+    "problem_and_fix": "| Command | Execution Mode | Incident Response Application |\n| :--- | :--- | :--- |\n| `show ip route` | Privileged EXEC (`#`) | Verifies which path (OSPF `O` vs Static `S`) is currently injected into the active routing table. |\n| `show ip route [subnet]` | Privileged EXEC (`#`) | Displays detailed metric, AD, and next-hop information for a specific destination network. |\n| `traceroute [ip]` | Privileged EXEC (`#`) | Validates the actual hop-by-hop forwarding path to ensure traffic isn't silently blackholed or asymmetrically routed. |\n| `show ip ospf neighbor` | Privileged EXEC (`#`) | Confirms if the primary dynamic routing adjacency has formed or failed. |\n\n---",
+    "addressing_table": "| Router | Interface | Role / Zone | IP Address | Subnet Mask | Next Hop (Backup) |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **R1** | `Gig0/1` | LAN (Enterprise A - PC1) | `10.0.1.254` | `255.255.255.0` | N/A |\n| **R1** | `Gig0/2/0` | Primary Internal Link | `10.0.0.1` | `255.255.255.252` | `10.0.0.2` (OSPF) |\n| **R1** | `Gig0/0/0` | ISP A (Backup WAN) | `203.0.113.2` | `255.255.255.252` | `203.0.113.1` (Static 120) |\n| **R2** | `Gig0/1` | LAN (Enterprise A - SRV1) | `10.0.2.254` | `255.255.255.0` | N/A |\n| **R2** | `Gig0/2/0` | Primary Internal Link | `10.0.0.2` | `255.255.255.252` | `10.0.0.1` (OSPF) |\n| **R2** | `Gig0/0/0` | ISP A (Backup WAN) | `203.0.113.6` | `255.255.255.252` | `203.0.113.5` (Static 120) |\n",
+    "verification": "The following output was captured **after simulating a failure on the primary internal link (Gig0/2/0)**. The router automatically withdrew the OSPF route and installed the backup static route.\n\n### R1 Routing Table (Primary Link Failed)\n```text\nR1# show ip route\nGateway of last resort is 203.0.113.9 to network 0.0.0.0\n\n     10.0.0.0/8 is variably subnetted, 3 subnets, 2 masks\nC       10.0.1.0/24 is directly connected, GigabitEthernet0/1\nL       10.0.1.254/32 is directly connected, GigabitEthernet0/1\n\n! The Floating Static Route has successfully assumed control of forwarding:\nS       10.0.2.0/24 [120/0] via 203.0.113.1\n\n     203.0.113.0/24 is variably subnetted, 4 subnets, 2 masks\nC       203.0.113.0/30 is directly connected, GigabitEthernet0/0/0\n```\n*Validation:* The bracket `[120/0]` proves that the standby route (Administrative Distance 120) is now actively routing traffic to the `10.0.2.0/24` subnet.\n\n---"
+  },
+  {
+    "id": "routing-08-ospf-neighbor-troubleshooting-lsdb",
+    "lab_num": 8,
+    "title": "Enterprise Protocol Diagnostics: OSPFv2 Adjacency & LSDB Troubleshooting",
+    "folder": "08-ospf-neighbor-troubleshooting-lsdb",
+    "category": "Enterprise Routing",
+    "category_slug": "routing",
+    "summary": "When an OSPF network fails to converge, NOC engineers must systematically diagnose the state machine (INIT, 2-WAY, EXSTART, FULL) to identify the root cause. A failed adjacency prevents Link-State Advertisements (LSAs) from flooding, causing silent rou...",
+    "tags": [
+      "Link--State",
+      "OSPFv2",
+      "Area 0/1",
+      "LSA Types"
+    ],
+    "topology_img": "assets/labs/routing-08-ospf-neighbor-troubleshooting-lsdb/topology.png",
+    "has_pkt": true,
+    "pkt_file": "ospf-neighbor-troubleshooting-lsdb.pkt",
+    "configs": [
+      "r5-config.ios",
+      "r2-config.ios",
+      "r3-config.ios",
+      "r4-config.ios",
+      "r1-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/enterprise-routing-labs/tree/main/08-ospf-neighbor-troubleshooting-lsdb",
+    "problem_and_fix": "[![Routing](https://img.shields.io/badge/Routing-OSPFv2-00599C?style=for-the-badge&logo=cisco&logoColor=white)](https://cisco.com)\n[![Feature](https://img.shields.io/badge/Feature-Adjacency_Troubleshooting-1BA0D7?style=for-the-badge&logo=cisco&logoColor=white)](https://cisco.com)\n[![Protocol](https://img.shields.io/badge/Protocol-Link--State-brightgreen?style=for-the-badge)]()\n[![Status](https://img.shields.io/badge/Status-Fully_Converged-orange?style=for-the-badge)]()\n\n<p align=\"center\">\n  <b>Diagnosing and resolving advanced OSPF neighbor adjacency failures caused by Network Type mismatches, Timer discrepancies, and Default Route injection errors across a 5-node routing domain.</b>\n</p>\n\n</div>\n\n---\n\n## \ud83d\udccc Executive Summary & NOC Engineering Objective\n\nWhen an OSPF network fails to converge, NOC engineers must systematically diagnose the state machine (`INIT`, `2-WAY`, `EXSTART`, `FULL`) to identify the root cause. A failed adjacency prevents Link-State Advertisements (LSAs) from flooding, causing silent routing blackholes.\n\nIn this lab, the OSPF domain was suffering from three critical production-level outages:\n1. **R3 to R4 Link Failure:** OSPF was stuck in `DOWN` state due to a **Network Type mismatch**. R3's interface was hardcoded to `point-to-point`, while R4 remained on the Ethernet default `broadcast`.\n2. **R2 to R5 Link Failure:** OSPF failed to form due to a **Hello/Dead Timer mismatch**.\n3. **Internet Reachability Failure:** The ASBR (R5) had a static default rout",
+    "addressing_table": "| Fault Location | Diagnostic Symptom | Root Cause | Resolution Action |\n| :--- | :--- | :--- | :--- |\n| **R3 \u2194 R4** | Routers missing from `show ip ospf neighbor` | **Network Type Mismatch** (R3 was `point-to-point`, R4 was `broadcast`) | Removed `ip ospf network point-to-point` on R3; returned to default `BROADCAST`. |\n| **R2 \u2194 R5** | Adjacency stuck / Hello packets dropped | **Timer Mismatch** (R5 Hello/Dead timers altered) | Reset timers to Ethernet defaults: `Hello 10`, `Dead 40`. |\n| **R5 (ASBR)** | Internal routers missing `O*E2` default route | **Missing Injection Command** | Applied `default-information originate` under `router ospf 1` on R5. |\n",
+    "verification": "### 1. Verifying Full Adjacency & DR/BDR Election (R5)\n```text\nR5# show ip ospf neighbor\n\nNeighbor ID     Pri   State           Dead Time   Address         Interface\n192.168.245.2     1   FULL/BDR        00:00:31    192.168.245.2   GigabitEthernet0/0\n192.168.245.1     1   FULL/DROTHER    00:00:31    192.168.245.1   GigabitEthernet0/0\n```\n*Validation:* R5 successfully formed `FULL` adjacencies with both R4 and R2.\n\n### 2. Verifying the LSDB Default Route Injection (R1)\n```text\nR1# show ip route\nGateway of last resort is 192.168.12.2 to network 0.0.0.0\n\n     10.0.0.0/8 is variably subnetted, 3 subnets, 2 masks\nC       10.0.1.0/24 is directly connected, GigabitEthernet0/0\nO       10.0.2.0/24 [110/67] via 192.168.12.2, 00:09:31, Serial0/0/0\n     192.168.34.0/30 is subnetted, 1 subnets\nO       192.168.34.0/30 [110/66] via 192.168.12.2, 00:09:31, Serial0/0/0\n\n! The default route is now successfully installed via OSPF from the ASBR\nO*E2 0.0.0.0/0 [110/1] via 192.168.12.2, 00:09:31, Serial0/0/0\n```\n*Validation:* The `O*E2` code confirms the External Type-2 LSA successfully propagated through the OSPF backbone to R1.\n\n---"
+  },
+  {
+    "id": "routing-09-ipv6-dual-stack-routing-slaac",
+    "lab_num": 9,
+    "title": "IPv6 Enterprise Routing: SLAAC, Link-Local Next-Hops & Floating Failover",
+    "folder": "09-ipv6-dual-stack-routing-slaac",
+    "category": "Enterprise Routing",
+    "category_slug": "routing",
+    "summary": "As IPv4 exhaustion accelerates, European enterprises and ISPs (especially in the Netherlands) heavily mandate dual-stack or IPv6-only architectures. A key differentiator in IPv6 is the separation of Global Unicast Addresses (GUA) used for data-plane traffi...",
+    "tags": [
+      "IPv6 Dual--Stack",
+      "IPv6 Dual-Stack",
+      "SLAAC",
+      "EUI-64"
+    ],
+    "topology_img": "assets/labs/routing-09-ipv6-dual-stack-routing-slaac/topology.png",
+    "has_pkt": true,
+    "pkt_file": "ipv6-dual-stack-routing-slaac.pkt",
+    "configs": [
+      "r2-config.ios",
+      "r3-config.ios",
+      "r1-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/enterprise-routing-labs/tree/main/09-ipv6-dual-stack-routing-slaac",
+    "problem_and_fix": "| Diagnostic Command | Execution Mode | Purpose & Application |\n| :--- | :--- | :--- |\n| `show ipv6 interface brief` | Privileged EXEC (`#`) | Displays all GUAs and automatically generated `FE80::` Link-Local addresses. |\n| `show ipv6 route` | Privileged EXEC (`#`) | Verifies active IPv6 routes. Ensure floating static routes are NOT visible while primary is UP. |\n| `show ipv6 neighbors` | Privileged EXEC (`#`) | IPv6 equivalent of the ARP table. Uses NDP (Neighbor Discovery Protocol) to map GUAs to MAC addresses. |\n| `ping ipv6 [address]` | Privileged EXEC (`#`) | Confirms end-to-end ICMPv6 reachability. |\n\n---",
+    "addressing_table": "| Router | Interface | Role / Zone | IPv6 Address (GUA / Link-Local) | Next-Hop Target |\n| :--- | :--- | :--- | :--- | :--- |\n| **R1** | `Gig0/0` | LAN 1 Gateway | `2001:DB8:0:1::1/64` | N/A (SLAAC enabled) |\n| **R1** | `Gig0/1` | Primary WAN to R3 | `2001:DB8:0:13::1/64` | `2001:DB8:0:13::2` |\n| **R1** | `Ser0/0/0` | Backup WAN to R2 | `FE80::202:4AFF:FE23:E201` (LLA Only) | `FE80::20B:BEFF:FED7:4901` |\n| **R2** | `Ser0/0/0` | Transit from R1 | `FE80::20B:BEFF:FED7:4901` (LLA Only) | `FE80::202:4AFF:FE23:E201` |\n| **R2** | `Ser0/0/1` | Transit to R3 | `FE80::20B:BEFF:FED7:4901` (LLA Only) | `FE80::290:2BFF:FECC:A101` |\n| **R3** | `Gig0/0` | LAN 3 Gateway | `2001:DB8:0:3::1/64` | N/A (SLAAC enabled) |\n| **R3** | `Gig0/1` | Primary WAN to R1 | `2001:DB8:0:13::2/64` | `2001:DB8:0:13::1` |\n| **R3** | `Ser0/0/0` | Backup WAN to R2 | `FE80::290:2BFF:FECC:A101` (LLA Only) | `FE80::20B:BEFF:FED7:4901` |\n",
+    "verification": "### 1. Validating Link-Local Address Assignments on R1\n```text\nR1# show ipv6 interface brief\nGigabitEthernet0/0         [up/up]\n    FE80::202:4AFF:FE23:E201\n    2001:DB8:0:1::1\nGigabitEthernet0/1         [up/up]\n    FE80::202:4AFF:FE23:E202\n    2001:DB8:0:13::1\nSerial0/0/0                [up/up]\n    FE80::202:4AFF:FE23:E201\n```\n*Validation:* `Serial0/0/0` is operational without a Global Unicast Address, conserving IP space on point-to-point transit links.\n\n### 2. Validating the IPv6 Routing Table on R1 (Primary Path Active)\n```text\nR1# show ipv6 route\nIPv6 Routing Table - 6 entries\nCodes: C - Connected, L - Local, S - Static, R - RIP, B - BGP\n       D - EIGRP, EX - EIGRP external\n\nC   2001:DB8:0:1::/64 [0/0]\n     via GigabitEthernet0/0, directly connected\nS   2001:DB8:0:3::/64 [1/0]\n     via 2001:DB8:0:13::2\nC   2001:DB8:0:13::/64 [0/0]\n     via GigabitEthernet0/1, directly connected\n```\n*Validation:* The static route `S` points to `2001:DB8:0:13::2` (via `Gig0/1`). The floating route (AD 100) via `Serial0/0/0` is correctly hidden in the background, waiting for a primary link failure.\n\n---"
+  },
+  {
+    "id": "routing-10-enterprise-edge-nat-pat-overload",
+    "lab_num": 10,
+    "title": "Enterprise Edge Architecture: Dynamic PAT (NAT Overload)",
+    "folder": "10-enterprise-edge-nat-pat-overload",
+    "category": "Enterprise Routing",
+    "category_slug": "routing",
+    "summary": "As public IPv4 address space remains exhausted, enterprise networks cannot assign a unique public IP to every internal workstation. The standard architectural solution is deploying Port Address Translation (PAT), also known as NAT Overload, at the WAN ...",
+    "tags": [
+      "NAT Overload",
+      "PAT Overload",
+      "NAT Pool",
+      "RFC 1918"
+    ],
+    "topology_img": "assets/labs/routing-10-enterprise-edge-nat-pat-overload/topology.png",
+    "has_pkt": true,
+    "pkt_file": "enterprise-edge-nat-pat-overload.pkt",
+    "configs": [
+      "r1-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/enterprise-routing-labs/tree/main/10-enterprise-edge-nat-pat-overload",
+    "problem_and_fix": "| Command | Execution Mode | Incident Response Application |\n| :--- | :--- | :--- |\n| `show ip nat translations` | Privileged EXEC (`#`) | Verifies active session mapping. Crucial for identifying if an internal host is generating excessive sessions (e.g., malware or botnet activity). |\n| `show ip nat statistics` | Privileged EXEC (`#`) | Displays global NAT hits, misses, and verifies which interfaces are designated as `inside` vs `outside`. |\n| `clear ip nat translation *` | Privileged EXEC (`#`) | Flushes the dynamic NAT table. Used to force a reset of stalled translations or after applying new ACL rules. |\n| `debug ip nat` | Privileged EXEC (`#`) | Real-time monitoring of address translation as packets cross the inside/outside boundary. |\n\n---",
+    "addressing_table": "| Device / Host | Interface | NAT Zone Designation | IP Address | Subnet Mask | Route Type |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **PC1** | `NIC` | Inside Local | `172.16.0.1` | `255.255.255.0` | Private (RFC 1918) |\n| **R1 (Edge)**| `Gig0/1` | **Inside Interface** | `172.16.0.254` | `255.255.255.0` | Private Gateway |\n| **R1 (Edge)**| `Gig0/0` | **Outside Interface** | `203.0.113.1` | `255.255.255.252` | Inside Global (Public) |\n| **Server** | `NIC` | Outside Global | `8.8.8.8` | `255.255.255.0` | Public Internet |\n",
+    "verification": "The following output was captured after initiating ICMP Echo Requests (pings) from internal host `PC1 (172.16.0.1)` to the external Internet Server `8.8.8.8`.\n\n### R1 Translation Table (NAT Overload Active)\n```text\nR1# show ip nat translations\nPro  Inside global     Inside local       Outside local      Outside global\nicmp 203.0.113.1:1     172.16.0.1:1       8.8.8.8:1          8.8.8.8:1\nicmp 203.0.113.1:2     172.16.0.1:2       8.8.8.8:2          8.8.8.8:2\nicmp 203.0.113.1:3     172.16.0.1:3       8.8.8.8:3          8.8.8.8:3\nicmp 203.0.113.1:4     172.16.0.1:4       8.8.8.8:4          8.8.8.8:4\n```\n*Validation:* \n* **Inside local** (`172.16.0.1`) represents the actual private IP of PC1.\n* **Inside global** (`203.0.113.1`) represents the public IP of R1's WAN interface.\n* **Port multiplexing** is visible via the `:1`, `:2`, `:3`, `:4` suffixes. R1 modifies the ICMP sequence numbers (acting as ports) to track the return traffic for the private host.\n\n---"
+  },
+  {
+    "id": "routing-11-modular-qos-traffic-prioritization",
+    "lab_num": 11,
+    "title": "Modular QoS CLI (MQC): Traffic Prioritization & DSCP Marking",
+    "folder": "11-modular-qos-traffic-prioritization",
+    "category": "Enterprise Routing",
+    "category_slug": "routing",
+    "summary": "In enterprise networks, raw bandwidth alone cannot guarantee the performance of critical applications during network congestion. Quality of Service (QoS) must be applied to identify, mark, and prioritize traffic before it leaves the edge router. This lab d...",
+    "tags": [
+      "Modular QoS CLI",
+      "DSCP EF",
+      "Bandwidth Guarantee"
+    ],
+    "topology_img": "assets/labs/routing-11-modular-qos-traffic-prioritization/topology.png",
+    "has_pkt": true,
+    "pkt_file": "modular-qos-traffic-prioritization.pkt",
+    "configs": [
+      "r1-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/enterprise-routing-labs/tree/main/11-modular-qos-traffic-prioritization",
+    "problem_and_fix": "| Diagnostic Command | Execution Mode | Purpose & Operational Value |\n| :--- | :--- | :--- |\n| `show policy-map interface [id]` | Privileged EXEC (`#`) | Displays real-time statistics, packet matches, and dropped packets for each QoS class. Crucial for identifying if a queue is starving. |\n| `show class-map` | Privileged EXEC (`#`) | Verifies all configured class-maps and their specific match criteria (e.g., protocol, access-list, DSCP). |\n| `show policy-map` | Privileged EXEC (`#`) | Reviews the static configuration of the policy-map to ensure percentages and actions are correct. |\n\n---",
+    "addressing_table": "| Traffic Profile | MQC Class-Map | DSCP Marking | Per-Hop Behavior (PHB) | Queuing Strategy | Allocation |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **HTTPS Traffic** | `HTTPS_MAP` | **AF31** | Assured Forwarding 31 (Low Drop) | **LLQ** (Strict Priority) | 10% |\n| **HTTP Traffic** | `HTTP_MAP` | **AF32** | Assured Forwarding 32 (Med Drop) | **CBWFQ** (Bandwidth) | 10% |\n| **ICMP (Ping)** | `ICMP_MAP` | **CS2** | Class Selector 2 (Backward Comp.) | **CBWFQ** (Bandwidth) | 5% |\n| **Default / Other** | `class-default` | Default (0) | Best Effort (FIFO) | **Default Queuing** | Remainder |\n",
+    "verification": "The following output validates that the MQC policy has been successfully compiled and applied into the router's hardware queues.\n\n```text\nR1# show policy-map \n  Policy Map G0/0/0_OUT\n    Class HTTPS_MAP\n      Strict Priority\n      Bandwidth 10 (%)\n      set ip dscp af31\n    Class HTTP_MAP\n      Bandwidth 10 (%) Max Threshold 64 (packets)\n      set ip dscp af32\n    Class ICMP_MAP\n      Bandwidth 5 (%) Max Threshold 64 (packets)\n      set ip dscp cs2\n```\n*Validation:* \n* `HTTPS_MAP` is successfully registered as a `Strict Priority` (LLQ) queue, guaranteeing that these packets bypass the normal queuing mechanisms and are dispatched first during periods of congestion.\n* The router correctly identifies the DSCP marking values (`af31`, `af32`, `cs2`) that will be rewritten into the IP headers of outbound packets.\n\n---"
+  },
+  {
+    "id": "routing-12-site-to-site-gre-tunnel-ospf",
+    "lab_num": 12,
+    "title": "Site-to-Site VPN Architecture: GRE Tunnels & OSPF Overlay",
+    "folder": "12-site-to-site-gre-tunnel-ospf",
+    "category": "Enterprise Routing",
+    "category_slug": "routing",
+    "summary": "When enterprise branches need to communicate across a public Service Provider network (the \"underlay\"), private RFC 1918 subnets cannot be routed directly over the Internet. This lab demonstrates the configuration of a Generic Routing Encapsulation (GRE) Tun...",
+    "tags": [
+      "GRE",
+      "OSPFv2",
+      "Area 0/1",
+      "LSA Types",
+      "GRE Tunnel"
+    ],
+    "topology_img": "assets/labs/routing-12-site-to-site-gre-tunnel-ospf/topology.png",
+    "has_pkt": true,
+    "pkt_file": "site-to-site-gre-tunnel-ospf.pkt",
+    "configs": [
+      "r2-config.ios",
+      "r1-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/enterprise-routing-labs/tree/main/12-site-to-site-gre-tunnel-ospf",
+    "problem_and_fix": "| Diagnostic Command | Execution Mode | Incident Response Application |\n| :--- | :--- | :--- |\n| `show interface tunnel 0` | Privileged EXEC (`#`) | Verifies tunnel state, encapsulation type, transport MTU, and endpoint misconfigurations. |\n| `ping [destination] source [tunnel_ip]` | Privileged EXEC (`#`) | Tests underlay connectivity. *A GRE tunnel will remain UP if there is a valid route to the tunnel destination, even if the destination is currently unreachable.* |\n| `show ip ospf neighbor` | Privileged EXEC (`#`) | Validates that multicast OSPF hello packets are successfully traversing the GRE tunnel. |\n| `traceroute [private_ip]` | Privileged EXEC (`#`) | Confirms that traffic to the remote branch takes exactly 1 hop (over the tunnel) instead of bleeding out to the ISP. |\n\n---",
+    "addressing_table": "| Router | Interface | Network Zone | IP Address | Subnet Mask | Route Domain |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **R1** | `Gig0/0` | Office A LAN | `10.0.1.1` | `255.255.255.0` | Private (OSPF Overlay) |\n| **R1** | `Gig0/0/0` | ISP Underlay | `100.0.0.2` | `255.255.255.252` | Public (Static Default) |\n| **R1** | `Tunnel0` | **GRE Overlay** | `192.168.1.1` | `255.255.255.252` | Transit (OSPF Overlay) |\n| **R2** | `Gig0/0` | Office B LAN | `10.0.2.1` | `255.255.255.0` | Private (OSPF Overlay) |\n| **R2** | `Gig0/0/0` | ISP Underlay | `200.0.0.2` | `255.255.255.252` | Public (Static Default) |\n| **R2** | `Tunnel0` | **GRE Overlay** | `192.168.1.2` | `255.255.255.252` | Transit (OSPF Overlay) |\n",
+    "verification": "```text\nR1# show interface Tunnel0\nTunnel0 is up, line protocol is up (connected)\n  Hardware is Tunnel\n  Internet address is 192.168.1.1/30\n  Encapsulation TUNNEL, loopback not set\n  Tunnel source 100.0.0.2 (GigabitEthernet0/0/0), destination 200.0.0.2\n  Tunnel protocol/transport GRE/IP\n  Tunnel transport MTU 1476 bytes\n```\n*Validation:* The virtual interface is `up/up`. The output confirms that private traffic entering `Tunnel0` is encapsulated using `GRE/IP` and transported across the public `100.0.0.2` -> `200.0.0.2` underlay."
+  },
+  {
+    "id": "routing-13-dynamic-routing-eigrp-variance",
+    "lab_num": 13,
+    "title": "EIGRP Advanced Architecture: DUAL Feasibility Condition & Unequal-Cost Load Balancing (Variance)",
+    "folder": "13-dynamic-routing-eigrp-variance",
+    "category": "Enterprise Routing",
+    "category_slug": "routing",
+    "summary": "Most Interior Gateway Protocols (such as OSPF and IS-IS) are strictly limited to Equal-Cost Multi-Path (ECMP) routing. If two paths to a destination have different metrics, the sub-optimal path sits completely idle as a dormant backup, stranding expensive ...",
+    "tags": [
+      "EIGRP AS 100",
+      "EIGRP AS 7",
+      "DUAL Metric",
+      "Feasible Successor"
+    ],
+    "topology_img": "assets/labs/routing-13-dynamic-routing-eigrp-variance/topology.png",
+    "has_pkt": true,
+    "pkt_file": "dynamic-routing-eigrp-variance.pkt",
+    "configs": [
+      "r4-config.ios",
+      "r1-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/enterprise-routing-labs/tree/main/13-dynamic-routing-eigrp-variance",
+    "problem_and_fix": "| Diagnostic Command | Execution Mode | Incident Response Application |\n| :--- | :--- | :--- |\n| `show ip route eigrp` | Privileged EXEC (`#`) | Verifies active EIGRP routes installed in the RIB. Displays multiple lines per destination if ECMP or UCLB is operational. |\n| `show ip eigrp topology` | Privileged EXEC (`#`) | Displays all successors and feasible successors. *If a backup route is missing here, it failed the Feasibility Condition ($AD \\ge FD$).* |\n| `show ip eigrp topology all-links` | Privileged EXEC (`#`) | Displays ALL known paths, including those that failed the Feasibility Condition. Essential for troubleshooting why a route won't balance. |\n| `show ip eigrp neighbors` | Privileged EXEC (`#`) | Verifies neighbor adjacency, uptime, and hold time. A reset hold timer indicates link flapping or MTU/timer mismatch. |\n\n---",
+    "addressing_table": "| Path via Neighbor | Egress Interface | Advertised Distance ($AD$) | Total Feasible Distance ($FD$) | Feasibility Condition ($AD < FD_{succ}$)? | Status & Role |\n| :--- | :--- | :---: | :---: | :---: | :--- |\n| **`10.0.12.2` (R2)** | `Gig0/0` | **`28416`** | **`28672`** | N/A (Best Metric) | \ud83c\udfc6 **Successor** (Primary Route) |\n| **`10.0.13.2` (R3)** | `Fa1/0` | **`28416`** | **`30976`** | **`28416 < 28672` (TRUE)** | \ud83d\udee1\ufe0f **Feasible Successor** (Backup) |\n",
+    "verification": "### 1. Dual Routes Installed with Asymmetric Metrics (`R1`)\n```text\nR1# show ip route eigrp\n     4.0.0.0/32 is subnetted, 1 subnets\nD       4.4.4.4 [90/156416] via 10.0.12.2, 00:06:48, GigabitEthernet0/0\n                [90/158720] via 10.0.13.2, 00:06:47, FastEthernet1/0\n     192.168.4.0/24 [90/28672] via 10.0.12.2, 00:06:48, GigabitEthernet0/0\n                    [90/30976] via 10.0.13.2, 00:06:47, FastEthernet1/0\n```\n*Validation:* **This is the smoking gun proof of Unequal-Cost Load Balancing.** Two distinct next-hop paths are actively installed in the routing table for `192.168.4.0/24` with different composite metrics (`28672` vs `30976`). Packets are distributed across `Gig0/0` and `Fa1/0` inversely proportional to their metrics.\n\n### 2. Dissecting the DUAL Topology Table (`R1`)\n```text\nR1# show ip eigrp topology\nP 192.168.4.0/24, 2 successors, FD is 28672\n         via 10.0.12.2 (28672/28416), GigabitEthernet0/0\n         via 10.0.13.2 (30976/28416), FastEthernet1/0\n```\n*Validation:* \n* The parenthetical values represent `(Total Distance / Advertised Distance)`.\n* Because `variance 2` was configured, the topology table reflects **`2 successors`** actively forwarding traffic, even though their underlying link speeds differ.\n\n### 3. EIGRP Dynamic Neighbor Convergence (`R1`)\n```text\nR1# show ip eigrp neighbors\nH   Address         Interface      Hold Uptime    SRTT   RTO   Q   Seq\n0   10.0.12.2       Gig0/0         10   00:07:01  40     1000  0   15\n1   10.0.13.2       Fa1/0 "
+  },
+  {
+    "id": "security-01-access-control-lists-acl",
+    "lab_num": 14,
+    "title": "Traffic Filtering & Network Security: Standard & Extended ACLs",
+    "folder": "01-access-control-lists-acl",
+    "category": "Layer 2 Security",
+    "category_slug": "security",
+    "summary": "Access Control Lists (ACLs) are the first line of defense in Cisco network infrastructure. This lab demonstrates the configuration, placement, and directionality of an Extended Access Control List (ACL 105) applied on edge router Router B. The object...",
+    "tags": [
+      "TCP Port 23",
+      "Extended ACL",
+      "Stateful Filtering",
+      "Port 80/443"
+    ],
+    "topology_img": "assets/labs/security-01-access-control-lists-acl/topology.png",
+    "has_pkt": true,
+    "pkt_file": "access-control-lists.pkt",
+    "configs": [
+      "router-a-config.ios",
+      "router-b-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/layer2-security-labs/tree/main/01-access-control-lists-acl",
+    "problem_and_fix": "",
+    "addressing_table": "| Device | Interface | IP Address | Subnet Mask | Default Gateway | Function / Role |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **Router A** | `Fa0/0` | `200.100.50.100` | `255.255.255.0` | N/A | Branch A LAN Gateway |\n| **Router A** | `Se0/0/0` | `1.1.1.1` | `255.0.0.0` | N/A | Point-to-Point WAN Link |\n| **Router B** | `Se0/0/0` | `1.1.1.2` | `255.0.0.0` | N/A | Point-to-Point WAN Link (ACL Inbound) |\n| **Router B** | `Fa0/0` | `200.100.100.100` | `255.255.255.0` | N/A | Branch B LAN Gateway |\n| **PC0** | `NIC` | `200.100.50.101` | `255.255.255.0` | `200.100.50.100` | Branch A User Workstation |\n| **PC1** | `NIC` | `200.100.100.101` | `255.255.255.0` | `200.100.100.100` | Branch B Server Host |\n",
+    "verification": "### 1. ACL Hit Counters on `Router B`\n```text\nB# show access-lists\nExtended IP access list 105\n    10 deny tcp host 1.1.1.1 host 200.100.100.100 eq telnet\n    20 permit ip any any (136 match(es))\n```\n\n### 2. Security Test Matrix\n\n| Test Scenario | Traffic Type | Source | Destination | Expected Result | Actual Result |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **Telnet Attempt** | TCP Port 23 | `Router A (1.1.1.1)` | `Router B (200.100.100.100)` | \u274c **Connection Refused / Denied** | \u2705 **Blocked (Matched Rule 10)** |\n| **ICMP Ping Test** | ICMP (Echo) | `Router A (1.1.1.1)` | `Router B (200.100.100.100)` | \u2714\ufe0f **Successful (0% Loss)** | \u2705 **Permitted (Matched Rule 20)** |\n| **OSPF Adjacency** | IP Protocol 89 | `Router A (1.1.1.1)` | `224.0.0.5` | \u2714\ufe0f **FULL / Adjacency UP** | \u2705 **Permitted (Matched Rule 20)** |\n| **End-to-End Host Ping**| ICMP | `PC0 (200.100.50.101)` | `PC1 (200.100.101.101)` | \u2714\ufe0f **Successful (0% Loss)** | \u2705 **Permitted (Matched Rule 20)** |\n\n---"
+  },
+  {
+    "id": "security-02-vlan-trunking-and-vtp",
+    "lab_num": 15,
+    "title": "Layer 2 Infrastructure: VLAN Segmentation, 802.1Q Trunking & VTP",
+    "folder": "02-vlan-trunking-and-vtp",
+    "category": "Layer 2 Security",
+    "category_slug": "security",
+    "summary": "Production Cisco IOS-XE networking lab covering Layer 2 Infrastructure: VLAN Segmentation, 802.1Q Trunking & VTP with end-to-end Packet Tracer simulation and CLI telemetry verification.",
+    "tags": [
+      "802.1Q Trunk",
+      "Inter-VLAN SVI",
+      "VTPv3"
+    ],
+    "topology_img": "assets/labs/security-02-vlan-trunking-and-vtp/topology.png",
+    "has_pkt": true,
+    "pkt_file": "vlan-trunking.pkt",
+    "configs": [
+      "sw-b-client-config.ios",
+      "sw-a-server-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/layer2-security-labs/tree/main/02-vlan-trunking-and-vtp",
+    "problem_and_fix": "",
+    "addressing_table": "| Switch | Port | Port Mode | Assigned VLAN | VLAN Name | Connected Device | IP Address |\n| :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n| **SW-A** | `Fa0/1` | **Trunk (802.1Q)** | Native 1 (VLANs 1,2,3) | `Trunk_Uplink` | `SW-B (Fa0/1)` | N/A |\n| **SW-A** | `Fa0/2` | **Access** | **VLAN 3** | `Engineering` | PC0 (Eng-1) | `10.1.1.1/24` |\n| **SW-A** | `Fa0/3` | **Access** | **VLAN 2** | `Sales_HR` | PC1 (Sales-1) | `10.1.1.2/24` |\n| **SW-B** | `Fa0/1` | **Trunk (802.1Q)** | Native 1 (VLANs 1,2,3) | `Trunk_Uplink` | `SW-A (Fa0/1)` | N/A |\n| **SW-B** | `Fa0/2` | **Access** | **VLAN 3** | `Engineering` | PC2 (Eng-2) | `10.2.1.1/24` |\n| **SW-B** | `Fa0/3` | **Access** | **VLAN 2** | `Sales_HR` | PC3 (Sales-2) | `10.2.1.2/24` |\n",
+    "verification": "### \ud83d\udd39 VTP Domain & Revision Synchronization (`show vtp status`)\n```text\nSW-A# show vtp status\nVTP Domain Name                 : corvit\nVTP Operating Mode              : Server\nNumber of existing VLANs        : 7\nConfiguration Revision          : 2\n\nSW-B# show vtp status\nVTP Domain Name                 : corvit\nVTP Operating Mode              : Client\nNumber of existing VLANs        : 7\nConfiguration Revision          : 2\n```\n*Validation:* The revision number (`2`) and number of VLANs (`7`) match on both switches, proving successful VTP advertisement propagation.\n\n---\n\n```text\nSW-A# show interfaces trunk\nPort        Mode         Encapsulation  Status        Native vlan\nFa0/1       on           802.1q         trunking      1\n\nPort        Vlans allowed and active in management domain\nFa0/1       1,2,3\n```\n\n---"
+  },
+  {
+    "id": "security-03-port-security-mac-limiting",
+    "lab_num": 16,
+    "title": "Layer 2 Security: Port Security, MAC Limiting & Violation Modes",
+    "folder": "03-port-security-mac-limiting",
+    "category": "Layer 2 Security",
+    "category_slug": "security",
+    "summary": "Unsecured switchports permit any rogue device to plug into the corporate network, posing severe risks of CAM Table Overflow (MAC flooding) attacks and unauthorized network access. This lab configures and compares the three primary Port Security Violation...",
+    "tags": [
+      "Port Security",
+      "Sticky MAC",
+      "Err-Disable"
+    ],
+    "topology_img": "assets/labs/security-03-port-security-mac-limiting/topology.png",
+    "has_pkt": true,
+    "pkt_file": "port-security.pkt",
+    "configs": [
+      "switch-port-security-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/layer2-security-labs/tree/main/03-port-security-mac-limiting",
+    "problem_and_fix": "| Command | Execution Level | Diagnostic Output & Operational Purpose |\n| :--- | :--- | :--- |\n| `show port-security` | Privileged EXEC (`#`) | Displays summary of all secure ports, max allowed addresses, current learned count, violation counters, and active violation mode. |\n| `show port-security address` | Privileged EXEC (`#`) | Lists all secure MAC addresses stored in the switch database and their learning type (`SecureConfigured`, `SecureDynamic`, `SecureSticky`). |\n| `show port-security interface <id>` | Privileged EXEC (`#`) | Comprehensive status of a specific interface, including current status (`Secure-up` / `Secure-down`), violation counts, and last offending MAC. |\n| `show mac address-table` | Privileged EXEC (`#`) | Displays active CAM table entries; secure MACs are listed with type `STATIC`. |\n| `show errdisable recovery` | Privileged EXEC (`#`) | Displays configured automated recovery timers for `psecure-violation` and remaining recovery time. |\n| `clear port-security sticky` | Privileged EXEC (`#`) | Clears dynamically learned sticky MAC addresses from the running configuration without rebooting. |\n\n---",
+    "addressing_table": "| Switch Port | Connected Device | Max MACs | Learning Method | Configured / Learned MAC | Violation Mode | Operational Behavior on Violation |\n| :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n| **`Gig1/0/1`** | PC0 (Corporate) | **1** | **Dynamic** | Learned on first frame | **Shutdown** | Disables port into `err-disabled` state; generates log |\n| **`Gig1/0/2`** | PC1 (Executive) | **2** | **Static** | `0002.2222.2222` | **Protect** | Drops unauthorized traffic silently; no logs generated |\n| **`Gig1/0/3`** | PC2 (Engineering)| **3** | **Sticky** | `0003.3333.3333` (Saved) | **Restrict** | Drops traffic, generates Syslog alert, increments counter |\n| **Rogue PC** | PC3 (Hacker) | N/A | Unauthorized | Spoofed / Foreign MAC | N/A | Triggers configured violation policy on any target port |\n",
+    "verification": "### 1. Global Port Security Summary (`show port-security`)\n```text\nSwitch# show port-security\nSecure Port MaxSecureAddr CurrentAddr SecurityViolation Security Action\n               (Count)       (Count)        (Count)\n--------------------------------------------------------------------\n     Gig1/0/1        1          0                 0         Shutdown\n     Gig1/0/2        2          1                 0          Protect\n     Gig1/0/3        3          1                 0         Restrict\n--------------------------------------------------------------------\n```\n\n---\n\n### 2. Secure MAC Address Table (`show port-security address`)\n```text\nSwitch# show port-security address\n               Secure Mac Address Table\n-----------------------------------------------------------------------------\nVlan    Mac Address       Type                          Ports   Remaining Age\n                                                                   (mins)\n----    -----------       ----                          -----   -------------\n   1    0002.2222.2222    SecureConfigured              Gig1/0/2     -\n   1    0003.3333.3333    SecureSticky                  Gig1/0/3     -\n-----------------------------------------------------------------------------\n```\n\n---\n\n### 3. Detailed Interface Inspection (`show port-security interface Gig1/0/3`)\n```text\nSwitch# show port-security interface gigabitEthernet1/0/3\nPort Security              : Enabled\nPort Status                : Secure-up\nViolation Mode        "
+  },
+  {
+    "id": "security-04-stp-root-guard",
+    "lab_num": 17,
+    "title": "Layer 2 Hardening: Spanning Tree Protocol (STP) Root Guard",
+    "folder": "04-stp-root-guard",
+    "category": "Layer 2 Security",
+    "category_slug": "security",
+    "summary": "In a standard Spanning Tree topology, any switch that introduces a superior BPDU (lower Bridge ID / Priority) can dynamically force a network-wide recalculation and become the new Root Bridge. An attacker can exploit this by attaching a rogue switch co...",
+    "tags": [
+      "STP Root Guard",
+      "BPDU Guard",
+      "Loop Guard"
+    ],
+    "topology_img": "assets/labs/security-04-stp-root-guard/topology.png",
+    "has_pkt": true,
+    "pkt_file": "stp-root-guard.pkt",
+    "configs": [
+      "s1-backup-root-config.ios",
+      "s2-root-bridge-config.ios",
+      "attacker-rogue-switch-config.ios",
+      "s3-access-switch-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/layer2-security-labs/tree/main/04-stp-root-guard",
+    "problem_and_fix": "| Command | Execution Mode | Diagnostic Purpose & Operational Value |\n| :--- | :--- | :--- |\n| `show spanning-tree` | Privileged EXEC (`#`) | Displays the active Root Bridge ID, local Bridge ID, timers, and the role/status of all physical switchports. |\n| `show spanning-tree vlan <id>` | Privileged EXEC (`#`) | Displays STP topology details restricted to a specific VLAN. |\n| `show spanning-tree detail` | Privileged EXEC (`#`) | Provides exhaustive port information including whether Root Guard is enabled and if the port is in `root-inconsistent` state. |\n| `show spanning-tree inconsistentports` | Privileged EXEC (`#`) | *(Production IOS)* Lists all switchports currently placed in inconsistent state by Root Guard. |\n| `show run | include spanning-tree` | Privileged EXEC (`#`) | Quickly filters the running configuration for all global and interface-level STP parameters. |\n| `debug spanning-tree events` | Privileged EXEC (`#`) | Real-time logging of BPDU generation, topology changes, and Root Guard state triggers. |\n\n---",
+    "addressing_table": "| Switch | Role in Network | Bridge Priority | Base MAC Address | Effective Bridge ID | Root Guard Enabled Ports |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **`S2`** | **Primary Root Bridge** | **`4096`** | `0001.42AC.06BB` | `4097.0001.42AC.06BB` | `Gig1/0/1 - 24` (All Downlinks) |\n| **`S1`** | **Backup Root Bridge** | **`8192`** | `0000.0C5A.0362` | `8193.0000.0C5A.0362` | `Gig1/0/3 - 24` (Edge Ports) |\n| **`S3`** | **Access Layer Switch** | `32768` (Default) | `0060.5C4C.16AC` | `32769.0060.5C4C.16AC` | `Gig1/0/3 - 24` (Edge Ports) |\n| **`Attacker`** | **Rogue Switch** | **`0` (Superior)** | `0001.4278.C590` | `1.0001.4278.C590` | N/A (Attack Generator) |\n",
+    "verification": "```text\nS2# show spanning-tree\nVLAN0001\n  Spanning tree enabled protocol ieee\n  Root ID    Priority    4097\n             Address     0001.42AC.06BB\n             This bridge is the root\n```\n\n---\n\n```text\nS1# show spanning-tree\n  Root ID    Priority    4097\n             Address     0001.42AC.06BB\n             Cost        4\n             Port        1 (GigabitEthernet1/0/1)\n\nS3# show spanning-tree\n  Root ID    Priority    4097\n             Address     0001.42AC.06BB\n             Cost        4\n             Port        2 (GigabitEthernet1/0/2)\n```\n*Validation:* Despite the Attacker switch running Priority 0, both `S1` and `S3` continue pointing to `S2` (`0001.42AC.06BB`) as the true Root Bridge.\n\n---\n\n\n| Command | Execution Mode | Diagnostic Purpose & Operational Value |\n| :--- | :--- | :--- |\n| `show spanning-tree` | Privileged EXEC (`#`) | Displays the active Root Bridge ID, local Bridge ID, timers, and the role/status of all physical switchports. |\n| `show spanning-tree vlan <id>` | Privileged EXEC (`#`) | Displays STP topology details restricted to a specific VLAN. |\n| `show spanning-tree detail` | Privileged EXEC (`#`) | Provides exhaustive port information including whether Root Guard is enabled and if the port is in `root-inconsistent` state. |\n| `show spanning-tree inconsistentports` | Privileged EXEC (`#`) | *(Production IOS)* Lists all switchports currently placed in inconsistent state by Root Guard. |\n| `show run | include spanning-tree` | Privileged EXEC (`#`) | Quickly"
+  },
+  {
+    "id": "security-05-stp-bpdu-filtering-and-loop-guard",
+    "lab_num": 18,
+    "title": "Layer 2 Loop Prevention: STP Loop Guard & BPDU Filtering",
+    "folder": "05-stp-bpdu-filtering-and-loop-guard",
+    "category": "Layer 2 Security",
+    "category_slug": "security",
+    "summary": "In redundant Layer 2 networks, Spanning Tree relies on the continuous reception of Bridge Protocol Data Units (BPDUs) to maintain blocked/alternate ports. If an inter-switch link experiences a unidirectional hardware failure or if BPDU filtering is...",
+    "tags": [
+      "STP Root Guard",
+      "BPDU Guard",
+      "Loop Guard"
+    ],
+    "topology_img": "assets/labs/security-05-stp-bpdu-filtering-and-loop-guard/topology.png",
+    "has_pkt": true,
+    "pkt_file": "bpdu-filtering-loop-guard.pkt",
+    "configs": [
+      "switch1-backup-config.ios",
+      "switch2-access-config.ios",
+      "switch0-root-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/layer2-security-labs/tree/main/05-stp-bpdu-filtering-and-loop-guard",
+    "problem_and_fix": "| Command | Execution Mode | Diagnostic Purpose & Operational Value |\n| :--- | :--- | :--- |\n| `show spanning-tree` | Privileged EXEC (`#`) | Displays current STP topology, active Root Bridge ID, port costs, and port states (`FWD`, `BLK`, `LSN`). |\n| `show spanning-tree detail` | Privileged EXEC (`#`) | Exhaustive diagnostic output verifying whether Loop Guard is enabled and tracking `loop-inconsistent` states. |\n| `show spanning-tree summary` | Privileged EXEC (`#`) | High-level overview displaying global STP features (PortFast, BPDU Guard, BPDU Filter, Loop Guard default states). |\n| `debug spanning-tree events` | Privileged EXEC (`#`) | Real-time debugging of BPDU transitions and Loop Guard state triggers. |\n\n---",
+    "addressing_table": "| Switch | Network Role | Configured Priority | Base MAC Address | Effective Bridge ID | Connected Trunk Interlinks |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **`Switch0`** | **Primary Root Bridge** | **`4096`** | `00D0.BC25.A9A3` | `4097.00D0.BC25.A9A3` | `Gig1/0/1` (to SW1), `Gig1/0/2` (to SW2) |\n| **`Switch1`** | **Secondary Root Bridge** | **`8192`** | `000A.418C.65E7` | `8193.000A.418C.65E7` | `Gig1/0/1` (to SW0), `Gig1/0/9` (to SW2) |\n| **`Switch2`** | **Access Layer Switch** | **`16384`** | `0001.C791.DB85` | `16385.0001.C791.DB85`| `Gig1/0/1` (to SW0), `Gig1/0/3` (to SW1) |\n",
+    "verification": "### 1. Root Bridge Election on `Switch0`\n```text\nSwitch0# show spanning-tree\nVLAN0001\n  Spanning tree enabled protocol ieee\n  Root ID    Priority    4097\n             Address     00D0.BC25.A9A3\n             This bridge is the root\n```\n\n---\n\n### 2. Alternate Port Blocking on `Switch2`\n```text\nSwitch2# show spanning-tree\nInterface        Role Sts Cost      Prio.Nbr Type\n---------------- ---- --- --------- -------- --------------------------------\nGi1/0/1          Root FWD 4         128.1    P2p\nGi1/0/2          Desg FWD 19        128.2    P2p\nGi1/0/3          Altn BLK 4         128.3    P2p\n```\n*Validation:* `Gi1/0/3` is correctly placed in Alternate Blocking (`Altn BLK`) state to eliminate the Layer 2 loop.\n\n---\n\n\n| Command | Execution Mode | Diagnostic Purpose & Operational Value |\n| :--- | :--- | :--- |\n| `show spanning-tree` | Privileged EXEC (`#`) | Displays current STP topology, active Root Bridge ID, port costs, and port states (`FWD`, `BLK`, `LSN`). |\n| `show spanning-tree detail` | Privileged EXEC (`#`) | Exhaustive diagnostic output verifying whether Loop Guard is enabled and tracking `loop-inconsistent` states. |\n| `show spanning-tree summary` | Privileged EXEC (`#`) | High-level overview displaying global STP features (PortFast, BPDU Guard, BPDU Filter, Loop Guard default states). |\n| `debug spanning-tree events` | Privileged EXEC (`#`) | Real-time debugging of BPDU transitions and Loop Guard state triggers. |\n\n---"
+  },
+  {
+    "id": "security-06-etherchannel-lacp-pagp-layer3",
+    "lab_num": 19,
+    "title": "Campus Link Aggregation: LACP, PAgP & L3 Routed EtherChannel",
+    "folder": "06-etherchannel-lacp-pagp-layer3",
+    "category": "Layer 2 Security",
+    "category_slug": "security",
+    "summary": "In traditional Layer 2 topologies, Spanning Tree Protocol (STP) prevents bridging loops by actively blocking redundant parallel links. This results in wasted physical bandwidth. EtherChannel (Link Aggregation) solves this by logically bundling multiple phy...",
+    "tags": [
+      "802",
+      "LACP 802.3ad",
+      "PAgP",
+      "PortChannel",
+      "GRE Tunnel"
+    ],
+    "topology_img": "assets/labs/security-06-etherchannel-lacp-pagp-layer3/topology.png",
+    "has_pkt": true,
+    "pkt_file": "etherchannel-lacp-pagp-layer3.pkt",
+    "configs": [
+      "asw2-config.ios",
+      "dsw1-config.ios",
+      "asw1-config.ios",
+      "dsw2-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/layer2-security-labs/tree/main/06-etherchannel-lacp-pagp-layer3",
+    "problem_and_fix": "| Diagnostic Command | Execution Mode | Incident Response Application |\n| :--- | :--- | :--- |\n| `show etherchannel summary` | Privileged EXEC (`#`) | Instantly validates bundle state flags (`SU` vs `RU`) and checks if physical ports have dropped out of the bundle (`I` or `s`). |\n| `show etherchannel load-balance` | Privileged EXEC (`#`) | Displays the hashing algorithm (e.g., `src-dst-ip` or `src-mac`) the switch uses to distribute frames across the physical cables. |\n| `show interfaces trunk` | Privileged EXEC (`#`) | Confirms that the logical `Port-channel` interface (not the physical ports) is successfully trunking 802.1Q tags. |\n\n---",
+    "addressing_table": "| Local Switch | Remote Switch | Interface Group | Logical Port | Bundle Type | Negotiation Protocol | Mode |\n| :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n| **DSW1** | **ASW1** | `Gig1/0/3 - 1/0/4` | `Po1` | Layer 2 Trunk | **LACP** (802.3ad) | `active` / `active` |\n| **DSW2** | **ASW2** | `Gig1/0/3 - 1/0/4` | `Po1` | Layer 2 Trunk | **PAgP** (Cisco) | `desirable` / `desirable` |\n| **DSW1** | **DSW2** | `Gig1/0/1 - 1/0/2` | `Po2` | **Layer 3 Routed** | **Static** (None) | `on` / `on` |\n",
+    "verification": "The `show etherchannel summary` command is the definitive NOC diagnostic tool for verifying bundle health and Layer 2 vs. Layer 3 operational states.\n\n### DSW1 Aggregation Status\n```text\nDSW1# show etherchannel summary\nFlags:  D - down        P - in port-channel\n        I - stand-alone s - suspended\n        R - Layer3      S - Layer2\n        U - in use      f - failed to allocate aggregator\n\nNumber of channel-groups in use: 2\nNumber of aggregators:           2\n\nGroup  Port-channel  Protocol    Ports\n------+-------------+-----------+----------------------------------------------\n1      Po1(SU)           LACP   Gig1/0/3(P) Gig1/0/4(P) \n2      Po2(RU)           -      Gig1/0/1(P) Gig1/0/2(P) \n```\n*Validation:* \n* `Po1` shows `(SU)`: It is operating as a **Layer 2 Switched (`S`)** bundle currently **In Use (`U`)**. The protocol is dynamically negotiated via `LACP`.\n* `Po2` shows `(RU)`: It is operating as a **Layer 3 Routed (`R`)** bundle currently **In Use (`U`)**. The protocol is `-` because it was forced `on` statically.\n* The physical ports all show `(P)`, proving they are successfully bundled and passing traffic (not suspended or stand-alone).\n\n---"
+  },
+  {
+    "id": "security-07-cdp-lldp-discovery-and-hardening",
+    "lab_num": 20,
+    "title": "Layer 2 Discovery & Security: LLDP Migration & Access-Port Hardening",
+    "folder": "07-cdp-lldp-discovery-and-hardening",
+    "category": "Layer 2 Security",
+    "category_slug": "security",
+    "summary": "Layer 2 discovery protocols are the primary diagnostic tools utilized by NOC engineers to map physical network topologies, verify cabling, and detect duplex or native VLAN mismatches. However, if these protocols are left active on edge access ports, they broad...",
+    "tags": [
+      "IEEE 802"
+    ],
+    "topology_img": "assets/labs/security-07-cdp-lldp-discovery-and-hardening/topology.png",
+    "has_pkt": true,
+    "pkt_file": "cdp-lldp-discovery-and-hardening.pkt",
+    "configs": [
+      "sw2-config.ios",
+      "r1-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/layer2-security-labs/tree/main/07-cdp-lldp-discovery-and-hardening",
+    "problem_and_fix": "| Diagnostic Command | Execution Mode | Incident Response Application |\n| :--- | :--- | :--- |\n| `show lldp neighbors` | Privileged EXEC (`#`) | Displays adjacent devices, local interface, and remote port ID. Used daily to trace blind physical cabling. |\n| `show lldp neighbors detail` | Privileged EXEC (`#`) | Extracts comprehensive hardware details from the neighbor, including exact IOS version, Management IP address, and chassis capabilities. |\n| `show lldp traffic` | Privileged EXEC (`#`) | Counters for LLDP frame transmission/reception. Useful for identifying if an interface is silently dropping discovery packets. |\n\n---",
+    "addressing_table": "| Local Device | Local Interface | Remote Device | Remote Interface | Capability Role |\n| :--- | :--- | :--- | :--- | :--- |\n| **R1 (Core)** | `Gig0/0` | **R3** | `Gig0/1` | Router (R) |\n| **R1 (Core)** | `Gig0/1` | **R2** | `Gig0/0` | Router (R) |\n| **R1 (Core)** | `Gig0/2` | **SW1** | `Gig0/1` | Bridge (B) |\n| **SW2 (Edge)**| `Gig0/2` | **R2** | `Gig0/1` | Router (R) |\n",
+    "verification": "### 1. Verifying CDP is Successfully Eradicated (R1)\n```text\nR1# show cdp neighbors\n% CDP is not enabled\n```\n*Validation:* CDP has been successfully disabled globally, ensuring no proprietary frames are transmitted across the infrastructure.\n\n### 2. Validating LLDP Adjacencies on Core Infrastructure (R1)\n```text\nR1# show lldp neighbors\nCapability codes:\n    (R) Router, (B) Bridge, (T) Telephone, (C) DOCSIS Cable Device\n    (W) WLAN Access Point, (P) Repeater, (S) Station, (O) Other\nDevice ID           Local Intf     Hold-time  Capability      Port ID\nR3                  Gig0/0         120        R               Gig0/1\nSW1                 Gig0/2         120        B               Gig0/1\nR2                  Gig0/1         120        R               Gig0/0\n\nTotal entries displayed: 3\n```\n*Validation:* The core router maintains full visibility of its adjacent infrastructure devices using open-standard LLDP.\n\n### 3. Validating LLDP Isolation on Edge Switch (SW2)\n```text\nSW2# show lldp neighbors\nCapability codes:\n    (R) Router, (B) Bridge, (T) Telephone, (C) DOCSIS Cable Device\n    (W) WLAN Access Point, (P) Repeater, (S) Station, (O) Other\nDevice ID           Local Intf     Hold-time  Capability      Port ID\nR2                  Gig0/2         120        R               Gig0/1\n\nTotal entries displayed: 1\n```\n*Validation:* SW2 successfully forms an LLDP adjacency with its upstream router (`R2`) on the designated uplink (`Gig0/2`). Because LLDP `transmit/receive` was disabled on all"
+  },
+  {
+    "id": "security-08-secure-device-management-sshv2",
+    "lab_num": 21,
+    "title": "Secure Control Plane Management: SSHv2 & VTY Access-Class Filtering",
+    "folder": "08-secure-device-management-sshv2",
+    "category": "Layer 2 Security",
+    "category_slug": "security",
+    "summary": "In a production enterprise network, the control and management planes must be strictly isolated and hardened. Legacy protocols like Telnet transmit credentials in plaintext, making the infrastructure highly vulnerable to packet sniffing and Man-in-the-Middle (...",
+    "tags": [
+      "SSHv2"
+    ],
+    "topology_img": "assets/labs/security-08-secure-device-management-sshv2/topology.png",
+    "has_pkt": true,
+    "pkt_file": "secure-device-management-sshv2.pkt",
+    "configs": [
+      "sw2-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/layer2-security-labs/tree/main/08-secure-device-management-sshv2",
+    "problem_and_fix": "| Diagnostic Command | Execution Mode | Incident Response Application |\n| :--- | :--- | :--- |\n| `show ip ssh` | Privileged EXEC (`#`) | Confirms if the SSH daemon is running and displays the active version. |\n| `show access-lists` | Privileged EXEC (`#`) | Verifies the permitted IP addresses and displays hit counters for allowed/blocked management attempts. |\n| `show users` | Privileged EXEC (`#`) | Displays currently logged-in administrators and their source IP addresses. |\n| `clear line vty [line_number]` | Privileged EXEC (`#`) | Forcefully terminates a hung or unauthorized remote management session. |\n\n---",
+    "addressing_table": "| Parameter | Configuration Value | Security Purpose |\n| :--- | :--- | :--- |\n| **Domain Name** | `jeremysitlab.com` | Prerequisite for generating fully qualified RSA keys. |\n| **RSA Key Size** | `2048 bits` | Enterprise minimum standard to prevent brute-force factoring. |\n| **Authentication** | `login local` | Ties authentication to individual user accounts (`username jeremy`). |\n| **VTY Restriction** | `access-class 1 in` | Drops all connection attempts not explicitly permitted by ACL 1. |\n| **Permitted Admin** | `host 192.168.1.1` | The only IP address allowed to connect to the switch CLI. |\n| **Timeout limit** | `exec-timeout 5 0` | Automatically drops idle sessions after 5 minutes to prevent hijacking. |\n",
+    "verification": "### 1. Validating SSH Status on the Device\n```text\nSW2# show ip ssh\nSSH Enabled - version 1.99\nAuthentication timeout: 120 secs; Authentication retries: 3\n```\n*Validation:* SSH is active and listening. The router successfully generated RSA keys and disabled plaintext Telnet access. *(Note: Version 1.99 indicates compatibility with both SSHv1 and SSHv2, though modern IOS restricts to v2 exclusively via the `ip ssh version 2` command).*\n\n### 2. Operational Test Results\n* **Connection from PC1 (`192.168.1.1`):** Allowed. PC1 matches the `access-list 1 permit` statement and is prompted for the local SSH credentials.\n* **Connection from Laptop1 (Unauthorized IP):** Dropped immediately. The `access-class` command on the VTY lines enforces an implicit deny, refusing the TCP connection before authentication is even requested.\n\n---"
+  },
+  {
+    "id": "security-09-switchport-voice-vlan-telephony",
+    "lab_num": 22,
+    "title": "Converged Campus Edge: Voice VLANs & IP Telephony Daisy-Chaining",
+    "folder": "09-switchport-voice-vlan-telephony",
+    "category": "Layer 2 Security",
+    "category_slug": "security",
+    "summary": "In a modern enterprise campus, deploying a dedicated physical switchport for every PC and a separate physical port for every IP Phone is financially and physically impractical. This lab demonstrates the industry-standard Converged Access architecture. Cisc...",
+    "tags": [
+      "802",
+      "802.1Q Trunk",
+      "Inter-VLAN SVI",
+      "VTPv3",
+      "DAI"
+    ],
+    "topology_img": "assets/labs/security-09-switchport-voice-vlan-telephony/topology.png",
+    "has_pkt": true,
+    "pkt_file": "switchport-voice-vlan-telephony.pkt",
+    "configs": [
+      "sw1-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/layer2-security-labs/tree/main/09-switchport-voice-vlan-telephony",
+    "problem_and_fix": "| Diagnostic Command | Execution Mode | Incident Response Application |\n| :--- | :--- | :--- |\n| `show interfaces [id] switchport` | Privileged EXEC (`#`) | Verifies the operational status of the auxiliary Voice VLAN on an edge port. |\n| `show mac address-table interface [id]` | Privileged EXEC (`#`) | Confirms that two separate MAC addresses (the IP Phone and the PC) are learned on the same physical port across two different VLANs. |\n| `show cdp neighbors detail` | Privileged EXEC (`#`) | Validates that the switch is detecting the Cisco IP phone. *If CDP is disabled globally or on the interface, the switch cannot negotiate the Voice VLAN ID with the phone, causing VoIP failure.* |\n| `show vlan brief` | Privileged EXEC (`#`) | Ensures the Voice VLAN actually exists in the local VLAN database. |\n\n---",
+    "addressing_table": "| Interface | Connected Device | Port Mode | Data (Untagged) VLAN | Voice (Tagged) VLAN | Upstream Path |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **`Gig1/0/2`** | `PH1` + `PC1` | Static Access | `VLAN 10` (Engineering) | `VLAN 20` (Telephony) | Layer 2 Edge |\n| **`Gig1/0/3`** | `PH2` + `PC2` | Static Access | `VLAN 10` (Engineering) | `VLAN 20` (Telephony) | Layer 2 Edge |\n| **`Gig1/0/1`** | `R1` (Gateway)| 802.1Q Trunk | Native / Default | Tagged (ROAS) | Layer 3 Uplink |\n",
+    "verification": "The following output validates how the switch physically processes frames arriving on a single cable from the converged endpoints.\n\n```text\nSW1# show interfaces gigabitEthernet1/0/2 switchport\nName: Gig1/0/2\nSwitchport: Enabled\nAdministrative Mode: static access\nOperational Mode: static access\nAdministrative Trunking Encapsulation: dot1q\nOperational Trunking Encapsulation: native\nNegotiation of Trunking: Off\n\nAccess Mode VLAN: 10 (VLAN0010)\nTrunking Native Mode VLAN: 1 (default)\nVoice VLAN: 20\n```\n*Validation:* \n* **Operational Mode is `static access`:** Even though it is carrying tagged voice frames (acting like a mini-trunk), the port operates safely as an access port, preventing unauthorized switches from initiating DTP trunk negotiation.\n* **Dual VLAN Assignment:** The port correctly segregates untagged frames into `VLAN 10` and 802.1p/Q tagged VoIP frames into `VLAN 20`.\n\n---"
+  },
+  {
+    "id": "security-10-dhcp-snooping-and-dynamic-arp-dai",
+    "lab_num": 23,
+    "title": "Layer 2 Security: DHCP Snooping & Dynamic ARP Inspection (DAI)",
+    "folder": "10-dhcp-snooping-and-dynamic-arp-dai",
+    "category": "Layer 2 Security",
+    "category_slug": "security",
+    "summary": "In an unsecured Layer 2 network, any host can act maliciously by standing up a rogue DHCP server to distribute fake default gateways, or by broadcasting gratuitous ARP replies to intercept traffic (ARP Poisoning / Man-in-the-Middle). This lab demonstrates how ...",
+    "tags": [
+      "DAI",
+      "ARP Poisoning Mitigation",
+      "Trusted Uplink",
+      "DHCP Snooping",
+      "Rogue Server Filter"
+    ],
+    "topology_img": "assets/labs/security-10-dhcp-snooping-and-dynamic-arp-dai/topology.png",
+    "has_pkt": true,
+    "pkt_file": "dhcp-snooping-and-dynamic-arp-dai.pkt",
+    "configs": [
+      "sw1-config.ios",
+      "r1-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/layer2-security-labs/tree/main/10-dhcp-snooping-and-dynamic-arp-dai",
+    "problem_and_fix": "| Diagnostic Command | Execution Mode | Incident Response Application |\n| :--- | :--- | :--- |\n| `show ip dhcp snooping binding` | Privileged EXEC (`#`) | Displays the dynamic MAC-to-IP mappings. If a host has no IP or cannot pass traffic via DAI, verify its binding here first. |\n| `show ip dhcp snooping` | Privileged EXEC (`#`) | Verifies which interfaces are trusted. Used to hunt down misconfigured rogue DHCP server ports. |\n| `show ip arp inspection interfaces` | Privileged EXEC (`#`) | Confirms the trust state of ports for DAI. Missing trust on an uplink will sever all gateway communication. |\n| `clear ip dhcp snooping binding` | Privileged EXEC (`#`) | Clears the database. Useful if a host changes IP or MAC address and DAI is aggressively blocking its new ARP broadcasts. |\n\n---",
+    "addressing_table": "| Device | Interface | Role / Zone | DHCP Snooping State | DAI State | Allowed Action |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **SW1/SW2** | `FastEthernet0/1-24`| Host / Access Edge | **Untrusted** | **Untrusted** | DHCP Requests only. ARP packets validated. |\n| **SW1** | `Gig0/1` | Downlink to SW2 | **Untrusted** | **Untrusted** | Monitored transit link. |\n| **SW1** | `Gig0/2` | Uplink to Gateway | **Trusted** | **Trusted** | DHCP Offers/Acks permitted. ARP bypasses validation. |\n| **R1** | `Gig0/0` | Authorized Gateway| N/A | N/A | Legitimate DHCP Server (`192.168.1.1`). |\n",
+    "verification": "```ios\n! 1. Enable DAI for the VLAN\nSW1(config)# ip arp inspection vlan 1\n\n! 2. Enable deep payload inspection to catch sophisticated spoofing\nSW1(config)# ip arp inspection validate src-mac dst-mac ip\n\n! 3. Trust the uplink so the gateway's ARP replies aren't dropped\nSW1(config)# interface GigabitEthernet0/2\nSW1(config-if)# ip arp inspection trust\n```\n\n---\n\n\n### 1. The DHCP Snooping Binding Database (SW2)\n```text\nSW2# show ip dhcp snooping binding\nMacAddress          IpAddress        Lease(sec)  Type           VLAN  Interface\n------------------  ---------------  ----------  -------------  ----  -----------------\n00:01:64:32:B9:22   192.168.1.10     86400       dhcp-snooping  1     FastEthernet0/1\n00:60:70:DB:6A:23   192.168.1.11     86400       dhcp-snooping  1     FastEthernet0/2\n00:0A:41:A6:B6:0E   192.168.1.12     86400       dhcp-snooping  1     FastEthernet0/3\nTotal number of bindings: 3\n```\n*Validation:* The switch has successfully intercepted DHCP transactions on untrusted edge ports and built a verified, dynamic database of MAC-to-IP mappings. This database is now the source of truth for DAI.\n\n### 2. DAI Deep Inspection Status (SW1)\n```text\nSW1# show ip arp inspection\n\nSource Mac Validation      : Enabled\nDestination Mac Validation : Enabled\nIP Address Validation      : Enabled\n\n Vlan     Configuration    Operation   ACL Match          Static ACL\n ----     -------------    ---------   ---------          ----------\n    1     Enabled          Active\n```\n*Validation:* D"
+  },
+  {
+    "id": "security-11-stp-hsrp-active-root-alignment",
+    "lab_num": 24,
+    "title": "Layer 2/3 Convergence: STP & HSRP Synchronization",
+    "folder": "11-stp-hsrp-active-root-alignment",
+    "category": "Layer 2 Security",
+    "category_slug": "security",
+    "summary": "In a dual-tier campus network utilizing Multilayer Switches (DSW1 & DSW2), First Hop Redundancy Protocols (HSRP/VRRP) provide Layer 3 default gateway redundancy. However, Spanning Tree Protocol (STP) dictates the physical Layer 2 forwarding path. The Archite...",
+    "tags": [
+      "HSRPv2",
+      "Virtual VIP",
+      "Preempt Failover",
+      "STP Root Guard",
+      "BPDU Guard"
+    ],
+    "topology_img": "assets/labs/security-11-stp-hsrp-active-root-alignment/topology.png",
+    "has_pkt": true,
+    "pkt_file": "stp-hsrp-active-root-alignment.pkt",
+    "configs": [
+      "dsw1-config.ios",
+      "dsw2-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/layer2-security-labs/tree/main/11-stp-hsrp-active-root-alignment",
+    "problem_and_fix": "| Diagnostic Command | Execution Mode | Incident Response Application |\n| :--- | :--- | :--- |\n| `show standby brief` | Privileged EXEC (`#`) | Instantly displays Active vs Standby roles, configured priorities, and virtual IPs for all HSRP instances. |\n| `show spanning-tree root` | Privileged EXEC (`#`) | Displays the MAC address and priority of the root bridge for every active VLAN. Compare this against `show standby brief` to detect hair-pinning. |\n| `traceroute [destination]` | Exec (`>`) | Run from a host PC. The first hop should be the Virtual IP. A layer-2 capture (Wireshark) should prove the frame went directly to the correct Distribution Switch. |\n\n---",
+    "addressing_table": "| Switch | Target VLAN | HSRP Priority | HSRP Role | STP Priority | STP Role | Result |\n| :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n| **DSW1** | **VLAN 10** | `105` (Preempt) | **Active** | `24576` | **Primary Root** | **Aligned (Optimal Path)** |\n| **DSW1** | VLAN 20 | `95` (Preempt) | Standby | `28672` | Secondary Root | Standby / Backup |\n| **DSW2** | **VLAN 20** | `105` (Preempt) | **Active** | `24576` | **Primary Root** | **Aligned (Optimal Path)** |\n| **DSW2** | VLAN 10 | `95` (Preempt) | Standby | `28672` | Secondary Root | Standby / Backup |\n",
+    "verification": "```text\nDSW1# show standby brief\n                     P indicates configured to preempt.\n                     |\nInterface   Grp  Pri P State    Active          Standby         Virtual IP\nVl10        10   105 P Active   local           10.0.10.2       10.0.10.254    \nVl20        20   95  P Standby  10.0.20.2       local           10.0.20.254    \n```\n*Validation:* `DSW1` successfully holds the **Active** gateway role for `Vl10` (Priority 105) and the **Standby** role for `Vl20` (Priority 95).\n\n```text\nDSW1# show spanning-tree vlan 10\nVLAN0010\n  Spanning tree enabled protocol ieee\n  Root ID    Priority    24586\n             Address     000C.856A.50BD\n             This bridge is the root\n```\n*Validation:* `DSW1` is the definitive Spanning Tree Root Bridge for VLAN 10. **The physical forwarding path and logical routing gateway are perfectly aligned.**\n\n---"
+  },
+  {
+    "id": "security-12-vtp-modes-and-dtp-hardening",
+    "lab_num": 25,
+    "title": "Layer 2 Enterprise Switching: VTP Multi-Mode Architecture & DTP Suppression",
+    "folder": "12-vtp-modes-and-dtp-hardening",
+    "category": "Layer 2 Security",
+    "category_slug": "security",
+    "summary": "In multi-switch enterprise campus networks, manually provisioning VLAN databases on every individual switch introduces configuration drift and operational overhead. VLAN Trunking Protocol (VTP) automates the distribution and synchronization of the VLAN dat...",
+    "tags": [
+      "VTP v1"
+    ],
+    "topology_img": "assets/labs/security-12-vtp-modes-and-dtp-hardening/topology.png",
+    "has_pkt": true,
+    "pkt_file": "vtp-modes-and-dtp-hardening.pkt",
+    "configs": [
+      "sw2-config.ios",
+      "sw1-config.ios",
+      "sw3-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/layer2-security-labs/tree/main/12-vtp-modes-and-dtp-hardening",
+    "problem_and_fix": "| Diagnostic Command | Execution Mode | Incident Response Application |\n| :--- | :--- | :--- |\n| `show vtp status` | Privileged EXEC (`#`) | Displays VTP domain, operating mode, revision number, and MD5 digest. |\n| `show interfaces [id] switchport` | Privileged EXEC (`#`) | Verifies `Negotiation of Trunking: Off`. If set to `On`, the link is susceptible to DTP spoofing. |\n| `show vtp password` | Privileged EXEC (`#`) | Verifies if an MD5 domain password was applied. (Mismatched passwords silently drop VTP updates). |\n| `show interfaces trunk` | Privileged EXEC (`#`) | Confirms active 802.1Q encapsulation and verifies allowed/active VLAN lists across the interlink. |\n\n---",
+    "addressing_table": "| Switch | VTP Operating Mode | Domain Name | Config Revision | MD5 Digest | Local VLAN Behavior |\n| :--- | :--- | :--- | :---: | :--- | :--- |\n| **`SW1`** | **Server** | `CCNA` | **`5`** | `...CA A1 CD A2 C9 E0` | Creates, modifies, and deletes VLANs; propagates updates. |\n| **`SW2`** | **Transparent** | `CCNA` | **`0`** | `...25 38 3F C3 17 DB 38` | Local changes only (`VLAN 40`); forwards VTP packets without syncing. |\n| **`SW3`** | **Client** | `CCNA` | **`5`** | `...CA A1 CD A2 C9 E0` | Read-only; synchronizes database and revision directly from `SW1`. |\n",
+    "verification": "### 1. Proof of Transparent Relay Synchronization (`SW1` \u2794 `SW3`)\n```text\nSW1# show vtp status\nVTP Operating Mode              : Server\nConfiguration Revision          : 5\nNumber of existing VLANs        : 10\nMD5 digest                      : 0xC6 0x83 0xCA 0xA1 0xCD 0xA2 0xC9 0xE0 \n```\n\n```text\nSW2# show vtp status\nVTP Operating Mode              : Transparent\nConfiguration Revision          : 0\nNumber of existing VLANs        : 10\nMD5 digest                      : 0x20 0x25 0x38 0x3F 0xC3 0x17 0xDB 0x38 \n```\n\n```text\nSW3# show vtp status\nVTP Operating Mode              : Client\nConfiguration Revision          : 5\nNumber of existing VLANs        : 10\nMD5 digest                      : 0xC6 0x83 0xCA 0xA1 0xCD 0xA2 0xC9 0xE0 \n```\n*Validation:* \n* `SW1` and `SW3` share the exact same **Configuration Revision (`5`)** and identical **MD5 digests (`...C9 E0`)**.\n* `SW2` maintained a revision of **`0`**, proving that intermediate Transparent switches do not adopt server databases, yet forward VTP frames so downstream clients synchronize without interruption.\n\n### 2. Validating DTP Suppression (`SW1`)\n```text\nSW1# show interfaces GigabitEthernet0/1 switchport\nName: Gig0/1\nSwitchport: Enabled\nAdministrative Mode: trunk\nOperational Mode: trunk\nAdministrative Trunking Encapsulation: dot1q\nOperational Trunking Encapsulation: dot1q\nNegotiation of Trunking: Off\n```\n*Validation:* `Negotiation of Trunking: Off` confirms `switchport nonegotiate` is active. The switch does not transmit DTP dy"
+  },
+  {
+    "id": "security-13-enterprise-extended-acls-service-filtering",
+    "lab_num": 26,
+    "title": "Enterprise Edge Security: Multi-Service Extended Access Control Lists (L4 Filtering)",
+    "folder": "13-enterprise-extended-acls-service-filtering",
+    "category": "Layer 2 Security",
+    "category_slug": "security",
+    "summary": "In enterprise routing and campus security, filtering traffic using basic packet filtering must adhere to strict architectural placement rules: * Standard ACLs (1\u201399 / 1300\u20131999): Filter based only on Source IP. Because they cannot evaluate destinations...",
+    "tags": [
+      "Extended ACL",
+      "Stateful Filtering",
+      "Port 80/443"
+    ],
+    "topology_img": "assets/labs/security-13-enterprise-extended-acls-service-filtering/topology.png",
+    "has_pkt": true,
+    "pkt_file": "enterprise-extended-acls-service-filtering.pkt",
+    "configs": [
+      "r2-config.ios",
+      "r1-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/layer2-security-labs/tree/main/13-enterprise-extended-acls-service-filtering",
+    "problem_and_fix": "| Diagnostic Command | Execution Mode | Incident Response Application |\n| :--- | :--- | :--- |\n| `show access-lists` | Privileged EXEC (`#`) | Displays all ACL statements along with match counters (`(x matches)`). If counters aren't incrementing, the ACL is applied to the wrong interface or direction. |\n| `clear access-list counters` | Privileged EXEC (`#`) | Resets packet match counters to zero. Essential before initiating a test ping or service connection to confirm rule hits. |\n| `show ip interface [id]` | Privileged EXEC (`#`) | Confirms whether an access-group is bound `Inbound` or `Outbound` on an interface. |\n\n---",
+    "addressing_table": "| Policy Name | Target Source | Protected Destination | Protocol / Port | Applied Interface | Action |\n| :--- | :--- | :--- | :---: | :--- | :---: |\n| **Host Isolation** | `172.16.2.0/24` (LAN 2) | `172.16.1.1` (PC1) | All IP (`ip`) | `R1: Gig0/1 (in)` | **DENY** |\n| **HTTPS Filter** | `172.16.2.0/24` (LAN 2) | `192.168.2.100` (SRV2) | TCP / `443` | `R1: Gig0/1 (in)` | **DENY** |\n| **HTTP Filter** | `172.16.2.0/24` (LAN 2) | `192.168.2.100` (SRV2) | TCP / `80 (www)` | `R1: Gig0/1 (in)` | **DENY** |\n| **LAN 2 General**| `172.16.2.0/24` (LAN 2) | Any Network | All IP (`ip`) | `R1: Gig0/1 (in)` | **PERMIT** |\n| **DNS Filter** | `172.16.1.0/24` (LAN 1) | `192.168.1.100` (SRV1) | UDP / `53 (domain)` | `R1: Gig0/0 (in)` | **DENY** |\n| **LAN 1 General**| `172.16.1.0/24` (LAN 1) | Any Network | All IP (`ip`) | `R1: Gig0/0 (in)` | **PERMIT** |\n",
+    "verification": "```text\nR1# show access-lists\nExtended IP access list 101\n    10 deny ip 172.16.2.0 0.0.0.255 host 172.16.1.1\n    20 deny tcp 172.16.2.0 0.0.0.255 host 192.168.2.100 eq 443\n    30 deny tcp 172.16.2.0 0.0.0.255 host 192.168.2.100 eq www\n    40 permit ip any any\nExtended IP access list 102\n    10 deny udp 172.16.1.0 0.0.0.255 host 192.168.1.100 eq domain\n    20 permit ip any any\n```\n*Validation:* \n* Rules are compiled in top-down sequential order. Specific `deny` statements precede the broad `permit ip any any` statement.\n* Port numbers are automatically translated to Cisco keywords where applicable (`eq 80` \u2794 `eq www`, `eq 53` \u2794 `eq domain`).\n\n```text\nR1# show ip interface GigabitEthernet0/0 | include Inbound\n  Inbound  access list is 102\nR1# show ip interface GigabitEthernet0/1 | include Inbound\n  Inbound  access list is 101\n```\n*Validation:* Both access lists are actively filtering inbound traffic at the edge interface level.\n\n---"
+  },
+  {
+    "id": "services-01-core-network-services-dhcp-dns-http",
+    "lab_num": 27,
+    "title": "Core Network Services: Integrated DHCP, DNS & HTTP Web Infrastructure",
+    "folder": "01-core-network-services-dhcp-dns-http",
+    "category": "Network Services",
+    "category_slug": "services",
+    "summary": "Enterprise client workstations rely on seamless application-layer services to discover network parameters and access web applications. This lab demonstrates a complete, multi-server infrastructure operating across a Cisco Layer 2 switched fabric: 1. Dynamic ...",
+    "tags": [
+      "Cisco IOS-XE",
+      "Packet Tracer",
+      "CLI Verified"
+    ],
+    "topology_img": "assets/labs/services-01-core-network-services-dhcp-dns-http/topology.png",
+    "has_pkt": true,
+    "pkt_file": "core-network-services.pkt",
+    "configs": [
+      "switch-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/network-services-labs/tree/main/01-core-network-services-dhcp-dns-http",
+    "problem_and_fix": "| Command / Utility | Execution Location | Diagnostic Purpose & Operational Value |\n| :--- | :--- | :--- |\n| `ipconfig /renew` | Client Command Prompt | Forces the client to release its current lease and restart the DHCP D.O.R.A negotiation. |\n| `ipconfig /all` | Client Command Prompt | Displays complete network adapter details including MAC address, DHCP server, and DNS server IPs. |\n| `nslookup <domain>` | Client Command Prompt | Tests DNS resolution and verifies the responding DNS server address. |\n| `ping <domain / IP>` | Client Command Prompt | Verifies Layer 3 ICMP reachability and checks automatic hostname-to-IP resolution. |\n| `show mac address-table` | Switch CLI (`#`) | Displays active Layer 2 CAM table entries across server and client switchports. |\n\n---",
+    "addressing_table": "| Server / Host | Interface | Static / Dynamic IP | Subnet Mask | Configured Service | Protocol / Port | Role & Configuration |\n| :--- | :--- | :--- | :--- | :--- | :--- | :--- |\n| **DHCP Server** | `Fa0` | `192.168.0.101` | `255.255.255.0` | **DHCP Pool** | UDP 67/68 | Leases `192.168.0.50 - .60`, hands out DNS `192.168.0.103` |\n| **Web Server** | `Fa0` | `192.168.0.102` | `255.255.255.0` | **HTTP / HTTPS** | TCP 80 / 443 | Hosts web application content for `cisco.com` |\n| **DNS Server** | `Fa0` | `192.168.0.103` | `255.255.255.0` | **DNS Service** | UDP 53 | Contains A-Record mapping: `cisco.com` \u2192 `192.168.0.102` |\n| **PC0** | `NIC` | `192.168.0.51` (DHCP) | `255.255.255.0` | Client Workstation | N/A | Dynamic host with DNS set to `192.168.0.103` |\n| **PC1** | `NIC` | *DHCP Assigned* | `255.255.255.0` | Client Workstation | N/A | Dynamic host |\n",
+    "verification": "```text\nC:\\> ipconfig\n\nFastEthernet0 Connection:\n   IPv4 Address....................: 192.168.0.51\n   Subnet Mask.....................: 255.255.255.0\n   Default Gateway.................: 0.0.0.0\n   DNS Server......................: 192.168.0.103\n```\n\n---\n\n```text\nC:\\> nslookup cisco.com\nServer:  [192.168.0.103]\nAddress:  192.168.0.103\n\nNon-authoritative answer:\nName:    cisco.com\nAddress: 192.168.0.102\n```\n\n---"
+  },
+  {
+    "id": "services-02-centralized-dhcp-relay-ip-helper",
+    "lab_num": 28,
+    "title": "Enterprise IP Management: Centralized DHCP & Cross-WAN Relay",
+    "folder": "02-centralized-dhcp-relay-ip-helper",
+    "category": "Network Services",
+    "category_slug": "services",
+    "summary": "In a large-scale enterprise or campus network, deploying and managing independent DHCP servers on every local subnet or branch edge router is administratively unscalable. The industry standard is to centralize DHCP services (often on dedicated IPAM servers or ...",
+    "tags": [
+      "DHCP"
+    ],
+    "topology_img": "assets/labs/services-02-centralized-dhcp-relay-ip-helper/topology.png",
+    "has_pkt": true,
+    "pkt_file": "centralized-dhcp-relay-ip-helper.pkt",
+    "configs": [
+      "r2-config.ios",
+      "r1-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/network-services-labs/tree/main/02-centralized-dhcp-relay-ip-helper",
+    "problem_and_fix": "| Diagnostic Command | Execution Mode | Incident Response Application |\n| :--- | :--- | :--- |\n| `show ip dhcp binding` | Privileged EXEC (`#`) | Displays all active MAC-to-IP leases. Critical for identifying IP conflicts or verifying a host's network assignment. |\n| `show ip dhcp pool` | Privileged EXEC (`#`) | Verifies subnet utilization, identifying if a scope is exhausted and dropping new client requests. |\n| `show ip interface [id]` | Privileged EXEC (`#`) | Confirms if an `ip helper-address` is actively applied to the gateway interface. |\n| `clear ip dhcp binding *` | Privileged EXEC (`#`) | Flushes all active dynamic leases. Typically used after restructuring subnet boundaries or clearing stuck reservations. |\n\n---",
+    "addressing_table": "| Server/Pool | Target Subnet | Default Gateway | Excluded IP Range | Domain Name |\n| :--- | :--- | :--- | :--- | :--- |\n| **R2: `POOL1`** | `192.168.1.0/24` | `192.168.1.1` (R1) | `.1` through `.10` | `abdulwahabsaim.github.io` |\n| **R2: `POOL2`** | `192.168.2.0/24` | `192.168.2.1` (R2) | `.1` through `.10` | `abdulwahabsaim.github.io` |\n| **R2: `POOL3`** | `203.0.113.0/30` | N/A (Transit Link) | `203.0.113.1` (R2) | N/A |\n",
+    "verification": "### 1. Validating Centralized Leases on the Server (R2)\n```text\nR2# show ip dhcp binding\nIP address       Client-ID/              Lease expiration        Type\n                 Hardware address\n192.168.1.12     0030.F238.8690           --                     Automatic\n192.168.2.11     00E0.B087.76E5           --                     Automatic\n203.0.113.2      0001.63B0.5601           --                     Automatic\n```\n*Validation:* The central server `R2` successfully leased `192.168.1.12` to a remote PC at the branch site, proving the `ip helper-address` on R1 is properly encapsulating and routing the DHCP D.O.R.A process across the WAN.\n\n### 2. Validating the Edge Router Client Interface (R1)\n```text\nR1# show ip interface brief\nInterface              IP-Address      OK? Method Status                Protocol \nGigabitEthernet0/0     203.0.113.2     YES DHCP   up                    up \nGigabitEthernet0/1     192.168.1.1     YES manual up                    up \n```\n*Validation:* `Gig0/0` successfully obtained its public-facing transit IP (`203.0.113.2`) dynamically via the `DHCP` method.\n\n---"
+  },
+  {
+    "id": "services-03-ntp-stratum-hierarchy-authentication",
+    "lab_num": 29,
+    "title": "Enterprise Time Synchronization: NTP Stratum Hierarchy & MD5 Authentication",
+    "folder": "03-ntp-stratum-hierarchy-authentication",
+    "category": "Network Services",
+    "category_slug": "services",
+    "summary": "Accurate, unified time synchronization is not merely a convenience\u2014it is a mandatory security and operational requirement across modern Network Operations Centers (NOC) and Security Operations Centers (SOC). Without synchronized clocks: * Log Correlation Fai...",
+    "tags": [
+      "NTPv4",
+      "NTP Stratum 2",
+      "MD5 Authentication",
+      "Clock Sync"
+    ],
+    "topology_img": "assets/labs/services-03-ntp-stratum-hierarchy-authentication/topology.png",
+    "has_pkt": true,
+    "pkt_file": "ntp-stratum-hierarchy-authentication.pkt",
+    "configs": [
+      "r2-config.ios",
+      "r1-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/network-services-labs/tree/main/03-ntp-stratum-hierarchy-authentication",
+    "problem_and_fix": "| Diagnostic Command | Execution Mode | Incident Response Application |\n| :--- | :--- | :--- |\n| `show ntp status` | Privileged EXEC (`#`) | Instantly confirms if the clock is synchronized, reports local Stratum level, and displays clock offset/dispersion. |\n| `show ntp associations` | Privileged EXEC (`#`) | Verifies peer reachability. Look for `*` (active peer) and an octal `reach` value climbing toward `377`. |\n| `show ntp associations detail` | Privileged EXEC (`#`) | Displays cryptographic authentication state, packet counters, and authentication failure drops. |\n| `show clock detail` | Privileged EXEC (`#`) | Shows current system timestamp and verifies if the time source is `NTP` vs `hardware calendar`. |\n\n---",
+    "addressing_table": "| Device | NTP Role | Reference Target | Local Stratum | MD5 Key ID | Hardware Calendar Sync |\n| :--- | :--- | :--- | :--- | :--- | :--- |\n| **External Server** | Authoritative Source | Atomic/GPS Reference (`127.127.1.1`) | **Stratum 1** | N/A | Active |\n| **R1 (Edge)** | Border Client / Internal Master | `1.1.1.1` | **Stratum 2** | `Key 1` (Trusted) | Enabled (`update-calendar`) |\n| **R2 (Core)** | Internal Client | `192.168.12.1` (`R1`) | **Stratum 3** | `Key 1` (Authenticated) | Enabled (`update-calendar`) |\n",
+    "verification": "```text\nR1# show ntp status\nClock is synchronized, stratum 2, reference is 1.1.1.1\nnominal freq is 250.0000 Hz, actual freq is 249.9990 Hz, precision is 2**24\nreference time is FFFFFFFFE369FAE6.000000EF (9:59:2.239 UTC Wed Dec 30 2020)\nclock offset is 0.00 msec, root delay is 0.00  msec\nroot dispersion is 57.51 msec, peer dispersion is 0.12 msec.\n```\n*Validation:* `R1` has successfully locked onto `1.1.1.1`, showing `stratum 2` with a `0.00 msec` offset."
+  },
+  {
+    "id": "services-04-centralized-syslog-telemetry",
+    "lab_num": 30,
+    "title": "Enterprise Network Telemetry: Centralized Syslog & Severity Levels (0\u20137)",
+    "folder": "04-centralized-syslog-telemetry",
+    "category": "Network Services",
+    "category_slug": "services",
+    "summary": "In an enterprise production network, reviewing incident logs locally on individual routers via console or SSH is unscalable and volatile (local RAM logs are permanently erased during reboots or power outages). Furthermore, security compliance standards (ISO 27...",
+    "tags": [
+      "Syslog",
+      "Syslog Trap 6",
+      "UDP 514",
+      "Telemetry Log"
+    ],
+    "topology_img": "assets/labs/services-04-centralized-syslog-telemetry/topology.png",
+    "has_pkt": true,
+    "pkt_file": "centralized-syslog-telemetry.pkt",
+    "configs": [
+      "r1-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/network-services-labs/tree/main/04-centralized-syslog-telemetry",
+    "problem_and_fix": "| Diagnostic Command | Execution Mode | Incident Response Application |\n| :--- | :--- | :--- |\n| `show logging` | Privileged EXEC (`#`) | Displays current logging destinations (console, monitor, buffer, host), drop counters, and dumps the circular RAM buffer. |\n| `terminal monitor` | Privileged EXEC (`#`) | Enables real-time log printing to your current VTY/SSH terminal session (`logging monitor`). *Disabled by default on remote sessions.* |\n| `terminal no monitor` | Privileged EXEC (`#`) | Silences terminal logging to stop active debugs from flooding an active SSH session. |\n| `clear logging` | Privileged EXEC (`#`) | Clears the internal RAM buffer. Used before running a focused test or reproduction step. |\n\n---",
+    "addressing_table": "| Level | Severity Name | Description | Operational Example | Trap Forwarded? |\n| :---: | :--- | :--- | :--- | :---: |\n| **`0`** | **Emergency** | System is completely unusable | Hardware bus panic, memory corruption | \u2705 Yes |\n| **`1`** | **Alert** | Immediate action required | Environmental overheating, power supply fail | \u2705 Yes |\n| **`2`** | **Critical** | Critical conditions | Core routing process failure | \u2705 Yes |\n| **`3`** | **Error** | Error conditions | Interface driver errors, crypto negotiation failure | \u2705 Yes |\n| **`4`** | **Warning** | Warning conditions | High memory threshold, redundant link flapping | \u2705 Yes |\n| **`5`** | **Notification**| Normal but significant state | Interface up/down (`%LINEPROTO-5-UPDOWN`), admin login | \u2705 Yes |\n| **`6`** | **Informational**| Routine informational messages| Server export started (`%SYS-6-LOGGINGHOST`) | \u2705 Yes |\n| **`7`** | **Debugging** | Detailed diagnostic output | Output generated by explicit `debug` commands | \u2705 Yes (Configured) |\n",
+    "verification": "### 1. Validating Syslog Subsystem Status (R1)\n```text\nR1# show logging\nSyslog logging: enabled (0 messages dropped, 0 messages rate-limited,\n          0 flushes, 0 overruns, xml disabled, filtering disabled)\n\n    Console logging: level debugging, 3 messages logged\n    Monitor logging: level debugging, 3 messages logged\n    Buffer logging:  level debugging, 0 messages logged\n\n    Trap logging: level debugging, 3 message lines logged\n        Logging to 192.168.1.100  (udp port 514,  audit disabled,\n             authentication disabled, encryption disabled, link up),\n             3 message lines logged,\n             0 message lines rate-limited,\n             0 message lines dropped-by-MD\n```\n*Validation:* \n* Remote trap logging is operational and actively bound to external host `192.168.1.100` via `UDP 514`.\n* `3 message lines logged` confirms packets are successfully egressing the router.\n* `0 messages dropped` confirms the internal socket buffer is keeping pace with generated traps without buffer exhaustion.\n\n### 2. Dissecting the Internal Log Buffer Events\n```text\nLog Buffer (4096 bytes):\n\n*Feb 28, 20:04:39.044: %SYS-6-LOGGINGHOST_STARTSTOP: Logging to host 192.168.1.100 port 514 started - CLI initiated\n*Feb 28, 20:04:39.044: %LINEPROTO-5-UPDOWN: Line protocol on Interface GigabitEthernet0/0, changed state to up\n*Feb 28, 20:06:31.066: %SYS-5-CONFIG_I: Configured from console by console\n```\n*Validation:* \n* **Audit Trail:** Level 5 event `%SYS-5-CONFIG_I` captures the exact m"
+  },
+  {
+    "id": "services-05-enterprise-wlc-centralized-wireless",
+    "lab_num": 31,
+    "title": "Centralized Enterprise Wireless: Cisco 3504 WLC, CAPWAP & Lightweight APs",
+    "folder": "05-enterprise-wlc-centralized-wireless",
+    "category": "Network Services",
+    "category_slug": "services",
+    "summary": "In enterprise campus environments, deploying standalone \"Autonomous\" (Fat) Access Points requires individual configuration and management per device, which does not scale. Modern campus deployments utilize a Centralized / Split-MAC Architecture: * Lightw...",
+    "tags": [
+      "Cisco 3504 WLC",
+      "CAPWAP Mobility",
+      "FlexConnect"
+    ],
+    "topology_img": "assets/labs/services-05-enterprise-wlc-centralized-wireless/topology.png",
+    "has_pkt": true,
+    "pkt_file": "enterprise-wlc-centralized-wireless.pkt",
+    "configs": [
+      "sw1-config.ios"
+    ],
+    "github_url": "https://github.com/abdulwahabsaim/network-services-labs/tree/main/05-enterprise-wlc-centralized-wireless",
+    "problem_and_fix": "| Troubleshooting Topic | Operational Diagnostic & Resolution |\n| :--- | :--- |\n| **AP Fails to Join WLC** | Verify the AP obtained an IP via DHCP. Ensure **Dynamic AP Management** is enabled on the WLC `management` interface. Check Layer 2 broadcast reachability or verify **DHCP Option 43** in multi-subnet environments. |\n| **Native VLAN Mismatch** | The WLC management interface expects **untagged** frames by default. If `switchport trunk native vlan 10` is missing on switch port `Gig1/0/1`, the switch tags VLAN 10, causing the WLC to drop all management and CAPWAP packets. |\n| **Why `192.0.2.1` Virtual IP?** | The virtual interface uses an unroutable RFC 5737 address solely for client-facing operations: Layer 3 web authentication (Captive Portals) and intra-controller roaming handoffs. It must never exist as a real route on the network. |\n| **PortFast on AP Links** | Switchports connected to Lightweight APs (`Gig1/0/2-3`) must have `spanning-tree portfast` enabled. If STP takes 30\u201350 seconds to transition to forwarding, the AP may time out during its DHCP discovery cycle. |\n\n---",
+    "addressing_table": "| Interface Name | VLAN ID | IP Address / Mask | Gateway | Interface Role / Purpose | Dynamic AP Mgmt |\n| :--- | :---: | :--- | :--- | :--- | :---: |\n| **`management`** | `untagged` (`VLAN 10`) | `172.16.1.10 /24` | `172.16.1.1` | HTTPS GUI, SSH CLI & CAPWAP AP Discovery | **Enabled** |\n| **`Internal`** | `VLAN 100` | `10.0.0.10 /24` | `10.0.0.1` | Internal Corporate Staff WLAN (`SSID: Internal`) | Disabled |\n| **`Guest`** | `VLAN 200` | `10.1.0.10 /24` | `10.1.0.1` | Isolated Guest Internet Access (`SSID: Guest`) | Disabled |\n| **`virtual`** | `N/A` | `192.0.2.1` | N/A | RFC 5737 Test IP for Guest Web-Auth & Roaming | Disabled |\n",
+    "verification": "The following operational metrics were validated through the Cisco 3504 Web Management Console (`https://172.16.1.10`):\n\n### 1. Controller Health & Radio State\n```text\nController Model:           Cisco 3504 Wireless Controller\nSoftware Version:           8.3.111.0\nSystem Name:                WLC1\nManagement IP Address:      172.16.1.10 (Untagged on Native VLAN 10)\n802.11a/n/ac Network State: Enabled\n802.11b/g/n Network State: Enabled\nInternal Temperature:      +31 C\nCPU / Memory Usage:         0% / 46%\n```\n\n### 2. CAPWAP Access Point Join Status\n```text\nAccess Point Summary:\n  All APs Associated:       2 (LAP1, LAP2)\n  802.11a/n/ac Radios Up:   2 of 2 (100% operational)\n  802.11b/g/n Radios Up:   2 of 2 (100% operational)\n  Active Wireless Clients:  1 (Associated via Smartphone)\n```\n*Validation:* Both Lightweight APs successfully discovered the controller over VLAN 10, completed DTLS negotiation, downloaded their run-time configurations over CAPWAP, and began beaconing both SSIDs.\n\n### 3. WLC Interface Table Summary\n```text\nInterface Name    VLAN Identifier    IP Address      Interface Type    Dynamic AP Mgmt\n----------------  -----------------  --------------  ----------------  ---------------\nmanagement        untagged           172.16.1.10     Static            Enabled\nvirtual           N/A                192.0.2.1       Static            Not Supported\nInternal          100                10.0.0.10       Dynamic           Disabled\nGuest             200                10.1."
+  }
+]

@@ -1,0 +1,125 @@
+    <!-- ==========================================================================
+         07. NOC ENGINEERING PROTOCOL (§4.7: 4-Stage Deterministic Lifecycle)
+         ========================================================================== -->
+    <section id="methodology" class="section-band relative border-t border-slate-200 dark:border-slate-800 py-16 lg:py-24" style="background: var(--bg-2);">
+
+      <div class="section-inner space-y-8">
+
+        <!-- Header -->
+        <div class="reveal mb-8 sm:mb-10">
+          <span class="eyebrow flex items-center gap-1.5 mb-2.5">
+            <span class="led emerald flex-shrink-0"></span>
+            OPERATIONAL RIGOR
+          </span>
+          <h2 class="font-display font-bold text-2xl sm:text-3xl lg:text-4xl" style="color: var(--text);">
+            NOC Engineering Protocol
+          </h2>
+          <p class="lead mt-2 max-w-2xl" style="color: var(--text-2);">
+            Every lab in this portfolio was configured, hardened, and verified under this 4-stage deterministic engineering lifecycle.
+          </p>
+        </div>
+
+        <!-- 4-Column Protocol Cards on Desktop / Smooth Touch Snap-Scroll on Mobile -->
+        <div id="protocol-slider-container" class="protocol-slider relative z-10 scrollbar-none reveal mt-8 sm:mt-10" data-lenis-prevent>
+
+          <!-- 01 // ARCHITECTURE -->
+          <div class="card-enterprise p-6 flex flex-col justify-between stagger-child w-[85vw] max-w-[320px] shrink-0 snap-start md:w-auto md:max-w-none md:shrink">
+            <div class="space-y-3">
+              <span class="font-mono text-xs font-bold tracking-widest uppercase" style="color: var(--muted);">01 // ARCHITECTURE</span>
+              <h3 class="font-display font-bold text-base" style="color: var(--text);">
+                Addressing &amp; Subnetting
+              </h3>
+              <p class="text-xs leading-relaxed" style="color: var(--text-2);">
+                Deterministic RFC 1918 IP address allocation, VLSM subnetting, VLAN boundaries, and interface tagging before touching any CLI.
+              </p>
+            </div>
+            <div class="pt-4 mt-5 border-t flex items-center gap-2.5" style="border-color: var(--line);">
+              <div class="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0" style="background: var(--accent-soft);">
+                <svg class="w-4 h-4" style="color: var(--accent);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="6" height="6" x="9" y="3" rx="1"/><rect width="6" height="6" x="2" y="15" rx="1"/><rect width="6" height="6" x="16" y="15" rx="1"/><path d="M5 15v-3a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v3"/><path d="M12 9v6"/></svg>
+              </div>
+              <span class="font-mono text-xs" style="color: var(--muted);">10.0.0.0/8 · VLSM · /30</span>
+            </div>
+          </div>
+
+          <!-- 02 // CONVERGENCE -->
+          <div class="card-enterprise p-6 flex flex-col justify-between stagger-child w-[85vw] max-w-[320px] shrink-0 snap-start md:w-auto md:max-w-none md:shrink">
+            <div class="space-y-3">
+              <span class="font-mono text-xs font-bold tracking-widest uppercase" style="color: var(--muted);">02 // CONVERGENCE</span>
+              <h3 class="font-display font-bold text-base" style="color: var(--text);">
+                Deterministic Routing
+              </h3>
+              <p class="text-xs leading-relaxed" style="color: var(--text-2);">
+                HSRPv2 gateway redundancy (per-VLAN active/standby load sharing), tuned preemption, and OSPFv2 SPF-convergence across multi-tier topologies.
+              </p>
+            </div>
+            <div class="pt-4 mt-5 border-t flex items-center gap-2.5" style="border-color: var(--line);">
+              <div class="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0" style="background: var(--accent-soft);">
+                <svg class="w-4 h-4" style="color: var(--accent);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/><polyline points="21 3 21 8 16 8"/></svg>
+              </div>
+              <span class="font-mono text-xs" style="color: var(--muted);">HSRPv2 · OSPFv2 · Tuned</span>
+            </div>
+          </div>
+
+          <!-- 03 // HARDENING -->
+          <div class="card-enterprise p-6 flex flex-col justify-between stagger-child w-[85vw] max-w-[320px] shrink-0 snap-start md:w-auto md:max-w-none md:shrink">
+            <div class="space-y-3">
+              <span class="font-mono text-xs font-bold tracking-widest uppercase" style="color: var(--muted);">03 // HARDENING</span>
+              <h3 class="font-display font-bold text-base" style="color: var(--text);">
+                Layer 2 Switch Hardening
+              </h3>
+              <p class="text-xs leading-relaxed" style="color: var(--text-2);">
+                Dynamic ARP Inspection (DAI), DHCP Snooping trust boundary, BPDU Guard, and 802.1X enterprise wireless authentication.
+              </p>
+            </div>
+            <div class="pt-4 mt-5 border-t flex items-center gap-2.5" style="border-color: var(--line);">
+              <div class="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0" style="background: var(--status-pass-bg);">
+                <svg class="w-4 h-4" style="color: var(--cat-security);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 22V2"/></svg>
+              </div>
+              <span class="font-mono text-xs" style="color: var(--muted);">DAI · DHCP Snooping · BPDU</span>
+            </div>
+          </div>
+
+          <!-- 04 // TELEMETRY -->
+          <div class="card-enterprise p-6 flex flex-col justify-between stagger-child w-[85vw] max-w-[320px] shrink-0 snap-start md:w-auto md:max-w-none md:shrink">
+            <div class="space-y-3">
+              <span class="font-mono text-xs font-bold tracking-widest uppercase" style="color: var(--muted);">04 // TELEMETRY</span>
+              <h3 class="font-display font-bold text-base" style="color: var(--text);">
+                Packet-Level Verification
+              </h3>
+              <p class="text-xs leading-relaxed" style="color: var(--text-2);">
+                Every route and failure mode verified via live Cisco IOS show commands, syslog facilities [0–7], and Wireshark frame dissection.
+              </p>
+            </div>
+            <div class="pt-4 mt-5 border-t flex items-center gap-2.5" style="border-color: var(--line);">
+              <div class="w-7 h-7 rounded-md flex items-center justify-center flex-shrink-0" style="background: rgba(245,181,68,0.12);">
+                <svg class="w-4 h-4" style="color: var(--cat-services);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12h5l3-9 4 18 3-9h5"/></svg>
+              </div>
+              <span class="font-mono text-xs" style="color: var(--muted);">show · syslog · Wireshark</span>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Mobile Slider Navigation & Dot Indicators (Hidden on Desktop & Tablet) -->
+        <div class="protocol-mobile-controls flex md:hidden items-center justify-between pt-1 px-1 text-slate-500 dark:text-slate-400">
+          <div class="flex items-center gap-1.5 font-mono text-xs">
+            <svg class="w-4 h-4 text-blue-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 16-4-4 4-4"/><path d="m17 8 4 4-4 4"/><path d="M3 12h18"/></svg>
+            <span>Swipe lifecycle (<span id="protocol-slider-counter" class="font-bold" style="color: var(--text);">1</span>/4)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="protocol-slider-prev" type="button" aria-label="Previous lifecycle stage" class="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 text-slate-600 dark:text-slate-300 text-xs active:scale-95 transition-all opacity-40">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <div class="flex items-center gap-1.5" id="protocol-slider-dots">
+              <button type="button" class="snap-dot active-dot" data-index="0" aria-label="Stage 1: Architecture"></button>
+              <button type="button" class="snap-dot" data-index="1" aria-label="Stage 2: Convergence"></button>
+              <button type="button" class="snap-dot" data-index="2" aria-label="Stage 3: Hardening"></button>
+              <button type="button" class="snap-dot" data-index="3" aria-label="Stage 4: Telemetry"></button>
+            </div>
+            <button id="protocol-slider-next" type="button" aria-label="Next lifecycle stage" class="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 text-slate-600 dark:text-slate-300 text-xs active:scale-95 transition-all">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>

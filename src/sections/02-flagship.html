@@ -1,0 +1,132 @@
+    <!-- ==========================================================================
+         02. FLAGSHIP CAPSTONE: 15-NODE ENTERPRISE CAMPUS NETWORK (§4.3)
+         ========================================================================== -->
+    <section id="flagship" class="section-band relative">
+      <div class="section-inner space-y-4 sm:space-y-8 py-3 sm:py-8 lg:py-12">
+        <div>
+          <span class="eyebrow block mb-1">Flagship Architecture</span>
+          <h2 class="font-display font-bold text-xl sm:text-2xl lg:text-3xl">15-Node Enterprise Campus Network</h2>
+          <p class="lead mt-1 text-xs sm:text-base line-clamp-2 sm:line-clamp-none">
+            Two buildings, redundant core, HSRP gateways, EtherChannel and Layer 2 security, documented end to end.
+          </p>
+        </div>
+
+        <div class="card card--static p-3.5 sm:p-6 lg:p-8 space-y-3 sm:space-y-8">
+          
+          <!-- Bento Grid: Specs + Topology Blueprint -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-6 lg:gap-8 items-start flagship-grid">
+            
+            <!-- Specifications Column (Desktop: Left Col / Mobile: Second) -->
+            <div class="lg:col-span-6 space-y-3 sm:space-y-6 flagship-specs-col">
+              
+              <!-- CTAs: Placed right beneath blueprint on mobile, at bottom on desktop -->
+              <div class="flex items-center gap-2 pt-1 flagship-cta-row">
+                <button type="button" class="btn btn-primary btn-sm flex-1 justify-center text-center text-xs font-semibold !min-h-[38px]" data-action="open-case-study" data-lab-id="campus">
+                  View NOC Runbook &amp; Deck
+                </button>
+                <a href="https://github.com/abdulwahabsaim/cisco-enterprise-campus-mega-lab" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm shrink-0 justify-center text-center text-xs font-semibold !min-h-[38px]">
+                  GitHub ↗
+                </a>
+              </div>
+
+              <!-- Mobile 3-Metric Proof Strip (Visible on mobile, hidden on desktop) -->
+              <div class="grid grid-cols-3 gap-1.5 pt-0.5 text-center flagship-mobile-metrics">
+                <div class="p-1.5 rounded-lg border" style="background: var(--panel-2); border-color: var(--line);">
+                  <div class="font-mono font-bold text-[11px]" style="color: var(--accent);">Gateway HA</div>
+                  <div class="text-[10px] font-mono mt-0.5" style="color: var(--muted);">&lt; 1s Failover</div>
+                </div>
+                <div class="p-1.5 rounded-lg border" style="background: var(--panel-2); border-color: var(--line);">
+                  <div class="font-mono font-bold text-[11px]" style="color: var(--ok);">L2 Defense</div>
+                  <div class="text-[10px] font-mono mt-0.5" style="color: var(--muted);">DAI + Snoop</div>
+                </div>
+                <div class="p-1.5 rounded-lg border" style="background: var(--panel-2); border-color: var(--line);">
+                  <div class="font-mono font-bold text-[11px]" style="color: var(--warn);">Mobility</div>
+                  <div class="text-[10px] font-mono mt-0.5" style="color: var(--muted);">Cisco 3504</div>
+                </div>
+              </div>
+
+              <!-- Technical Highlights Feature Rows with 36px Icon Tiles (Visible on desktop/tablet, hidden on mobile for 1-screen fit) -->
+              <div class="space-y-3.5 flagship-features-list">
+                <div class="flex items-start gap-3.5">
+                  <div class="feature-icon-tile">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                  </div>
+                  <div>
+                    <div class="font-semibold text-sm" style="color: var(--text);">Routed Core (OSPFv2 Area 0)</div>
+                    <div class="text-xs mt-0.5" style="color: var(--text-2);">Layer 3 core transit over /30 point-to-point subnets in Area 0 backbone.</div>
+                  </div>
+                </div>
+
+                <div class="flex items-start gap-3.5">
+                  <div class="feature-icon-tile">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+                  </div>
+                  <div>
+                    <div class="font-semibold text-sm" style="color: var(--text);">Gateway Redundancy (HSRPv2)</div>
+                    <div class="text-xs mt-0.5" style="color: var(--text-2);">HSRPv2 per-VLAN active/standby gateway load-sharing across Building A and B distribution blocks.</div>
+                  </div>
+                </div>
+
+                <div class="flex items-start gap-3.5">
+                  <div class="feature-icon-tile">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+                  </div>
+                  <div>
+                    <div class="font-semibold text-sm" style="color: var(--text);">Distribution Switching &amp; EtherChannel</div>
+                    <div class="text-xs mt-0.5" style="color: var(--text-2);">Cisco PAgP &amp; IEEE 802.3ad LACP multi-link bundles aligned with Rapid-PVST+ root.</div>
+                  </div>
+                </div>
+
+                <div class="flex items-start gap-3.5">
+                  <div class="feature-icon-tile">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                  </div>
+                  <div>
+                    <div class="font-semibold text-sm" style="color: var(--text);">Layer 2 Access Defense</div>
+                    <div class="text-xs mt-0.5" style="color: var(--text-2);">Ingress attack mitigation via DHCP Snooping, Dynamic ARP Inspection (DAI), and Port Security.</div>
+                  </div>
+                </div>
+
+                <div class="flex items-start gap-3.5">
+                  <div class="feature-icon-tile">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M8.111 16.404a5.5 5.5 0 017.778 0M12 20h.01m-7.08-7.071c3.904-3.905 10.236-3.905 14.141 0M1.394 9.393c5.857-5.857 15.355-5.857 21.213 0"/></svg>
+                  </div>
+                  <div>
+                    <div class="font-semibold text-sm" style="color: var(--text);">Services &amp; Mobility</div>
+                    <div class="text-xs mt-0.5" style="color: var(--text-2);">Centralized DHCP Relay Option 43, Cisco 3504 WLC mobility, and PAT translation.</div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Blueprint Column (Desktop: Right Col / Mobile: First) -->
+            <div class="lg:col-span-6 flagship-blueprint-col">
+              <button type="button" class="w-full text-left rounded-xl overflow-hidden border group cursor-pointer shadow-md transition-all relative block" style="background: var(--term-bg); border-color: var(--line-strong);" data-action="open-deck" data-deck-index="0" aria-label="Open full 4K topology blueprint">
+                <div class="flex items-center justify-between px-3.5 py-2 border-b text-xs font-mono select-none" style="background: rgba(10, 16, 28, 0.85); border-color: var(--line-strong);">
+                  <span class="font-bold text-slate-200">15-NODE PACKET TRACER TOPOLOGY BLUEPRINT</span>
+                  <span class="text-xs font-semibold flex items-center gap-1" style="color: var(--accent-2);">
+                    <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+                    4K Inspect
+                  </span>
+                </div>
+                <div class="relative aspect-[16/9] w-full overflow-hidden flex items-center justify-center" style="background: #030712;">
+                  <picture>
+                    <source srcset="assets/labs/campus/mega-lab.webp" type="image/webp">
+                    <img src="assets/labs/campus/mega-lab.png" alt="15-Node Campus Network Topology Architecture Blueprint" width="1200" height="675" loading="lazy" decoding="async" sizes="(min-width: 1024px) 50vw, 100vw" class="w-full h-full object-contain group-hover:scale-[1.02] transition-transform duration-200" />
+                  </picture>
+                  
+                  <!-- Bottom-Right Expand Button (44px target per §4.3) -->
+                  <div class="absolute bottom-3 right-3 w-11 h-11 rounded-lg flex items-center justify-center text-white border shadow-lg transition-transform group-hover:scale-105" style="background: rgba(10, 16, 28, 0.85); border-color: var(--line-strong);">
+                    <svg class="w-5 h-5 text-cyan-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/></svg>
+                  </div>
+                </div>
+              </button>
+              <p class="text-xs font-mono mt-2 text-right hidden sm:block" style="color: var(--muted);">Click topology image to inspect full 4K blueprint</p>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+    </section>

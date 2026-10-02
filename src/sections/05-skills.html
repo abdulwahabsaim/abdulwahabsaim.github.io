@@ -1,0 +1,145 @@
+    <!-- ==========================================================================
+         05. DOMAIN COMPETENCIES: 4 STACKED EXPANDING SKILLS ACCORDION
+         ========================================================================== -->
+    <section id="skills" class="skills-scroll-container section-band relative border-t border-slate-200 dark:border-slate-800">
+      <div class="skills-sticky-viewport">
+        <div class="section-inner space-y-6 flex flex-col items-center justify-center">
+          <div class="text-center max-w-2xl mx-auto">
+            <span class="eyebrow block mb-1.5">Domain Competencies</span>
+            <h2 class="font-display font-bold">Core Networking Skills</h2>
+            <p class="lead mt-2">
+              Interactive network engineering domains verified across Cisco IOS topologies and Packet Tracer / GNS3 simulations.
+            </p>
+          </div>
+
+        <!-- Unified Fluid Accordion List -->
+        <div class="relative z-10 space-y-3 mt-4 w-full max-w-4xl mx-auto" id="skills-accordion-container">
+          
+          <!-- Accordion Item 1 (Active by default) -->
+          <div class="skills-accordion-item active" data-accordion="routing" data-index="0">
+            <button id="skills-btn-0" class="skills-row" data-hover type="button" aria-expanded="true" aria-controls="skills-panel-0">
+              <div class="flex items-center gap-3">
+                <svg class="w-5 h-5 shrink-0" style="color: var(--cat-routing);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg>
+                <span class="domain-title font-display font-bold text-base sm:text-lg uppercase tracking-wider" style="color: var(--text);">
+                  Enterprise Routing &amp; High Availability
+                </span>
+              </div>
+              <svg class="arrow-icon w-4 h-4 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div id="skills-panel-0" class="skills-collapse" role="region" aria-labelledby="skills-btn-0">
+              <div class="skills-collapse-body">
+                <div class="skills-content px-4 pb-6 sm:px-6 sm:pb-6">
+                  <p class="text-sm font-sans leading-relaxed mb-4 max-w-3xl" style="color: var(--text-2);">
+                    Designing and verifying resilient multi-tier campus and WAN core routing. Specializing in gateway redundancy via HSRPv2 per-VLAN load sharing, hierarchical Multi-Area OSPFv2 with Type-3 LSA summary aggregation, EIGRP AS 7 composite metric tuning, and BGP transit routing.
+                  </p>
+                  <div class="flex flex-wrap gap-2">
+                    <span class="tag-badge">OSPFv2 Multi-Area</span>
+                    <span class="tag-badge">HSRPv2 Preempt</span>
+                    <span class="tag-badge">EIGRP AS 7</span>
+                    <span class="tag-badge">BGP Peering</span>
+                    <span class="tag-badge">ECMP Load Balancing</span>
+                    <span class="tag-badge">Inter-VLAN SVI Routing</span>
+                    <span class="tag-badge">Static Floating Routes</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion Item 2 -->
+          <div class="skills-accordion-item" data-accordion="security" data-index="1">
+            <button id="skills-btn-1" class="skills-row" data-hover type="button" aria-expanded="false" aria-controls="skills-panel-1">
+              <div class="flex items-center gap-3">
+                <svg class="w-5 h-5 shrink-0" style="color: var(--cat-security);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 22V2"/></svg>
+                <span class="domain-title font-display font-bold text-base sm:text-lg uppercase tracking-wider" style="color: var(--text);">
+                  Layer 2 Security Hardening &amp; DAI
+                </span>
+              </div>
+              <svg class="arrow-icon w-4 h-4 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div id="skills-panel-1" class="skills-collapse" role="region" aria-labelledby="skills-btn-1">
+              <div class="skills-collapse-body">
+                <div class="skills-content px-4 pb-6 sm:px-6 sm:pb-6">
+                  <p class="text-sm font-sans leading-relaxed mb-4 max-w-3xl" style="color: var(--text-2);">
+                    Hardening access and distribution layer switches against unauthorized attacks. Enforcing Dynamic ARP Inspection (DAI) against DHCP snooping binding databases, STP Root Guard to block root bridge hijacking, BPDU Guard, Sticky MAC Port Security, and 802.1Q trunk native VLAN hopping defense.
+                  </p>
+                  <div class="flex flex-wrap gap-2">
+                    <span class="tag-badge">Dynamic ARP Inspection</span>
+                    <span class="tag-badge">DHCP Snooping</span>
+                    <span class="tag-badge">STP Root Guard</span>
+                    <span class="tag-badge">BPDU Guard</span>
+                    <span class="tag-badge">Sticky MAC Port Sec</span>
+                    <span class="tag-badge">802.1Q Native VLAN Defense</span>
+                    <span class="tag-badge">Private VLANs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion Item 3 -->
+          <div class="skills-accordion-item" data-accordion="services" data-index="2">
+            <button id="skills-btn-2" class="skills-row" data-hover type="button" aria-expanded="false" aria-controls="skills-panel-2">
+              <div class="flex items-center gap-3">
+                <svg class="w-5 h-5 shrink-0" style="color: var(--cat-services);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>
+                <span class="domain-title font-display font-bold text-base sm:text-lg uppercase tracking-wider" style="color: var(--text);">
+                  Infrastructure Services &amp; Cisco WLC Mobility
+                </span>
+              </div>
+              <svg class="arrow-icon w-4 h-4 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div id="skills-panel-2" class="skills-collapse" role="region" aria-labelledby="skills-btn-2">
+              <div class="skills-collapse-body">
+                <div class="skills-content px-4 pb-6 sm:px-6 sm:pb-6">
+                  <p class="text-sm font-sans leading-relaxed mb-4 max-w-3xl" style="color: var(--text-2);">
+                    Configuring central infrastructure services supporting corporate networks. Managing Cisco 3504 Wireless LAN Controllers (WLC) with CAPWAP tunnels, enterprise 802.1X/WPA3 authentication, DHCP Relay helpers, NTP Stratum clock synchronization, PAT NAT overload, and centralized syslog telemetry (severity 0–7).
+                  </p>
+                  <div class="flex flex-wrap gap-2">
+                    <span class="tag-badge">Cisco 3504 WLC</span>
+                    <span class="tag-badge">CAPWAP Tunnels</span>
+                    <span class="tag-badge">DHCP Server &amp; Relay</span>
+                    <span class="tag-badge">DNS Authoritative</span>
+                    <span class="tag-badge">NTP Stratum Sync</span>
+                    <span class="tag-badge">Central Syslog (0–7)</span>
+                    <span class="tag-badge">PAT NAT Overload</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Accordion Item 4 -->
+          <div class="skills-accordion-item" data-accordion="tools" data-index="3">
+            <button id="skills-btn-3" class="skills-row" data-hover type="button" aria-expanded="false" aria-controls="skills-panel-3">
+              <div class="flex items-center gap-3">
+                <svg class="w-5 h-5 shrink-0" style="color: var(--cat-campus);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg>
+                <span class="domain-title font-display font-bold text-base sm:text-lg uppercase tracking-wider" style="color: var(--text);">
+                  Automation, Tooling &amp; NOC Telemetry
+                </span>
+              </div>
+              <svg class="arrow-icon w-4 h-4 text-slate-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div id="skills-panel-3" class="skills-collapse" role="region" aria-labelledby="skills-btn-3">
+              <div class="skills-collapse-body">
+                <div class="skills-content px-4 pb-6 sm:px-6 sm:pb-6">
+                  <p class="text-sm font-sans leading-relaxed mb-4 max-w-3xl" style="color: var(--text-2);">
+                    Operating network emulation environments and programmatic network management. Verification with Cisco IOS topologies in Packet Tracer and GNS3, Wireshark frame dissection, Netmiko Python scripts for automated config deployment, and Linux (Ubuntu) server administration.
+                  </p>
+                  <div class="flex flex-wrap gap-2">
+                    <span class="tag-badge">Cisco IOS-XE</span>
+                    <span class="tag-badge">Packet Tracer 8.2+</span>
+                    <span class="tag-badge">GNS3 Emulation</span>
+                    <span class="tag-badge">Wireshark Analysis</span>
+                    <span class="tag-badge">Python &amp; Netmiko</span>
+                    <span class="tag-badge">Linux (Ubuntu)</span>
+                    <span class="tag-badge">Git &amp; Markdown NOC Docs</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>

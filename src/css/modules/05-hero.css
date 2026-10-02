@@ -1,0 +1,501 @@
+/* ==========================================================================
+   HERO ENTRANCE (IMMEDIATE CLEAN REVEAL, ZERO DELAY)
+   ========================================================================== */
+.hero-enter,
+.hero-enter.hero-in {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+/* ==========================================================================
+   HERO TABBED TECHNICAL PANEL (§2.4, §5.1, §5.3)
+   ========================================================================== */
+.hero-panel {
+  position: relative;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-card);
+  padding: 16px !important;
+}
+
+.seg {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  padding: 4px;
+  background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+}
+
+.seg [role="tab"] {
+  min-height: 36px;
+  padding: 6px 4px;
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.8125rem;
+  color: var(--text-2);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.seg [role="tab"]:hover {
+  color: var(--text);
+}
+
+.seg [role="tab"][aria-selected="true"] {
+  color: #ffffff;
+  background: var(--accent-fill);
+  font-weight: 700;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+
+.hero-panel [role="tabpanel"] {
+  min-height: var(--hero-console-height, 485px);
+  height: auto;
+}
+
+#hero-tab-terminal[role="tabpanel"] {
+  height: 485px;
+}
+
+/* Proof-linked chips (§2.4) */
+.hero-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4.5px;
+  padding: 3px 8px;
+  border-radius: var(--r-sm);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label, 0.75rem);
+  font-weight: 500;
+  line-height: 1.3;
+  background: var(--bg-2);
+  color: var(--text);
+  border: 1px solid var(--line-strong);
+  text-decoration: none !important;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+}
+
+.hero-chip:hover, .hero-chip:focus-visible {
+  border-color: var(--accent);
+  background: var(--panel-2);
+  color: var(--accent-2);
+  transform: translateY(-1px);
+}
+
+.hero-chip-badge {
+  display: inline-block;
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: var(--fs-label, 0.75rem);
+  font-weight: 600;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  transition: all 0.15s ease;
+}
+
+.hero-chip:hover .hero-chip-badge {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+/* IOS Output Terminal (§5.3) */
+.hero-cli-block {
+  background: var(--term-bg, #050810);
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label, 0.75rem);
+  line-height: 1.6;
+  color: var(--term-text, #CBD5E1);
+  overflow-x: auto;
+  position: relative;
+}
+
+html.light .hero-cli-block {
+  background: #080D1A;
+  color: #94A3B8;
+}
+
+.token-prompt { color: var(--accent); font-weight: 600; }
+.token-cmd { color: var(--accent-2); font-weight: 600; }
+.token-hdr { color: var(--muted); }
+.token-ok { color: var(--ok); font-weight: 600; }
+.token-accent { color: var(--accent); font-weight: 600; }
+
+/* ==========================================================================
+   HERO HEADLINE & DUAL-CONSOLE EQUAL HEIGHT SYSTEM
+   ========================================================================== */
+.hero-candidate-name {
+  font-family: var(--font-sans);
+  font-size: clamp(2.45rem, 6.8vw, 4.75rem);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
+  display: block;
+  color: var(--text);
+}
+
+@media (max-width: 639px) {
+  .hero-candidate-name {
+    font-size: clamp(1.85rem, 8.5vw, 3rem) !important;
+    white-space: normal !important;
+    text-wrap: balance !important;
+  }
+}
+
+.hero-cta-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+@media (max-width: 639px) {
+  .hero-cta-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  .hero-cta-group > a:first-child,
+  .hero-cta-group > a:nth-child(2) {
+    width: 100%;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hero-cta-group > a:nth-child(3) {
+    grid-column: span 2;
+    justify-content: center;
+    padding-top: 0.25rem;
+  }
+}
+
+@media (max-width: 339px) {
+  .hero-cta-group {
+    grid-template-columns: 1fr !important;
+  }
+  .hero-cta-group > a:nth-child(3) {
+    grid-column: span 1 !important;
+  }
+  .hero-proof-row {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 0.5rem !important;
+  }
+  .hero-proof-row > div:last-child {
+    grid-column: span 2 !important;
+    border-left: none !important;
+    border-top: 1px solid var(--line) !important;
+    padding-top: 0.5rem !important;
+    padding-left: 0 !important;
+  }
+}
+
+/* ==========================================================================
+   HERO DUAL-CONSOLE EQUAL HEIGHT SYSTEM & SEAMLESS TRANSITION
+   ========================================================================== */
+:root {
+  --hero-console-height: 560px;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --hero-console-height: auto;
+  }
+}
+
+.hero-dual-console-container {
+  display: grid;
+  grid-template-areas: "stack";
+  grid-template-rows: minmax(0, 1fr);
+  height: var(--hero-console-height);
+  max-height: var(--hero-console-height);
+  min-height: 0;
+  position: relative;
+  border-radius: var(--radius-xl, 1rem);
+  overflow: hidden;
+}
+
+@media (max-width: 767px) {
+  .hero-dual-console-container {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+}
+
+.hero-console-panel {
+  grid-area: stack;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  transition: opacity 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.24s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.24s ease;
+}
+
+.hero-console-panel.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+  z-index: 2;
+}
+
+.hero-console-panel:not(.is-active) {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(6px) scale(0.995);
+  z-index: 1;
+}
+
+@media (max-width: 767px) {
+  .hero-console-panel:not(.is-active) {
+    display: none !important;
+  }
+}
+
+#hero-panel-skills {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+#hero-panel-skills .card-enterprise {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 0;
+  padding: 0.875rem 1rem;
+}
+
+@media (max-width: 767px) {
+  #hero-panel-skills.is-active {
+    display: flex !important;
+    flex-direction: row;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 0.5rem;
+    gap: 0.75rem;
+    padding: 0.25rem 0.25rem 0.5rem;
+    height: auto;
+    min-height: 0;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  #hero-panel-skills::-webkit-scrollbar {
+    display: none;
+  }
+
+  #hero-panel-skills .card-enterprise {
+    flex: 0 0 85vw;
+    max-width: 320px;
+    height: auto;
+    min-height: 0;
+    scroll-snap-align: start;
+    padding: 1rem;
+    justify-content: flex-start;
+  }
+}
+
+#hero-panel-terminal {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 100%;
+  min-height: 0;
+  overflow: hidden;
+}
+
+#hero-panel-terminal .terminal {
+  height: 100%;
+  max-height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (max-width: 767px) {
+  #hero-panel-terminal.is-active {
+    display: flex !important;
+    flex-direction: column;
+    height: 420px !important;
+    max-height: 420px !important;
+    min-height: 420px !important;
+    border-radius: var(--radius-xl, 1rem);
+    overflow: hidden;
+  }
+}
+
+/* ==========================================================================
+   HERO CONSOLE SWITCH TABS & PROMINENT LIVE CLI BUTTON
+   ========================================================================== */
+.hero-console-switch {
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.hero-tab-btn {
+  border-radius: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid transparent;
+  user-select: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Tab 1: Technical Arsenal */
+.hero-tab-btn-skills[aria-selected="true"] {
+  background: var(--blue-600, #2563eb);
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.hero-tab-btn-skills:not([aria-selected="true"]) {
+  background: transparent;
+  color: var(--text-2);
+}
+
+.hero-tab-btn-skills:not([aria-selected="true"]):hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+html.light .hero-tab-btn-skills:not([aria-selected="true"]):hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Tab 2: Live Cisco IOS CLI — Eye-Catching Interactive Highlighting */
+.hero-tab-btn-terminal:not([aria-selected="true"]) {
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  color: var(--text);
+  box-shadow: 0 1px 4px rgba(16, 185, 129, 0.1);
+}
+
+html.light .hero-tab-btn-terminal:not([aria-selected="true"]) {
+  background: rgba(16, 185, 129, 0.09);
+  border-color: rgba(16, 185, 129, 0.45);
+  color: #065f46;
+}
+
+.hero-tab-btn-terminal:not([aria-selected="true"]):hover {
+  background: rgba(16, 185, 129, 0.18);
+  border-color: rgba(16, 185, 129, 0.65);
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.28);
+  transform: translateY(-0.5px);
+}
+
+.hero-tab-btn-terminal[aria-selected="true"] {
+  background: var(--blue-600, #2563eb);
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 2px 10px rgba(37, 99, 235, 0.35);
+}
+
+.hero-tab-btn-terminal[aria-selected="true"] i {
+  color: #ffffff !important;
+}
+
+/* Live Pulse Radar Animation */
+.hero-pulse-dot {
+  position: relative;
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background-color: #10b981;
+  flex-shrink: 0;
+}
+
+.hero-pulse-dot::before {
+  content: '';
+  position: absolute;
+  top: -2.5px;
+  left: -2.5px;
+  right: -2.5px;
+  bottom: -2.5px;
+  border-radius: 9999px;
+  background-color: #34d399;
+  animation: heroPulseRadar 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  opacity: 0.8;
+}
+
+@keyframes heroPulseRadar {
+  0% { transform: scale(0.9); opacity: 0.85; }
+  50% { transform: scale(1.9); opacity: 0; }
+  100% { transform: scale(0.9); opacity: 0.85; }
+}
+
+/* Prominent "TRY LIVE" Chip */
+.hero-live-chip {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.25rem;
+  background: rgba(16, 185, 129, 0.18);
+  color: var(--ok);
+  border: 1px solid rgba(16, 185, 129, 0.35);
+  line-height: 1.2;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+html.dark .hero-live-chip {
+  background: rgba(16, 185, 129, 0.22);
+  color: #34d399;
+  border-color: rgba(52, 211, 153, 0.45);
+}
+
+.hero-tab-btn-terminal[aria-selected="true"] .hero-live-chip {
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+@media (max-width: 767px) {
+  .hero-console-switch {
+    padding: 0.25rem !important;
+    gap: 0.35rem !important;
+  }
+
+  .hero-tab-btn {
+    height: 40px !important;
+    min-height: 40px !important;
+    padding: 0 0.5rem !important;
+    font-size: 0.72rem !important;
+    white-space: nowrap !important;
+    justify-content: center !important;
+    flex: 1 1 0 !important;
+  }
+
+  .hero-live-chip {
+    display: none !important;
+  }
+}
+

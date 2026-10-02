@@ -1,0 +1,217 @@
+/* ==========================================================================
+   REPOSITORY SHOWCASE & CASE STUDY SLIDE-OVER DRAWER
+   Candidate: Abdul Wahab Saim — Junior Network & NOC Engineer (CCNA)
+   ========================================================================== */
+
+.repo-grid-layout {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline: 1rem;
+  gap: 1rem;
+  padding-bottom: 0.5rem;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .repo-grid-layout {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 1.25rem !important;
+    overflow-x: visible !important;
+    padding-bottom: 0 !important;
+    scroll-snap-type: none !important;
+  }
+  .repo-grid-layout > .card-enterprise:first-child {
+    grid-column: span 2 !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .repo-grid-layout {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    gap: 1.5rem !important;
+    overflow-x: visible !important;
+    padding-bottom: 0 !important;
+    scroll-snap-type: none !important;
+  }
+}
+
+.repo-grid-layout > .card-enterprise {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+.repo-topo-box {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+  background: var(--topo-box);
+}
+
+.repo-topo-box svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .repo-topo-box animateMotion,
+  .repo-topo-box animate {
+    display: none;
+  }
+}
+
+.card-link-arrow {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.card-enterprise:hover .card-link-arrow {
+  transform: translateX(4px);
+}
+
+.repo-slider {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+}
+
+.repo-mobile-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@media (min-width: 768px) {
+  .repo-mobile-controls {
+    display: none !important;
+  }
+}
+
+.repo-dot {
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease;
+}
+
+.repo-dot.active-dot {
+  width: 1.5rem;
+  background-color: var(--accent);
+}
+
+/* ==========================================================================
+   CASE STUDY SLIDE-OVER DRAWER
+   ========================================================================== */
+.case-study-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 860px;
+  background-color: var(--bg);
+  color: var(--text);
+  box-shadow: -10px 0 40px rgba(0, 0, 0, 0.7);
+  z-index: var(--z-drawer, 90);
+  overflow-y: auto !important;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  transform: translateX(100%);
+  transition: transform 0.22s ease, visibility 0s linear 0.22s;
+  border-left: 1px solid var(--rule);
+}
+
+.case-study-drawer:not(.open) {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.case-study-drawer.open {
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateX(0);
+  transition: transform 0.22s ease;
+  transition-delay: 0s;
+}
+
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(15, 23, 42, 0.5);
+  z-index: var(--z-backdrop, 80);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+html.light .drawer-backdrop,
+[data-theme="light"] .drawer-backdrop {
+  background-color: rgba(15, 23, 42, 0.4);
+}
+
+.drawer-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Markdown Tables inside Case Study Drawer */
+.case-study-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  margin: 1rem 0;
+}
+
+.case-study-table th {
+  background-color: var(--surface-hover);
+  color: var(--text-primary);
+  font-weight: 600;
+  text-align: left;
+  padding: 0.65rem 0.85rem;
+  border-bottom: 2px solid var(--surface-border-strong);
+  font-family: var(--font-sans);
+  font-size: var(--text-xs);
+}
+
+.case-study-table td {
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--surface-border);
+  color: var(--text-muted);
+}
+
+.case-study-table tr:hover td {
+  background-color: var(--surface-hover);
+}
+
+/* Code Snippet Box inside Drawer */
+.terminal-snippet {
+  background-color: var(--term-bg, #050810);
+  color: var(--term-text, #cbd5e1);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  padding: 1.15rem;
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+  border: 1px solid var(--rule);
+  line-height: 1.6;
+}
+
+/* Short-Height & Landscape Viewports Lightbox Modal Resilience */
+@media (max-height: 540px) {
+  #topology-deck-card {
+    max-height: 96vh !important;
+  }
+  #topology-deck-card .min-h-\[300px\] {
+    min-height: 160px !important;
+  }
+  #deck-modal-img {
+    max-height: calc(100vh - 120px) !important;
+  }
+}

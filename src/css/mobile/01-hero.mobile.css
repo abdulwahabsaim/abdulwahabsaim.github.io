@@ -1,0 +1,43 @@
+/* ==========================================================================
+   DEDICATED MOBILE MODULE: 01-HERO (§4.2: Hero 1-Screen Viewport Fit)
+   Target: Mobile Devices (< 1024px)
+   ========================================================================== */
+
+@media (max-width: 1023px) {
+  #hero {
+    min-height: auto !important;
+    padding-top: max(4.5rem, calc(var(--header-h, 64px) + 0.75rem)) !important;
+    padding-bottom: 1.5rem !important;
+  }
+
+  .hero-candidate-name {
+    font-size: clamp(1.75rem, 8vw, 2.75rem) !important;
+    line-height: 1.12 !important;
+    text-wrap: balance;
+  }
+
+  .hero-tagline {
+    font-size: 0.85rem !important;
+    line-clamp: 2;
+  }
+}
+
+/* Ultra-Narrow Devices (< 340px, Fold outer screen, iPhone SE 1) */
+@media (max-width: 339px) {
+  .hero-proof-row {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.35rem !important;
+  }
+  
+  .hero-proof-row > div:last-child {
+    grid-column: span 2 !important;
+  }
+
+  .brand-logo-text {
+    display: none !important;
+  }
+
+  .brand-logo-monogram {
+    display: flex !important;
+  }
+}

@@ -1,0 +1,178 @@
+/* ==========================================================================
+   DEDICATED MOBILE MODULE: 09-FOOTER-MODALS (§4.10: Case Study Drawer & 4K Modal)
+   Target: Mobile Devices (< 1024px)
+   ========================================================================== */
+
+@media (max-width: 1023px) {
+
+  /* ── Drawer Wrapper: full-screen fixed container (flex column) ── */
+  .drawer-wrapper {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    z-index: var(--z-drawer, 90) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    /* Hidden by default — slides off to right */
+    transform: translateX(100%) !important;
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+  }
+
+  .drawer-wrapper.open {
+    transform: translateX(0) !important;
+    pointer-events: auto !important;
+    visibility: visible !important;
+  }
+
+  /* ── Scrollable aside: fills all space above the bottom bar ── */
+  .case-study-drawer {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    flex: 1 1 auto !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    overscroll-behavior: contain !important;
+    padding: 1rem !important;
+    padding-bottom: 0.5rem !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+    background-color: var(--bg) !important;
+    color: var(--text) !important;
+    /* Remove old slide animation — wrapper now handles it */
+    transform: none !important;
+    transition: none !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+    box-shadow: none !important;
+    border-left: none !important;
+  }
+
+  /* Keep existing .open class harmless */
+  .case-study-drawer.open {
+    transform: none !important;
+  }
+
+  /* Progress bar margins match 1rem padding */
+  .case-study-drawer #drawer-progress {
+    margin-left: -1rem !important;
+    margin-right: -1rem !important;
+    margin-top: -1rem !important;
+  }
+
+  /* Content constraints */
+  .case-study-drawer #drawer-content {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    box-sizing: border-box !important;
+    padding-bottom: 0.5rem !important;
+  }
+
+  .case-study-drawer #drawer-content * {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .case-study-drawer #drawer-content .overflow-x-auto,
+  .case-study-drawer #drawer-content pre {
+    max-width: 100% !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    white-space: pre !important;
+  }
+
+  /* ── Mobile Bottom Bar: sibling to aside, NEVER inside scroll ── */
+  .drawer-mobile-bar {
+    flex: 0 0 auto !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.625rem !important;
+    padding: 0.625rem 1rem max(0.875rem, env(safe-area-inset-bottom)) !important;
+    background: rgba(7, 11, 19, 0.96) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    border-top: 1px solid rgba(76, 141, 255, 0.25) !important;
+    box-sizing: border-box !important;
+    width: 100% !important;
+  }
+
+  /* ── Bar Buttons ── */
+  .drawer-bar-btn {
+    flex: 1 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 44px !important;
+    border-radius: 8px !important;
+    font-size: 0.875rem !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    border: none !important;
+    transition: opacity 0.15s ease, background 0.15s ease !important;
+    box-sizing: border-box !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  .drawer-bar-btn--ghost {
+    background: rgba(255, 255, 255, 0.06) !important;
+    color: var(--text-2, #8899bb) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  }
+
+  .drawer-bar-btn--ghost:active {
+    opacity: 0.7 !important;
+  }
+
+  .drawer-bar-btn--primary {
+    background: var(--accent, #4C8DFF) !important;
+    color: #fff !important;
+  }
+
+  .drawer-bar-btn--primary:active {
+    opacity: 0.85 !important;
+  }
+
+  /* ── Hide the desktop mobile-bar on ≥ sm ── */
+  @media (min-width: 640px) {
+    .drawer-mobile-bar {
+      display: none !important;
+    }
+  }
+
+  /* 4K Lightbox Modal */
+  .topology-modal-content {
+    max-height: calc(100vh - 80px) !important;
+    width: 96vw !important;
+    margin: 40px auto !important;
+  }
+
+  .site-footer {
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom)) !important;
+  }
+}
+
+/* Desktop — wrapper must NOT show, drawer reverts to normal */
+@media (min-width: 1024px) {
+  .drawer-wrapper {
+    position: contents !important;
+    transform: none !important;
+    display: contents !important;
+  }
+
+  .drawer-mobile-bar {
+    display: none !important;
+  }
+}

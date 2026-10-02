@@ -1,0 +1,283 @@
+    <section id="top" class="section-band relative overflow-hidden min-h-[calc(100vh-4rem)] flex flex-col">
+      <!-- Ambient Glowing Color Orbs for High-Aesthetic Glassmorphism Refraction -->
+      <div class="ambient-glow-orb -top-24 -left-20 w-[500px] h-[500px] bg-blue-500/10 dark:bg-blue-600/18 pointer-events-none"></div>
+      <div class="ambient-glow-orb top-1/4 -right-24 w-[480px] h-[480px] bg-cyan-500/8 dark:bg-cyan-500/15 pointer-events-none"></div>
+      <div class="ambient-glow-orb -bottom-24 left-1/3 w-[450px] h-[450px] bg-indigo-500/6 dark:bg-indigo-600/12 pointer-events-none"></div>
+
+      <!-- 2D Canvas Constellation (§3.1) -->
+      <canvas id="constellation" aria-hidden="true"></canvas>
+
+      <!-- Flex-1 centering wrapper: fills available space and centers the grid -->
+      <div class="relative z-10 flex-1 flex items-center w-full">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-10 w-full">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+        
+        <!-- Left Column (6 cols - 50% split) -->
+        <div class="lg:col-span-6 lg:self-center space-y-6">
+          
+          <!-- 1. H1 Headline -->
+          <h1 class="hero-stagger hero-stagger-1 font-display">
+            <span class="hero-candidate-name">Abdul Wahab</span>
+            <span class="hero-candidate-name">Saim</span>
+            <span class="block text-sm sm:text-base font-sans font-semibold uppercase tracking-wider mt-3 grad-text">CCNA-certified Network &amp; NOC Engineer</span>
+          </h1>
+
+          <!-- 2. Lead Paragraph -->
+          <p class="hero-stagger hero-stagger-2 text-base sm:text-lg lg:text-[1.125rem] leading-relaxed max-w-xl text-slate-700 dark:text-slate-300">
+            I configure, secure and troubleshoot Cisco campus networks: OSPF, HSRP, EtherChannel and Layer 2 security, documented across 32 labs in Packet Tracer and GNS3.
+          </p>
+
+          <!-- 2b. Target Roles Line -->
+          <p class="hero-stagger hero-stagger-3 text-sm sm:text-base font-medium text-slate-500 dark:text-slate-400">
+            Looking for: NOC Engineer · Network Support Engineer · Junior Network Engineer
+          </p>
+
+          <!-- 3. Action Buttons -->
+          <div class="hero-stagger hero-stagger-4 hero-cta-group pt-1">
+            <a href="#contact" class="btn btn-primary">Contact me</a>
+            <a href="assets/Abdul-Wahab-Saim-CV.pdf" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Download CV</a>
+            <a href="#flagship" class="inline-flex items-center gap-1.5 text-sm font-semibold hover:underline group" style="color: var(--accent);">
+              <span>See flagship lab</span>
+              <span class="group-hover:translate-x-0.5 transition-transform" aria-hidden="true">→</span>
+            </a>
+          </div>
+
+          <!-- 4. Proof Row -->
+          <div class="pt-5 border-t grid grid-cols-3 gap-3 sm:gap-5 hero-proof-row" style="border-color: var(--line);">
+            <div>
+              <div class="font-display font-extrabold text-2xl sm:text-3xl tabular-nums" style="color: var(--text);" data-counter="32">32</div>
+              <div class="text-xs font-mono mt-1" style="color: var(--muted);">Documented labs</div>
+            </div>
+            <div class="pl-3 sm:pl-5 border-l" style="border-color: var(--line);">
+              <div class="font-display font-extrabold text-2xl sm:text-3xl tabular-nums" style="color: var(--text);" data-counter="15">15</div>
+              <div class="text-xs font-mono mt-1" style="color: var(--muted);">15-node flagship</div>
+            </div>
+            <div class="pl-3 sm:pl-5 border-l" style="border-color: var(--line);">
+              <div class="font-display font-extrabold text-2xl sm:text-3xl" style="color: var(--text);">CCNA</div>
+              <div class="text-xs font-mono mt-1" style="color: var(--muted);">Exam 200-301</div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right Column: TECHNICAL ARSENAL (FRONT BY DEFAULT) & Live Cisco IOS CLI Toggle (6 cols - 50% split) -->
+        <div class="lg:col-span-6 space-y-3">
+          
+          <!-- Segmented Console Switch (Technical Arsenal is Active by default) — Stage 5 -->
+          <div class="hero-console-switch flex items-center justify-between p-1.5 rounded-xl bg-white/80 dark:bg-white/5 backdrop-blur-xl border border-slate-200/90 dark:border-white/10 text-xs font-mono font-semibold hero-enter hero-stage-5 shadow-sm gap-2" role="tablist">
+            <button id="hero-tab-skills" role="tab" aria-selected="true" onclick="switchHeroConsole('skills')" class="hero-tab-btn hero-tab-btn-skills flex-1 py-2 px-3 rounded-lg transition-all flex items-center justify-center gap-1.5" data-hover>
+              <svg class="w-3.5 h-3.5 text-amber-500 inline shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              <span class="whitespace-nowrap">Technical Arsenal</span>
+            </button>
+            <button id="hero-tab-terminal" role="tab" aria-selected="false" onclick="switchHeroConsole('terminal')" class="hero-tab-btn hero-tab-btn-terminal group flex-1 py-2 px-3 rounded-lg transition-all flex items-center justify-center gap-1.5" data-hover>
+              <span class="hero-pulse-dot shrink-0" aria-hidden="true"></span>
+              <svg class="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400 group-hover:scale-110 transition-transform inline shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+              <span class="font-bold tracking-tight whitespace-nowrap hidden sm:inline">Live Cisco IOS CLI</span>
+              <span class="font-bold tracking-tight whitespace-nowrap sm:hidden">Live Cisco CLI</span>
+              <span class="hero-live-chip hidden sm:inline-flex">TRY LIVE</span>
+            </button>
+          </div>
+
+          <!-- Stable Container for Both Panels (Equal Height, Zero Jitter Stack) -->
+          <div class="hero-dual-console-container relative" id="hero-console-container">
+
+            <!-- PANEL 1: Technical Arsenal (ON FRONT BY DEFAULT) -->
+            <div id="hero-panel-skills" class="hero-console-panel is-active" role="tabpanel" aria-labelledby="hero-tab-skills" aria-hidden="false" data-lenis-prevent>
+              
+              <!-- Deck 1: Routing & High Availability -->
+              <div class="card-enterprise p-4">
+                <div class="flex items-center justify-between mb-2.5">
+                  <span class="font-mono text-xs font-bold flex items-center gap-2" style="color: var(--text);">
+                    <svg class="w-4 h-4 shrink-0 inline" style="color: var(--cat-routing);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="19" r="3"/><path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15"/><circle cx="18" cy="5" r="3"/></svg> Routing &amp; High Availability
+                  </span>
+                  <span class="tag-badge text-xs">Layer 3 Core</span>
+                </div>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="tag-badge text-xs">OSPFv2 Multi-Area</span>
+                  <span class="tag-badge text-xs">HSRPv2 Virtual VIP</span>
+                  <span class="tag-badge text-xs">EIGRP AS 7</span>
+                  <span class="tag-badge text-xs">BGP Transit</span>
+                  <span class="tag-badge text-xs">ECMP Balancing</span>
+                  <span class="tag-badge text-xs">Inter-VLAN SVI</span>
+                </div>
+              </div>
+
+              <!-- Deck 2: Layer 2 Switching & Security Citadel -->
+              <div class="card-enterprise p-4">
+                <div class="flex items-center justify-between mb-2.5">
+                  <span class="font-mono text-xs font-bold flex items-center gap-2" style="color: var(--text);">
+                    <svg class="w-4 h-4 shrink-0 inline" style="color: var(--cat-security);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 22V2"/></svg> Layer 2 Switching &amp; Hardening
+                  </span>
+                  <span class="tag-badge text-xs">L2 Security</span>
+                </div>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="tag-badge text-xs">Dynamic ARP Inspection (DAI)</span>
+                  <span class="tag-badge text-xs">DHCP Snooping</span>
+                  <span class="tag-badge text-xs">Sticky MAC Port Sec</span>
+                  <span class="tag-badge text-xs">STP Root Guard</span>
+                  <span class="tag-badge text-xs">BPDU Guard</span>
+                  <span class="tag-badge text-xs">802.1Q Native Defense</span>
+                </div>
+              </div>
+
+              <!-- Deck 3: Infrastructure Services & Enterprise Wireless -->
+              <div class="card-enterprise p-4">
+                <div class="flex items-center justify-between mb-2.5">
+                  <span class="font-mono text-xs font-bold flex items-center gap-2" style="color: var(--text);">
+                    <svg class="w-4 h-4 shrink-0 inline" style="color: var(--cat-services);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg> Infrastructure &amp; Mobility
+                  </span>
+                  <span class="tag-badge text-xs">Wireless &amp; Services</span>
+                </div>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="tag-badge text-xs">Cisco 3504 WLC</span>
+                  <span class="tag-badge text-xs">DHCP Relay</span>
+                  <span class="tag-badge text-xs">NTP Stratum</span>
+                  <span class="tag-badge text-xs">Central Syslog (0–7)</span>
+                  <span class="tag-badge text-xs">PAT Overload</span>
+                  <span class="tag-badge text-xs">MQC QoS</span>
+                </div>
+              </div>
+
+              <!-- Deck 4: Platforms & NOC Tools -->
+              <div class="card-enterprise p-4">
+                <div class="flex items-center justify-between mb-2.5">
+                  <span class="font-mono text-xs font-bold flex items-center gap-2" style="color: var(--text);">
+                    <svg class="w-4 h-4 shrink-0 inline" style="color: var(--cat-campus);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="16" height="16" x="4" y="4" rx="2"/><rect width="6" height="6" x="9" y="9" rx="1"/><path d="M15 2v2"/><path d="M15 20v2"/><path d="M2 15h2"/><path d="M2 9h2"/><path d="M20 15h2"/><path d="M20 9h2"/><path d="M9 2v2"/><path d="M9 20v2"/></svg> Verified Systems &amp; Tooling
+                  </span>
+                  <span class="tag-badge text-xs">Hands-on CLI</span>
+                </div>
+                <div class="flex flex-wrap gap-1.5">
+                  <span class="tag-badge text-xs">Cisco IOS-XE</span>
+                  <span class="tag-badge text-xs">Packet Tracer 8.2+</span>
+                  <span class="tag-badge text-xs">GNS3 Emulation</span>
+                  <span class="tag-badge text-xs">Wireshark Analysis</span>
+                  <span class="tag-badge text-xs">Python &amp; Netmiko</span>
+                  <span class="tag-badge text-xs">Linux (Ubuntu)</span>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- PANEL 2: Live Cisco IOS Config Terminal (Accessible via toggle) -->
+            <div id="hero-panel-terminal" class="hero-console-panel" role="tabpanel" aria-labelledby="hero-tab-terminal" aria-hidden="true">
+              <div class="terminal rounded-2xl overflow-hidden relative shadow-2xl h-full flex flex-col min-h-0">
+                <div class="terminal-header shrink-0">
+                  <div class="flex items-center gap-1.5 shrink-0">
+                    <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-rose-500/80"></span>
+                    <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-amber-500/80"></span>
+                    <span class="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full bg-emerald-500/80"></span>
+                  </div>
+                  <span class="terminal-header-title font-mono text-xs ml-2 sm:ml-3 font-semibold truncate">
+                    <span class="term-desktop-only">saim.ios — ssh (Cisco IOS-XE / GNS3)</span>
+                    <span class="term-mobile-only">saim.ios (Cisco IOS-XE)</span>
+                  </span>
+                  <span class="terminal-header-uptime ml-auto font-mono text-xs font-medium shrink-0">
+                    <span class="term-desktop-only">CLI Session · Active</span>
+                    <span class="term-mobile-only term-mobile-flex items-center gap-1 text-emerald-500 dark:text-emerald-400 font-semibold"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>Active</span>
+                  </span>
+                </div>
+
+                <!-- Quick Candidate Command Chips Rail (ZERO SCROLLBAR, FLEX WRAP) -->
+                <div class="cli-exec-bar shrink-0">
+                  <span class="cli-exec-label">EXEC:</span>
+                  <button type="button" onclick="window.runCiscoCommand('about')" class="cli-exec-btn cli-btn-accent">about</button>
+                  <button type="button" onclick="window.runCiscoCommand('skills')" class="cli-exec-btn">skills</button>
+                  <button type="button" onclick="window.runCiscoCommand('projects')" class="cli-exec-btn">projects</button>
+                  <button type="button" onclick="window.runCiscoCommand('certs')" class="cli-exec-btn">certs</button>
+                  <button type="button" onclick="window.runCiscoCommand('resume')" class="cli-exec-btn">resume</button>
+                  <button type="button" onclick="window.runCiscoCommand('contact')" class="cli-exec-btn">contact</button>
+                  <button type="button" onclick="window.runCiscoCommand('sudo hire')" class="cli-exec-btn cli-btn-success">sudo hire</button>
+                  <button type="button" onclick="window.runCiscoCommand('clear')" class="cli-exec-btn cli-btn-danger">clear</button>
+                </div>
+                
+                <div id="hero-terminal-stream" class="p-5 font-mono text-[12px] leading-relaxed space-y-1 flex-1 min-h-0 overflow-y-auto terminal-scrollbar cursor-text" data-lenis-prevent onclick="document.getElementById('hero-terminal-input') &amp;&amp; document.getElementById('hero-terminal-input').focus()">
+                  <div id="hero-terminal-history" class="space-y-1">
+                    <p class="terminal-line"><span class="t-prompt">core-rtr-01#</span> <span class="t-cmd">show running-config</span></p>
+                    <p class="terminal-line t-comment">! NVRAM config verified on Cisco IOS &amp; GNS3</p>
+                    <p class="terminal-line t-comment">!</p>
+                    <p class="terminal-line"><span class="t-kw">hostname</span> <span class="t-val-strong">abdul-wahab-saim</span></p>
+                    <p class="terminal-line"><span class="t-kw">cisco-id</span> <span class="t-success">CSCO15110282 [VERIFIED]</span></p>
+                    <p class="terminal-line"><span class="t-kw">valid-thru</span> <span class="t-val">February 26, 2029</span></p>
+                    <p class="terminal-line"><span class="t-kw">education</span> <span class="t-val">B.Sc. CS — 7th Sem (CGPA 3.58)</span></p>
+                    <p class="terminal-line"><span class="t-kw">location</span> <span class="t-val">Goes, Zeeland, Netherlands 🇳🇱</span></p>
+                    <p class="terminal-line"><span class="t-kw">flagship</span> <span class="t-val">15-Node Campus Mega Lab (L3 Core + WLC + DAI)</span></p>
+                    <p class="terminal-line t-comment">!</p>
+                    <p class="terminal-line"><span class="t-kw">interface</span> <span class="t-val-strong">GigabitEthernet0/0</span></p>
+                    <p class="terminal-line pl-4 t-subval">ip address 10.10.10.1 255.255.255.0</p>
+                    <p class="terminal-line pl-4 t-param">standby 1 ip 10.10.10.254</p>
+                    <p class="terminal-line pl-4 t-param">standby 1 priority 110</p>
+                    <p class="terminal-line pl-4 t-param">standby 1 preempt</p>
+                    <p class="terminal-line t-comment">!</p>
+                    <p class="terminal-line"><span class="t-kw">router ospf 7</span></p>
+                    <p class="terminal-line pl-4 t-subval">network 10.10.10.0 0.0.0.255 area 0</p>
+                    <p class="terminal-line t-comment">!</p>
+                  </div>
+
+                  <!-- Interactive Prompt at end of stream with cursor -->
+                  <div class="flex items-center gap-1.5 pt-2 pb-1 text-[12px]" id="hero-cli-input-row" style="opacity: 1 !important; transform: none !important;">
+                    <span class="t-prompt shrink-0 select-none">core-rtr-01#</span>
+                    <input type="text" id="hero-terminal-input" class="bg-transparent flex-1 font-mono text-[12px] focus:outline-none" placeholder="type 'about', 'skills', 'projects', 'help'..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+                  </div>
+                </div>
+                
+                <div class="terminal-footer">
+                  <span class="flex items-center gap-1 font-bold whitespace-nowrap"><span class="status-dot emerald shrink-0"></span>PORT UP</span>
+                  <span class="flex items-center gap-1 font-bold whitespace-nowrap"><span class="status-dot blue shrink-0"></span><span class="term-desktop-only">OSPF AREA 0</span><span class="term-mobile-only">OSPF A0</span></span>
+                  <span class="flex items-center gap-1 font-bold whitespace-nowrap"><span class="status-dot amber shrink-0"></span><span class="term-desktop-only">HSRP ACT</span><span class="term-mobile-only">HSRP</span></span>
+                  <span class="term-desktop-only flex items-center gap-1 font-bold whitespace-nowrap"><span class="status-dot rose shrink-0"></span>DAI/SNOOP</span>
+                  <span class="ml-auto font-bold terminal-footer-count whitespace-nowrap"><span class="term-desktop-only">32 LABS DOCUMENTED</span><span class="term-mobile-only">32 LABS</span></span>
+                </div>
+              </div>
+            </div>
+
+          </div> <!-- Close stable min-h container -->
+
+        </div> <!-- Close right col -->
+
+      </div> <!-- Close grid -->
+      </div> <!-- Close max-w-7xl -->
+      </div> <!-- Close flex-1 centering wrapper -->
+
+    <!-- Slim Capability Strip inside hero section at the bottom -->
+    <div class="capability-strip relative z-10" aria-label="Core competencies marquee">
+      <div class="capability-track">
+        <div class="capability-group">
+          <span>Cisco IOS-XE</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>OSPFv2 Multi-Area</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>HSRPv2 Redundancy</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>LACP EtherChannel</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>802.1Q VLAN Trunks</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>Port Security &amp; DHCP Snooping</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>Dynamic ARP Inspection</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>Wireshark Analysis</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>Packet Tracer &amp; GNS3</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>Ubuntu Linux / Bash</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>Python &amp; Netmiko</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>IPv4 Subnetting &amp; VLSM</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>NAT / PAT &amp; ACL Filtering</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>Syslog &amp; NTPv4</span><span class="capability-sep" aria-hidden="true"></span>
+        </div>
+        <!-- Doubled for seamless loop -->
+        <div class="capability-group" aria-hidden="true">
+          <span>Cisco IOS-XE</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>OSPFv2 Multi-Area</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>HSRPv2 Redundancy</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>LACP EtherChannel</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>802.1Q VLAN Trunks</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>Port Security &amp; DHCP Snooping</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>Dynamic ARP Inspection</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>Wireshark Analysis</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>Packet Tracer &amp; GNS3</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>Ubuntu Linux / Bash</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>Python &amp; Netmiko</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>IPv4 Subnetting &amp; VLSM</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>NAT / PAT &amp; ACL Filtering</span><span class="capability-sep" aria-hidden="true"></span>
+          <span>Syslog &amp; NTPv4</span><span class="capability-sep" aria-hidden="true"></span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <!-- ==========================================================================
+         03. FLAGSHIP CAPSTONE (STATIC HTML ARCHITECTURE §4.3)
+         ========================================================================== -->

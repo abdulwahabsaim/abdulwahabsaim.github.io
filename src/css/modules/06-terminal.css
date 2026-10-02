@@ -1,0 +1,446 @@
+/* ==========================================================================
+   TERMINAL (UNIX SHELL WITH BLUEPRINT CLARITY — DUAL-THEME ADAPTIVE)
+   Candidate: Abdul Wahab Saim — Junior Network & NOC Engineer (CCNA)
+   ========================================================================== */
+.terminal {
+  background-color: var(--term-bg);
+  border: 1px solid var(--term-border);
+  border-radius: var(--r-lg);
+  box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  color: var(--term-text);
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
+}
+
+html.light .terminal {
+  box-shadow: 0 10px 30px -10px rgba(15, 23, 42, 0.12), 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+
+/* Terminal Header */
+.terminal-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--line);
+  background: var(--term-header-bg);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+.terminal-header-title {
+  color: var(--term-text);
+  font-weight: 600;
+}
+.terminal-header-uptime {
+  color: var(--term-muted);
+}
+
+/* CLI Quick Commands Execution Bar */
+.cli-exec-bar {
+  padding: 0.5rem 0.875rem;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.375rem;
+  background: var(--term-bar-bg);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label, 0.75rem);
+  user-select: none;
+  outline-offset: -2px;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.cli-exec-label {
+  font-size: var(--fs-label, 0.75rem);
+  color: var(--term-muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  flex-shrink: 0;
+  margin-right: 0.25rem;
+  letter-spacing: 0.05em;
+}
+
+.cli-exec-btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--r-sm);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label, 0.75rem);
+  font-weight: 500;
+  line-height: 1.25;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #E2E8F0;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+html.light .cli-exec-btn {
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.16);
+  color: #1e293b;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.05);
+}
+
+.cli-exec-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: var(--accent);
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(76, 141, 255, 0.25);
+}
+
+html.light .cli-exec-btn:hover {
+  background: #f1f5f9;
+  border-color: #1d4ed8;
+  color: #0f172a;
+  box-shadow: 0 2px 6px rgba(29, 78, 216, 0.15);
+}
+
+.cli-exec-btn.cli-btn-accent {
+  background: rgba(76, 141, 255, 0.2);
+  border-color: rgba(76, 141, 255, 0.45);
+  color: #93c5fd;
+  font-weight: 600;
+}
+
+html.light .cli-exec-btn.cli-btn-accent {
+  background: rgba(29, 78, 216, 0.08);
+  border-color: rgba(29, 78, 216, 0.3);
+  color: #1d4ed8;
+}
+
+.cli-exec-btn.cli-btn-success {
+  background: rgba(16, 185, 129, 0.18);
+  border-color: rgba(16, 185, 129, 0.4);
+  color: #6ee7b7;
+  font-weight: 600;
+}
+
+html.light .cli-exec-btn.cli-btn-success {
+  background: rgba(5, 150, 105, 0.08);
+  border-color: rgba(5, 150, 105, 0.3);
+  color: #047857;
+}
+
+.cli-exec-btn.cli-btn-danger {
+  background: rgba(244, 63, 94, 0.15);
+  border-color: rgba(244, 63, 94, 0.4);
+  color: #fda4af;
+}
+
+html.light .cli-exec-btn.cli-btn-danger {
+  background: rgba(225, 29, 72, 0.08);
+  border-color: rgba(225, 29, 72, 0.25);
+  color: #be123c;
+}
+
+@media (pointer: coarse) {
+  .cli-exec-btn {
+    min-height: 40px;
+    padding: 0.35rem 0.75rem;
+  }
+}
+
+/* Terminal Footer */
+.terminal-footer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem 1rem;
+  border-top: 1px solid var(--line);
+  background: var(--term-header-bg);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label, 0.75rem);
+  color: var(--term-muted);
+  flex-shrink: 0;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.terminal-footer-count {
+  color: var(--term-text);
+  font-weight: 700;
+}
+
+.terminal-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong, rgba(255, 255, 255, 0.25)) transparent;
+}
+
+html.light .terminal-scrollbar {
+  scrollbar-color: rgba(15, 23, 42, 0.25) transparent;
+}
+
+.terminal-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.terminal-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.terminal-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--line-strong, rgba(255, 255, 255, 0.25));
+  border-radius: 4px;
+}
+.terminal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--text-2, rgba(255, 255, 255, 0.4));
+}
+
+html.light .terminal-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.22);
+}
+html.light .terminal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(15, 23, 42, 0.4);
+}
+
+.terminal-scrollbar,
+#hero-terminal-stream {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  overscroll-behavior: contain !important;
+  -webkit-overflow-scrolling: touch !important;
+  touch-action: pan-y !important;
+}
+
+#hero-terminal-stream {
+  flex: 1 1 0% !important;
+  min-height: 0 !important;
+  max-height: 100% !important;
+}
+
+#hero-terminal-history {
+  min-height: 0;
+  width: 100%;
+}
+
+/* ==========================================================================
+   TERMINAL SEQUENTIAL LINE-BY-LINE REVEAL ENGINE
+   ========================================================================== */
+.terminal-line {
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.terminal-line.revealed,
+.terminal-output-line {
+  opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
+}
+
+/* Streaming command output lines */
+.terminal-stream-line {
+  opacity: 0 !important;
+  transform: translateY(3px) !important;
+  transition: opacity 0.16s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.16s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.terminal-stream-line.streamed {
+  opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .terminal-line,
+  .terminal-stream-line {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
+
+.cli-typing-cursor {
+  display: inline-block;
+  width: 7px;
+  height: 14px;
+  background-color: #10b981;
+  vertical-align: middle;
+  margin-left: 2px;
+  animation: cliCursorBlink 0.9s infinite;
+}
+
+@keyframes cliCursorBlink {
+  0%, 49% { opacity: 1; }
+  50%, 100% { opacity: 0; }
+}
+
+/* ==========================================================================
+   TERMINAL HIGH-CONTRAST DUAL-THEME TYPOGRAPHY SYSTEM
+   ========================================================================== */
+.t-prompt {
+  color: var(--term-prompt) !important;
+  font-weight: 700;
+}
+
+.t-cmd {
+  color: var(--term-text) !important;
+  font-weight: 600;
+}
+
+.t-comment {
+  color: var(--term-muted) !important;
+}
+
+.t-kw {
+  color: var(--term-keyword) !important;
+  font-weight: 700;
+}
+
+.t-val {
+  color: var(--term-value) !important;
+}
+
+.t-val-strong {
+  color: var(--term-text) !important;
+  font-weight: 600;
+}
+
+.t-subval {
+  color: var(--term-subvalue) !important;
+}
+
+.t-param {
+  color: var(--term-accent) !important;
+  font-weight: 600;
+}
+
+.t-success {
+  color: var(--term-prompt) !important;
+  font-weight: 700;
+}
+
+.t-link {
+  color: var(--term-keyword) !important;
+  text-decoration: underline;
+}
+
+.t-link:hover {
+  color: var(--accent) !important;
+}
+
+#hero-terminal-input {
+  color: var(--term-text) !important;
+  caret-color: var(--term-prompt);
+}
+
+#hero-terminal-input::placeholder {
+  color: var(--term-muted) !important;
+  opacity: 0.85;
+}
+
+/* Responsive visibility utilities for terminal header and footer */
+.term-mobile-only {
+  display: none !important;
+}
+.term-desktop-only {
+  display: inline !important;
+}
+span.term-desktop-only.flex {
+  display: inline-flex !important;
+}
+
+/* ==========================================================================
+   MOBILE TERMINAL OPTIMIZATION (§4.3 — MAX-WIDTH 767PX)
+   Zero wrap EXEC swipe rail, compact header/footer, maximized stream view
+   ========================================================================== */
+@media (max-width: 767px) {
+  .term-mobile-only {
+    display: inline !important;
+  }
+  .term-mobile-only.term-mobile-flex {
+    display: inline-flex !important;
+  }
+  .term-desktop-only {
+    display: none !important;
+  }
+
+  .terminal-header {
+    padding: 0.5rem 0.75rem !important;
+    min-height: 38px !important;
+  }
+
+  .terminal-header-title {
+    font-size: 0.75rem !important;
+  }
+
+  .terminal-header-uptime {
+    font-size: 0.7rem !important;
+  }
+
+  .cli-exec-bar {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    gap: 0.35rem !important;
+    padding: 0.35rem 0.65rem !important;
+    width: 100% !important;
+  }
+
+  .cli-exec-bar::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .cli-exec-label {
+    font-size: 0.7rem !important;
+    margin-right: 0.15rem !important;
+  }
+
+  .cli-exec-btn {
+    flex-shrink: 0 !important;
+    min-height: 34px !important;
+    height: 34px !important;
+    padding: 0 0.75rem !important;
+    font-size: 0.75rem !important;
+    line-height: 1 !important;
+    touch-action: manipulation !important;
+  }
+
+  #hero-terminal-stream {
+    padding: 0.65rem 0.75rem !important;
+    font-size: 11px !important;
+    line-height: 1.45 !important;
+  }
+
+  #hero-cli-input-row {
+    padding-top: 0.35rem !important;
+    padding-bottom: 0.35rem !important;
+    font-size: 12px !important;
+  }
+
+  #hero-terminal-input {
+    font-size: 16px !important;
+    line-height: 1.2 !important;
+  }
+
+  .terminal-footer {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0.35rem 0.75rem !important;
+    font-size: 0.68rem !important;
+    gap: 0.5rem !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    scrollbar-width: none !important;
+    -ms-overflow-style: none !important;
+    min-height: 32px !important;
+  }
+
+  .terminal-footer::-webkit-scrollbar {
+    display: none !important;
+  }
+}
+
+

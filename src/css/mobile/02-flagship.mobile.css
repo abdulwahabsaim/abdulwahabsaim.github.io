@@ -1,0 +1,50 @@
+/* ==========================================================================
+   DEDICATED MOBILE MODULE: 02-FLAGSHIP (§4.3: Mega Lab 1-View-Height Fit)
+   Target: Mobile Devices (< 1024px)
+   ========================================================================== */
+
+@media (max-width: 1023px) {
+  #flagship {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  #flagship .section-inner {
+    space-y: 0.75rem !important;
+  }
+
+  #flagship .card {
+    padding: 0.75rem !important;
+  }
+
+  .flagship-blueprint-col {
+    order: 1 !important;
+  }
+
+  .flagship-specs-col {
+    order: 2 !important;
+  }
+
+  .flagship-cta-row {
+    order: 1 !important;
+  }
+
+  .flagship-mobile-metrics {
+    order: 2 !important;
+    display: grid !important;
+  }
+
+  .flagship-features-list {
+    display: none !important;
+  }
+
+  .flagship-blueprint-col .aspect-\[16\/9\] {
+    max-height: 160px !important;
+  }
+}
+
+@media (max-width: 360px) {
+  .flagship-blueprint-col .aspect-\[16\/9\] {
+    max-height: 135px !important;
+  }
+}

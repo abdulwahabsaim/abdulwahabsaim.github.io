@@ -1,0 +1,181 @@
+/* ==========================================================================
+   NETWORK OPERATIONS BLUEPRINT MASTER DESIGN TOKENS
+   Candidate: Abdul Wahab Saim — Junior Network & NOC Engineer (CCNA)
+   Dark-First Ink-Blue Engineering Aesthetic (Tokens & Variables Only)
+   ========================================================================== */
+
+:root {
+  /* DARK THEME (DEFAULT) */
+  --bg:            #070B13;   /* page ink */
+  --bg-2:          #0A101C;   /* alternate section band */
+  --panel:         #0E1524;   /* cards */
+  --panel-2:       #121B2E;   /* raised / hover */
+  --line:          rgba(148, 163, 184, 0.14);
+  --line-strong:   rgba(148, 163, 184, 0.28);
+  --text:          #EAF0FA;
+  --text-2:        #B4BFD3;   /* body copy (>= 7:1 on --bg) */
+  --muted:         #8593AB;   /* secondary only, never for key info (>= 4.6:1) */
+
+  --accent:        #4C8DFF;   /* signal blue */
+  --accent-2:      #22D3EE;   /* cyan, used only in gradients with --accent */
+  --accent-soft:   rgba(76, 141, 255, 0.12);
+  --ok:            #34D399;   /* ONLY for real "passed/verified/valid" facts */
+  --warn:          #F5B544;
+
+  --grad-signal:   linear-gradient(135deg, #4C8DFF 0%, #22D3EE 100%);
+  --grad-text:     linear-gradient(100deg, #60A5FA 0%, #38BDF8 50%, #22D3EE 100%);
+
+  /* Topology & Node Diagram Colors */
+  --cyan:          #38bdf8;
+  --cyan-b:        #0ea5e9;
+  --emerald:       #10b981;
+  --emerald-b:     #34d399;
+  --amber:         #f59e0b;
+  --amber-b:       #fbbf24;
+  --rose:          #f43f5e;
+  --rose-b:        #fb7185;
+  --dim:           #64748b;
+  --topo-box:      rgba(15, 23, 42, 0.45);
+  --hero-node-bg:  rgba(11, 17, 29, 0.9);
+  --border-bright: rgba(148, 163, 184, 0.25);
+
+  --glow-blue:     0 0 0 1px rgba(76, 141, 255, 0.35), 0 12px 40px -12px rgba(76, 141, 255, 0.45);
+  --shadow-card:   0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 20px 50px -24px rgba(0, 0, 0, 0.7);
+
+  --font-display:  'Space Grotesk', 'Inter', system-ui, sans-serif;
+  --font-sans:     'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-mono:     'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+  --radius-lg: 20px;  --radius-md: 12px;  --radius-sm: 8px;
+  --ease: cubic-bezier(.16, 1, .3, 1);
+  --container: 1200px;
+
+  /* §6 Token additions */
+  --on-accent:     #04101F;
+  --accent-fill:   #2563EB;
+  --term-bg:        #050810;
+  --term-text:      #F8FAFC;
+  --term-muted:     #94A3B8;
+  --term-accent:    #38BDF8;
+  --term-prompt:    #34D399;
+  --term-keyword:   #60A5FA;
+  --term-value:     #F1F5F9;
+  --term-subvalue:  #CBD5E1;
+  --term-header-bg: rgba(255, 255, 255, 0.03);
+  --term-bar-bg:    rgba(0, 0, 0, 0.32);
+  --term-border:    var(--line-strong);
+  --cat-routing:   var(--accent);
+  --cat-security:  #34D399;
+  --cat-services:  #FBBF24;
+  --cat-campus:    #38BDF8;
+
+  --r-sm:          8px;
+  --r-md:          12px;
+  --r-lg:          16px;
+  --r-xl:          20px;
+
+  --fs-label:      .75rem;
+  --fs-sm:         .875rem;
+  --lift:          -2px;
+  --text-xs:       .75rem;
+  --transition-fast: .15s ease;
+
+  /* Aliases for currently-undefined vars */
+  --surface-hover:          var(--panel-2);
+  --surface-border:         var(--line);
+  --surface-border-strong:  var(--line-strong);
+  --text-muted:             var(--muted);
+  --glass-bg-subtle:        var(--panel);
+
+  /* Z-index scale */
+  --z-rail:     30;
+  --z-header:   40;
+  --z-backdrop: 80;
+  --z-drawer:   90;
+  --z-modal:    100;
+  --z-toast:    110;
+
+  /* Extras unified from 01 & 05 */
+  --header-h:            64px;
+  --shadow-drawer:       -6px 0 40px rgba(0, 0, 0, 0.85);
+  --hero-console-height: 485px;
+
+  /* Compatibility aliases */
+  --surface:           var(--panel);
+  --surface-2:         var(--panel-2);
+  --rule:              var(--line);
+  --border:            var(--line);
+  --status-pass:       var(--ok);
+  --status-pass-bg:    rgba(52, 211, 153, 0.15);
+  --cisco-blue:        var(--accent);
+  --cisco-blue-hover:  #3b82f6;
+  --cisco-blue-subtle: var(--accent-soft);
+  --text-primary:      var(--text);
+  --text-secondary:    var(--text-2);
+
+  color-scheme: dark;
+}
+
+/* LIGHT THEME */
+html.light, [data-theme="light"] {
+  --bg:            #F5F8FC;
+  --bg-2:          #EDF2F9;
+  --panel:         #FFFFFF;
+  --panel-2:       #F8FAFD;
+  --line:          rgba(15, 23, 42, 0.10);
+  --line-strong:   rgba(15, 23, 42, 0.22);
+  --text:          #0B1220;
+  --text-2:        #334155;
+  --muted:         #5B6B82;
+  --accent:        #1F6BFF;
+  --accent-2:      #0891B2;
+  --accent-soft:   rgba(31, 107, 255, 0.09);
+  --ok:            #047857;
+  --status-pass-bg: rgba(4, 120, 87, 0.1);
+  --accent-2-text: #0E7490;
+  --cat-security:  #047857;
+  --cat-services:  #B45309;
+  --cat-campus:    #0E7490;
+  --cat-routing:   #1D4ED8;
+  --term-bg:        #FFFFFF;
+  --term-text:      #0F172A;
+  --term-muted:     #64748B;
+  --term-accent:    #0284C7;
+  --term-prompt:    #059669;
+  --term-keyword:   #1D4ED8;
+  --term-value:     #0F172A;
+  --term-subvalue:  #334155;
+  --term-header-bg: #F8FAFC;
+  --term-bar-bg:    #F1F5F9;
+  --term-border:    rgba(15, 23, 42, 0.14);
+
+  --grad-text:     linear-gradient(100deg, #0B1220 10%, #1F6BFF 60%, #0891B2 100%);
+  --cyan:          #0284c7;
+  --cyan-b:        #0369a1;
+  --emerald:       #047857;
+  --emerald-b:     #065f46;
+  --amber:         #b45309;
+  --amber-b:       #92400e;
+  --rose:          #dc2626;
+  --rose-b:        #b91c1c;
+  --dim:           #94a3b8;
+  --topo-box:      rgba(241, 245, 249, 0.65);
+  --hero-node-bg:  rgba(255, 255, 255, 0.95);
+  --border-bright: rgba(203, 213, 225, 0.8);
+  --glow-blue:     0 0 0 1px rgba(31, 107, 255, 0.3), 0 12px 32px -14px rgba(31, 107, 255, 0.35);
+  --shadow-card:   0 1px 2px rgba(15, 23, 42, 0.05), 0 18px 40px -26px rgba(15, 23, 42, 0.22);
+  --shadow-drawer: -6px 0 30px rgba(15, 23, 42, 0.12);
+
+  --surface:           var(--panel);
+  --surface-2:         var(--panel-2);
+  --rule:              var(--line);
+  --border:            var(--line);
+  --status-pass:       var(--ok);
+  --cisco-blue:        var(--accent);
+  --cisco-blue-hover:  #1d4ed8;
+  --cisco-blue-subtle: var(--accent-soft);
+  --text-primary:      var(--text);
+  --text-secondary:    var(--text-2);
+
+  color-scheme: light;
+}

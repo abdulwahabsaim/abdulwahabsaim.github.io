@@ -1,0 +1,167 @@
+/* ==========================================================================
+   DEDICATED MOBILE MODULE: 00-HEADER (§4.1: Sticky Header & Safe Areas)
+   Target: Mobile Devices (< 1024px)
+   ========================================================================== */
+
+@media (max-width: 1023px) {
+  .site-header {
+    padding-left: max(0.75rem, env(safe-area-inset-left));
+    padding-right: max(0.75rem, env(safe-area-inset-right));
+  }
+
+  .nav-mobile-menu {
+    top: var(--header-h, 64px);
+    height: calc(100vh - var(--header-h, 64px));
+    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+  }
+
+  /* Hide old hamburger button and dropdown on mobile */
+  #mobile-menu-btn {
+    display: none !important;
+  }
+
+  #mobile-nav-menu {
+    display: none !important;
+  }
+
+  /* Hide Contact CTA button in header on mobile — dock handles navigation */
+  .site-header a[href="#contact"].btn-primary {
+    display: none !important;
+  }
+
+  /* ── Floating Bottom Navigation Dock ── */
+  .mobile-floating-dock {
+    display: flex !important;
+    position: fixed !important;
+    bottom: max(10px, env(safe-area-inset-bottom)) !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: calc(100% - 24px) !important;
+    max-width: 420px !important;
+    height: 54px !important;
+    border-radius: 9999px !important;
+    z-index: 200 !important;
+    background: rgba(7, 11, 19, 0.82) !important;
+    backdrop-filter: blur(20px) saturate(180%) !important;
+    -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+    border: 1px solid rgba(76, 141, 255, 0.18) !important;
+    box-shadow:
+      0 4px 24px rgba(0, 0, 0, 0.55),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
+    align-items: center !important;
+    justify-content: space-around !important;
+    padding: 0 12px !important;
+    box-sizing: border-box !important;
+    /* Scroll-hide transition */
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.3s ease !important;
+    will-change: transform !important;
+  }
+
+  /* Hidden state — slides below viewport on scroll-down */
+  .mobile-floating-dock.dock-hidden {
+    transform: translateX(-50%) translateY(calc(100% + 20px)) !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+
+  /* Light theme dock */
+  :root.light .mobile-floating-dock {
+    background: rgba(248, 250, 255, 0.90) !important;
+    border: 1px solid rgba(76, 141, 255, 0.22) !important;
+    box-shadow:
+      0 4px 24px rgba(0, 0, 0, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.7) !important;
+  }
+
+  /* Dock Items */
+  .dock-item {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 2px !important;
+    flex: 1 !important;
+    padding: 6px 2px !important;
+    text-decoration: none !important;
+    color: var(--text-2, #8899bb) !important;
+    transition: color 0.2s ease, transform 0.2s ease !important;
+    border-radius: 12px !important;
+    position: relative !important;
+    -webkit-tap-highlight-color: transparent !important;
+    min-width: 0 !important;
+  }
+
+  .dock-item:active {
+    transform: scale(0.88) !important;
+  }
+
+  .dock-icon {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 22px !important;
+    height: 22px !important;
+    flex-shrink: 0 !important;
+  }
+
+  .dock-icon svg {
+    width: 20px !important;
+    height: 20px !important;
+    stroke: currentColor !important;
+  }
+
+  .dock-label {
+    font-size: 10px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    color: inherit !important;
+  }
+
+  /* Active dock item */
+  .dock-item.active {
+    color: var(--accent, #4C8DFF) !important;
+  }
+
+  .dock-item.active::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 2px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 4px !important;
+    height: 4px !important;
+    border-radius: 50% !important;
+    background: var(--accent, #4C8DFF) !important;
+  }
+}
+
+/* Landscape compact mode */
+@media (max-height: 500px) and (orientation: landscape) {
+  :root {
+    --header-h: 48px !important;
+  }
+
+  .mobile-floating-dock {
+    height: 46px !important;
+    bottom: max(6px, env(safe-area-inset-bottom)) !important;
+  }
+
+  .dock-label {
+    display: none !important;
+  }
+
+  .dock-icon svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+}
+
+/* Desktop: always hide the floating dock */
+@media (min-width: 1024px) {
+  .mobile-floating-dock {
+    display: none !important;
+  }
+}

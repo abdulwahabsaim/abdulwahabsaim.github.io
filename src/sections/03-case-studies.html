@@ -1,0 +1,248 @@
+    <!-- ==========================================================================
+         03. TIER 2: 3 MAIN REPOSITORIES WITH AUTHENTIC CISCO ARCHITECTURE SCHEMATICS
+         ========================================================================== -->
+    <section id="repos" class="section-band relative overflow-hidden">
+      <!-- Ambient Glow Orb for Repository Cards Depth -->
+      <div class="ambient-glow-orb top-1/4 right-1/4 w-[450px] h-[450px] bg-blue-500/8 dark:bg-blue-600/12 pointer-events-none"></div>
+
+      <div class="section-inner space-y-6 sm:space-y-8">
+        <div>
+          <span class="eyebrow block mb-1.5"><svg class="w-3.5 h-3.5 inline mr-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="6" height="6" x="3" y="3" rx="1"/><rect width="6" height="6" x="15" y="15" rx="1"/><rect width="6" height="6" x="3" y="15" rx="1"/><path d="M6 9v3a3 3 0 0 0 3 3h6"/></svg> Curated Repositories</span>
+          <h2 class="font-display font-bold">Selected Lab Repositories</h2>
+          <p class="lead mt-2">
+            High-impact architectures engineered on Cisco IOS &amp; GNS3 with interactive SVG topology blueprints.
+          </p>
+        </div>
+
+        <!-- 3-Column Grid on Desktop / Smooth Snap-Scroll Slider on Mobile -->
+        <div id="repo-slider-container" class="relative z-10 repo-slider repo-grid-layout scrollbar-none">
+          
+          <!-- CARD 1: ENTERPRISE ROUTING -->
+          <article class="card-enterprise flex flex-col justify-between w-[85vw] max-w-[340px] shrink-0 snap-start md:snap-align-none md:w-auto md:max-w-none md:shrink" data-tilt>
+            <div class="repo-topo-box" style="background:var(--topo-box); border-color:var(--border)">
+              <div class="absolute inset-0 grid-bg opacity-40"></div>
+              <svg viewBox="0 0 400 270" class="absolute inset-0 w-full h-full" role="img" aria-label="Enterprise Dynamic Routing Topology Diagram">
+                <title>Enterprise Dynamic Routing Topology Diagram</title>
+                <g stroke="var(--border-bright)" stroke-width="1.2" fill="none">
+                  <line x1="60" y1="50" x2="160" y2="50"/><line x1="240" y1="50" x2="340" y2="50"/>
+                  <line x1="160" y1="50" x2="240" y2="50"/><line x1="160" y1="50" x2="160" y2="140"/><line x1="240" y1="50" x2="240" y2="140"/>
+                  <line x1="160" y1="140" x2="80" y2="220"/><line x1="160" y1="140" x2="160" y2="220"/><line x1="240" y1="140" x2="240" y2="220"/><line x1="240" y1="140" x2="320" y2="220"/>
+                </g>
+                <g>
+                  <line x1="160" y1="50" x2="240" y2="50" stroke="var(--cyan)" stroke-width="1.5" opacity="0.7"/>
+                  <circle r="2.5" fill="var(--cyan-b)"><animateMotion dur="1.6s" repeatCount="indefinite" path="M160,50 L240,50"/></circle>
+                  <circle r="2.5" fill="var(--emerald-b)"><animateMotion dur="1.6s" repeatCount="indefinite" path="M240,50 L160,50" begin="0.8s"/></circle>
+                  <line x1="160" y1="50" x2="160" y2="140" stroke="var(--cyan)" stroke-width="1.5" opacity="0.5"/>
+                  <circle r="2.5" fill="var(--cyan-b)"><animateMotion dur="2s" repeatCount="indefinite" path="M160,50 L160,140"/></circle>
+                  <line x1="240" y1="50" x2="240" y2="140" stroke="var(--cyan)" stroke-width="1.5" opacity="0.5"/>
+                  <circle r="2.5" fill="var(--cyan-b)"><animateMotion dur="2s" repeatCount="indefinite" path="M240,50 L240,140" begin="0.6s"/></circle>
+                  <line x1="160" y1="140" x2="80" y2="220" stroke="var(--emerald)" stroke-width="1.5" opacity="0.5"/>
+                  <circle r="2.5" fill="var(--emerald-b)"><animateMotion dur="2.2s" repeatCount="indefinite" path="M160,140 L80,220"/></circle>
+                  <line x1="240" y1="140" x2="320" y2="220" stroke="var(--emerald)" stroke-width="1.5" opacity="0.5"/>
+                  <circle r="2.5" fill="var(--emerald-b)"><animateMotion dur="2.2s" repeatCount="indefinite" path="M240,140 L320,220" begin="1s"/></circle>
+                </g>
+                <g font-family="JetBrains Mono" font-size="11">
+                  <g><circle cx="60" cy="50" r="12" fill="var(--hero-node-bg)" stroke="var(--cyan)" stroke-width="1.5"/><text x="60" y="54" text-anchor="middle" fill="var(--cyan)" font-weight="bold">INET</text></g>
+                  <g><rect x="148" y="38" width="24" height="24" rx="3" fill="var(--hero-node-bg)" stroke="var(--cyan)" stroke-width="1.5"/><text x="160" y="54" text-anchor="middle" fill="var(--cyan)" font-weight="bold">R1</text></g>
+                  <g><rect x="228" y="38" width="24" height="24" rx="3" fill="var(--hero-node-bg)" stroke="var(--cyan)" stroke-width="1.5"/><text x="240" y="54" text-anchor="middle" fill="var(--cyan)" font-weight="bold">R2</text></g>
+                  <g><circle cx="340" cy="50" r="12" fill="var(--hero-node-bg)" stroke="var(--cyan)" stroke-width="1.5"/><text x="340" y="54" text-anchor="middle" fill="var(--cyan)" font-weight="bold">ISP</text></g>
+                  <g><rect x="148" y="128" width="24" height="24" rx="3" fill="var(--hero-node-bg)" stroke="var(--emerald)" stroke-width="1.5"/><text x="160" y="144" text-anchor="middle" fill="var(--emerald)" font-weight="bold">SW1</text></g>
+                  <g><rect x="228" y="128" width="24" height="24" rx="3" fill="var(--hero-node-bg)" stroke="var(--emerald)" stroke-width="1.5"/><text x="240" y="144" text-anchor="middle" fill="var(--emerald)" font-weight="bold">SW2</text></g>
+                  <g><circle cx="80" cy="220" r="7" fill="var(--hero-node-bg)" stroke="var(--dim)" stroke-width="1.5"/><text x="80" y="240" text-anchor="middle" fill="var(--dim)">VLAN10</text></g>
+                  <g><circle cx="160" cy="220" r="7" fill="var(--hero-node-bg)" stroke="var(--dim)" stroke-width="1.5"/><text x="160" y="240" text-anchor="middle" fill="var(--dim)">VLAN20</text></g>
+                  <g><circle cx="240" cy="220" r="7" fill="var(--hero-node-bg)" stroke="var(--dim)" stroke-width="1.5"/><text x="240" y="240" text-anchor="middle" fill="var(--dim)">VLAN30</text></g>
+                  <g><circle cx="320" cy="220" r="7" fill="var(--hero-node-bg)" stroke="var(--cyan)" stroke-width="1.5"/><text x="320" y="240" text-anchor="middle" fill="var(--cyan)" font-weight="bold">SRV</text></g>
+                </g>
+              </svg>
+              <div class="absolute top-2.5 left-3 z-10 flex items-center gap-2 font-mono text-xs tracking-wider font-semibold">
+                <span class="px-2 py-0.5 rounded text-xs font-bold" style="background: rgba(76,141,255,0.15); color: var(--cat-routing); border: 1px solid rgba(76,141,255,0.3);">01</span>
+                <span class="text-xs tracking-wider font-mono" style="color: var(--text-2);">TOPOLOGY // ROUTING</span>
+              </div>
+              <div class="absolute top-2.5 right-3 z-10 flex items-center gap-1.5 px-2 py-0.5 rounded" style="background:rgba(16,185,129,0.12); border:1px solid rgba(16,185,129,0.35)">
+                <span class="led"></span><span class="font-mono text-xs font-bold" style="color:var(--emerald)">CONVERGED</span>
+              </div>
+            </div>
+            <div class="p-5 space-y-3.5 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="flex items-start justify-between gap-2 mb-1.5">
+                  <div>
+                    <h3 class="font-display text-base sm:text-lg font-bold" style="color: var(--text);">Enterprise Dynamic Routing</h3>
+                    <p class="text-xs font-mono" style="color: var(--muted);">// 13 multi-node redundant core labs · gns3</p>
+                  </div>
+                  <span class="tag-badge text-xs font-bold">HSRP/OSPF</span>
+                </div>
+                <ul class="space-y-1.5 text-xs" style="color: var(--text-2);">
+                  <li class="flex items-start gap-1.5"><span class="font-bold shrink-0" style="color: var(--cat-routing);">▸</span><span><strong style="color: var(--text);">Multi-Area OSPFv2:</strong> Hierarchical Area 0/1 backbone with Type-3 LSAs.</span></li>
+                  <li class="flex items-start gap-1.5"><span class="font-bold shrink-0" style="color: var(--cat-routing);">▸</span><span><strong style="color: var(--text);">EIGRP AS 7:</strong> Composite metric calculation &amp; DUAL convergence.</span></li>
+                  <li class="flex items-start gap-1.5"><span class="font-bold shrink-0" style="color: var(--cat-routing);">▸</span><span><strong style="color: var(--text);">Dual HSRPv2:</strong> Active/Standby gateway failover with preemption.</span></li>
+                  <li class="flex items-start gap-1.5"><span class="font-bold shrink-0" style="color: var(--cat-routing);">▸</span><span><strong style="color: var(--text);">5-Node WAN Mesh:</strong> ECMP traffic load balancing.</span></li>
+                </ul>
+              </div>
+              <div>
+                <div class="flex flex-wrap gap-1 pt-2.5 border-t border-slate-200 dark:border-slate-800 mb-2.5">
+                  <span class="tag-badge text-xs">GNS3</span>
+                  <span class="tag-badge text-xs">OSPFv2</span>
+                  <span class="tag-badge text-xs">EIGRP AS 7</span>
+                  <span class="tag-badge text-xs">HSRP v2</span>
+                  <span class="tag-badge text-xs">ECMP</span>
+                </div>
+                <a href="https://github.com/abdulwahabsaim/enterprise-routing-labs" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm w-full justify-center" data-hover-btn>
+                  Launch Repository <svg class="w-3.5 h-3.5 inline ml-1 card-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- CARD 2: LAYER 2 SECURITY -->
+          <article class="card-enterprise flex flex-col justify-between w-[85vw] max-w-[340px] shrink-0 snap-start md:snap-align-none md:w-auto md:max-w-none md:shrink" data-tilt>
+            <div class="repo-topo-box" style="background:var(--topo-box); border-color:var(--border)">
+              <div class="absolute inset-0 grid-bg opacity-40"></div>
+              <svg viewBox="0 0 400 270" class="absolute inset-0 w-full h-full" role="img" aria-label="Layer 2 Switch Security Topology Diagram">
+                <title>Layer 2 Switch Security Topology Diagram</title>
+                <g stroke="var(--border-bright)" stroke-width="1.2" fill="none">
+                  <line x1="200" y1="50" x2="120" y2="130"/><line x1="200" y1="50" x2="280" y2="130"/>
+                  <line x1="120" y1="130" x2="280" y2="130"/><line x1="120" y1="130" x2="70" y2="210"/><line x1="120" y1="130" x2="140" y2="210"/><line x1="280" y1="130" x2="260" y2="210"/><line x1="280" y1="130" x2="330" y2="210"/>
+                </g>
+                <g>
+                  <line x1="120" y1="130" x2="280" y2="130" stroke="var(--cat-security)" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/>
+                  <line x1="200" y1="50" x2="120" y2="130" stroke="var(--cyan)" stroke-width="1.5" opacity="0.6"/>
+                  <circle r="2.5" fill="var(--cyan-b)"><animateMotion dur="2s" repeatCount="indefinite" path="M200,50 L120,130"/></circle>
+                  <line x1="200" y1="50" x2="280" y2="130" stroke="var(--cyan)" stroke-width="1.5" opacity="0.6"/>
+                  <circle r="2.5" fill="var(--cyan-b)"><animateMotion dur="2s" repeatCount="indefinite" path="M200,50 L280,130" begin="0.5s"/></circle>
+                </g>
+                <g font-family="JetBrains Mono" font-size="11">
+                  <g><rect x="188" y="38" width="24" height="24" rx="3" fill="var(--hero-node-bg)" stroke="var(--cat-security)" stroke-width="1.5"/><text x="200" y="54" text-anchor="middle" fill="var(--cat-security)" font-weight="bold">ROOT</text></g>
+                  <g><rect x="108" y="118" width="24" height="24" rx="3" fill="var(--hero-node-bg)" stroke="var(--cyan)" stroke-width="1.2"/><text x="120" y="134" text-anchor="middle" fill="var(--cyan)" font-weight="bold">SW-A</text></g>
+                  <g><rect x="268" y="118" width="24" height="24" rx="3" fill="var(--hero-node-bg)" stroke="var(--cyan)" stroke-width="1.2"/><text x="280" y="134" text-anchor="middle" fill="var(--cyan)" font-weight="bold">SW-B</text></g>
+                  <g><circle cx="70" cy="210" r="7" fill="var(--hero-node-bg)" stroke="var(--dim)" stroke-width="1.2"/><text x="70" y="230" text-anchor="middle" fill="var(--dim)">PC1</text></g>
+                  <g><circle cx="140" cy="210" r="7" fill="var(--hero-node-bg)" stroke="var(--dim)" stroke-width="1.2"/><text x="140" y="230" text-anchor="middle" fill="var(--dim)">PC2</text></g>
+                  <g><circle cx="260" cy="210" r="7" fill="var(--hero-node-bg)" stroke="var(--dim)" stroke-width="1.2"/><text x="260" y="230" text-anchor="middle" fill="var(--dim)">PC3</text></g>
+                  <g><circle cx="330" cy="210" r="7" fill="var(--hero-node-bg)" stroke="var(--dim)" stroke-width="1.2"/><text x="330" y="230" text-anchor="middle" fill="var(--dim)">PC4</text></g>
+                </g>
+              </svg>
+              <div class="absolute top-2.5 left-3 z-10 flex items-center gap-2 font-mono text-xs tracking-wider font-semibold">
+                <span class="px-2 py-0.5 rounded text-xs font-bold" style="background: rgba(52,211,153,0.15); color: var(--cat-security); border: 1px solid rgba(52,211,153,0.3);">02</span>
+                <span class="text-xs tracking-wider font-mono" style="color: var(--text-2);">TOPOLOGY // SECURITY</span>
+              </div>
+              <div class="absolute top-2.5 right-3 z-10 flex items-center gap-1.5 px-2 py-0.5 rounded" style="background:rgba(52,211,153,0.12); border:1px solid rgba(52,211,153,0.35)">
+                <span class="led" style="background:var(--cat-security)"></span><span class="font-mono text-xs font-bold" style="color:var(--cat-security)">HARDENED</span>
+              </div>
+            </div>
+            <div class="p-5 space-y-3.5 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="flex items-start justify-between gap-2 mb-1.5">
+                  <div>
+                    <h3 class="font-display text-base sm:text-lg font-bold" style="color: var(--text);">Layer 2 Switch Security</h3>
+                    <p class="text-xs font-mono" style="color: var(--muted);">// 13 switchport defense &amp; DAI labs · gns3 / packet tracer</p>
+                  </div>
+                  <span class="tag-badge text-xs font-bold">DAI/SNOOP</span>
+                </div>
+                <ul class="space-y-1.5 text-xs" style="color: var(--text-2);">
+                  <li class="flex items-start gap-1.5"><span class="font-bold shrink-0" style="color: var(--cat-security);">▸</span><span><strong style="color: var(--text);">STP Root Guard:</strong> Defends against rogue Priority 0 root hijacking.</span></li>
+                  <li class="flex items-start gap-1.5"><span class="font-bold shrink-0" style="color: var(--cat-security);">▸</span><span><strong style="color: var(--text);">Dynamic ARP Inspection:</strong> Validates ARP against DHCP binding database.</span></li>
+                  <li class="flex items-start gap-1.5"><span class="font-bold shrink-0" style="color: var(--cat-security);">▸</span><span><strong style="color: var(--text);">Port Security:</strong> Sticky MAC limits (Shutdown, Protect, Restrict).</span></li>
+                  <li class="flex items-start gap-1.5"><span class="font-bold shrink-0" style="color: var(--cat-security);">▸</span><span><strong style="color: var(--text);">Extended ACLs:</strong> Layer 4 TCP port filtering blocking Telnet (TCP 23).</span></li>
+                </ul>
+              </div>
+              <div>
+                <div class="flex flex-wrap gap-1 pt-2.5 border-t border-slate-200 dark:border-slate-800 mb-2.5">
+                  <span class="tag-badge text-xs">GNS3</span>
+                  <span class="tag-badge text-xs">Root Guard</span>
+                  <span class="tag-badge text-xs">DAI</span>
+                  <span class="tag-badge text-xs">DHCP Snoop</span>
+                  <span class="tag-badge text-xs">Port Sec</span>
+                </div>
+                <a href="https://github.com/abdulwahabsaim/layer2-security-labs" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm w-full justify-center" data-hover-btn>
+                  Launch Repository <svg class="w-3.5 h-3.5 inline ml-1 card-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- CARD 3: NETWORK SERVICES -->
+          <article class="card-enterprise flex flex-col justify-between w-[85vw] max-w-[340px] shrink-0 snap-start md:snap-align-none md:w-auto md:max-w-none md:shrink" data-tilt>
+            <div class="repo-topo-box" style="background:var(--topo-box); border-color:var(--border)">
+              <div class="absolute inset-0 grid-bg opacity-40"></div>
+              <svg viewBox="0 0 400 270" class="absolute inset-0 w-full h-full" role="img" aria-label="Core Network Services & WLC Topology Diagram">
+                <title>Core Network Services &amp; WLC Topology Diagram</title>
+                <g stroke="var(--border-bright)" stroke-width="1.2" fill="none">
+                  <line x1="200" y1="130" x2="300" y2="50"/><line x1="200" y1="130" x2="320" y2="130"/><line x1="200" y1="130" x2="300" y2="210"/><line x1="200" y1="130" x2="90" y2="80"/><line x1="200" y1="130" x2="90" y2="180"/>
+                </g>
+                <g>
+                  <circle r="2.5" fill="var(--amber)"><animateMotion dur="2.2s" repeatCount="indefinite" path="M90,80 L200,130"/></circle>
+                  <circle r="2.5" fill="var(--emerald)"><animateMotion dur="2.2s" repeatCount="indefinite" path="M200,130 L300,50" begin="0.4s"/></circle>
+                  <circle r="2.5" fill="var(--cyan)"><animateMotion dur="2.4s" repeatCount="indefinite" path="M200,130 L320,130" begin="0.8s"/></circle>
+                  <circle r="2.5" fill="var(--cat-routing)"><animateMotion dur="2.4s" repeatCount="indefinite" path="M200,130 L300,210" begin="1.2s"/></circle>
+                </g>
+                <g font-family="JetBrains Mono" font-size="11">
+                  <g><rect x="188" y="118" width="24" height="24" rx="3" fill="var(--hero-node-bg)" stroke="var(--cyan)" stroke-width="1.2"/><text x="200" y="134" text-anchor="middle" fill="var(--cyan)" font-weight="bold">SW0</text></g>
+                  <g><rect x="288" y="38" width="24" height="24" rx="3" fill="var(--hero-node-bg)" stroke="var(--emerald)" stroke-width="1.2"/><text x="300" y="54" text-anchor="middle" fill="var(--emerald)" font-weight="bold">DHCP</text></g>
+                  <g><rect x="308" y="118" width="24" height="24" rx="3" fill="var(--hero-node-bg)" stroke="var(--amber)" stroke-width="1.2"/><text x="320" y="134" text-anchor="middle" fill="var(--amber)" font-weight="bold">DNS</text></g>
+                  <g><rect x="288" y="198" width="24" height="24" rx="3" fill="var(--hero-node-bg)" stroke="var(--cat-routing)" stroke-width="1.2"/><text x="300" y="214" text-anchor="middle" fill="var(--cat-routing)" font-weight="bold">WEB</text></g>
+                  <g><circle cx="90" cy="80" r="8" fill="var(--hero-node-bg)" stroke="var(--dim)" stroke-width="1.2"/><text x="90" y="84" text-anchor="middle" fill="var(--dim)">PC0</text></g>
+                  <g><circle cx="90" cy="180" r="8" fill="var(--hero-node-bg)" stroke="var(--dim)" stroke-width="1.2"/><text x="90" y="184" text-anchor="middle" fill="var(--dim)">PC1</text></g>
+                </g>
+              </svg>
+              <div class="absolute top-2.5 left-3 z-10 flex items-center gap-2 font-mono text-xs tracking-wider font-semibold">
+                <span class="px-2 py-0.5 rounded text-xs font-bold" style="background: rgba(251,191,36,0.15); color: var(--cat-services); border: 1px solid rgba(251,191,36,0.3);">03</span>
+                <span class="text-xs tracking-wider font-mono" style="color: var(--text-2);">TOPOLOGY // SERVICES</span>
+              </div>
+              <div class="absolute top-2.5 right-3 z-10 flex items-center gap-1.5 px-2 py-0.5 rounded" style="background:rgba(251,191,36,0.12); border:1px solid rgba(251,191,36,0.35)">
+                <span class="led amber"></span><span class="font-mono text-xs font-bold" style="color:var(--amber)">ACTIVE</span>
+              </div>
+            </div>
+            <div class="p-5 space-y-3.5 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="flex items-start justify-between gap-2 mb-1.5">
+                  <div>
+                    <h3 class="font-display text-base sm:text-lg font-bold" style="color: var(--text);">Core Network Services &amp; WLC</h3>
+                    <p class="text-xs font-mono" style="color: var(--muted);">// 5 enterprise infrastructure labs · packet tracer</p>
+                  </div>
+                  <span class="tag-badge text-xs font-bold">SERVICES</span>
+                </div>
+                <ul class="space-y-1.5 text-xs" style="color: var(--text-2);">
+                  <li class="flex items-start gap-1.5"><span class="font-bold shrink-0" style="color: var(--cat-services);">▸</span><span><strong style="color: var(--text);">Cisco 3504 WLC:</strong> CAPWAP tunnel termination &amp; enterprise Wi-Fi.</span></li>
+                  <li class="flex items-start gap-1.5"><span class="font-bold shrink-0" style="color: var(--cat-services);">▸</span><span><strong style="color: var(--text);">DHCP Server:</strong> Automated pool distribution (<code class="font-mono text-xs">192.168.0.0/24</code>).</span></li>
+                  <li class="flex items-start gap-1.5"><span class="font-bold shrink-0" style="color: var(--cat-services);">▸</span><span><strong style="color: var(--text);">DNS Authoritative:</strong> A-Record mapping for local domains.</span></li>
+                  <li class="flex items-start gap-1.5"><span class="font-bold shrink-0" style="color: var(--cat-services);">▸</span><span><strong style="color: var(--text);">Telemetry &amp; NTP:</strong> Stratum clock sync &amp; centralized syslog (0–7).</span></li>
+                </ul>
+              </div>
+              <div>
+                <div class="flex flex-wrap gap-1 pt-2.5 border-t border-slate-200 dark:border-slate-800 mb-2.5">
+                  <span class="tag-badge text-xs">GNS3</span>
+                  <span class="tag-badge text-xs">Cisco 3504 WLC</span>
+                  <span class="tag-badge text-xs">DHCP Relay</span>
+                  <span class="tag-badge text-xs">NTP Stratum</span>
+                </div>
+                <a href="https://github.com/abdulwahabsaim/network-services-labs" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm w-full justify-center" data-hover-btn>
+                  Launch Repository <svg class="w-3.5 h-3.5 inline ml-1 card-link-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                </a>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <!-- Mobile Slider Navigation & Dot Indicators (Hidden on Desktop) -->
+        <div class="repo-mobile-controls pt-1 px-1 text-slate-500 dark:text-slate-400">
+          <div class="flex items-center gap-1.5 font-mono text-xs">
+            <svg class="w-4 h-4 text-blue-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 16-4-4 4-4"/><path d="m17 8 4 4-4 4"/><path d="M3 12h18"/></svg>
+            <span>Swipe to explore (<span id="repo-slider-counter" class="font-bold" style="color: var(--text);">1</span>/3)</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button id="repo-slider-prev" type="button" aria-label="Previous repository" class="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 text-slate-600 dark:text-slate-300 text-xs active:scale-95 transition-all opacity-40">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <div class="flex items-center gap-1.5" id="repo-slider-dots">
+              <button type="button" class="repo-dot active-dot" data-index="0" aria-label="Slide 1: Routing"></button>
+              <button type="button" class="repo-dot" data-index="1" aria-label="Slide 2: Security"></button>
+              <button type="button" class="repo-dot" data-index="2" aria-label="Slide 3: Services"></button>
+            </div>
+            <button id="repo-slider-next" type="button" aria-label="Next repository" class="w-11 h-11 min-w-[44px] min-h-[44px] rounded-full flex items-center justify-center border border-slate-200 dark:border-slate-800 bg-white/80 dark:bg-slate-900/80 text-slate-600 dark:text-slate-300 text-xs active:scale-95 transition-all">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>

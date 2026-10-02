@@ -1,0 +1,212 @@
+/* ==========================================================================
+   FLAGSHIP PRESENTATION DECK & CAROUSEL (4:5 ARCHITECTURE SLIDES)
+   Candidate: Abdul Wahab Saim — Junior Network & NOC Engineer (CCNA)
+   ========================================================================== */
+.deck-stage-wrap {
+  position: relative;
+  background: var(--surface);
+  border: 1px solid var(--rule);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.deck-stage-img-container {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background: #020617;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.deck-stage-img-container.blueprint-mode {
+  aspect-ratio: 16 / 9;
+}
+
+.deck-stage-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.deck-nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  z-index: 20;
+  cursor: pointer;
+}
+
+.deck-nav-btn:hover {
+  background: var(--accent-fill);
+  border-color: var(--accent-fill);
+}
+
+.deck-nav-btn.prev {
+  left: 0.75rem;
+}
+
+.deck-nav-btn.next {
+  right: 0.75rem;
+}
+
+.deck-filmstrip-track {
+  display: flex;
+  gap: 0.5rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  padding: 6px 6px 10px;
+}
+
+.deck-filmstrip-track::-webkit-scrollbar {
+  height: 5px;
+}
+.deck-filmstrip-track::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 9999px;
+}
+.deck-filmstrip-track::-webkit-scrollbar-thumb {
+  background: rgba(148, 163, 184, 0.3);
+  border-radius: 9999px;
+}
+.deck-filmstrip-track::-webkit-scrollbar-thumb:hover {
+  background: rgba(59, 130, 246, 0.6);
+}
+
+.deck-thumb-card, .cs-thumb-card {
+  flex: 0 0 76px;
+  cursor: pointer;
+  border-radius: 0.5rem;
+  border: 1.5px solid rgba(255, 255, 255, 0.08);
+  background: #0f172a;
+  overflow: hidden;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  text-align: left;
+  position: relative;
+}
+
+[data-theme="light"] .deck-thumb-card, html.light .deck-thumb-card,
+[data-theme="light"] .cs-thumb-card, html.light .cs-thumb-card {
+  border-color: #e2e8f0;
+  background: #f8fafc;
+}
+
+.deck-thumb-card:hover, .cs-thumb-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+
+.deck-thumb-card.active, .cs-thumb-card.active {
+  border-color: var(--accent-fill);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.4), 0 4px 12px rgba(37, 99, 235, 0.35);
+  transform: translateY(-2px) scale(1.04);
+}
+
+.deck-thumb-card .thumb-aspect, .cs-thumb-card .thumb-aspect {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background: #020617;
+  overflow: hidden;
+  position: relative;
+}
+
+.deck-thumb-card .thumb-aspect img, .cs-thumb-card .thumb-aspect img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.deck-view-pill {
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  white-space: nowrap;
+}
+
+.deck-view-pill.active {
+  background: var(--accent-fill) !important;
+  color: #ffffff !important;
+  border-color: var(--accent-fill) !important;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+}
+
+/* ==========================================================================
+   FLAGSHIP RESPONSIVE ORDERING SYSTEM (DESKTOP & MOBILE INVARIANTS)
+   ========================================================================== */
+.flagship-grid {
+  display: grid;
+}
+
+.flagship-specs-col {
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 1023px) {
+  .flagship-blueprint-col {
+    order: 1 !important;
+  }
+  .flagship-specs-col {
+    order: 2 !important;
+  }
+  .flagship-cta-row {
+    order: 1 !important;
+  }
+  .flagship-mobile-metrics {
+    order: 2 !important;
+    display: grid !important;
+  }
+  .flagship-features-list {
+    display: none !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  .flagship-specs-col {
+    order: 1 !important;
+  }
+  .flagship-blueprint-col {
+    order: 2 !important;
+  }
+  .flagship-features-list {
+    order: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+  }
+  .flagship-cta-row {
+    order: 2 !important;
+  }
+  .flagship-mobile-metrics {
+    display: none !important;
+  }
+}
+
+@media (max-width: 639px) {
+  .flagship-blueprint-col .aspect-\[16\/9\] {
+    max-height: 180px !important;
+  }
+  .flagship-features-list {
+    gap: 0.65rem !important;
+  }
+  .flagship-features-list .feature-icon-tile {
+    width: 32px !important;
+    height: 32px !important;
+    min-width: 32px !important;
+    min-height: 32px !important;
+  }
+}
+

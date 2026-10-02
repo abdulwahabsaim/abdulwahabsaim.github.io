@@ -1,0 +1,45 @@
+
+/* ==========================================================================
+   MAGIC UI ANIMATED THEME TOGGLER (ZERO-JANK VIEW TRANSITIONS ENGINE)
+   ========================================================================== */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+::view-transition-new(root) {
+  z-index: 9999;
+  clip-path: var(--magicui-theme-vt-clip-from, none);
+}
+
+/* Eliminate all competing CSS transitions on the entire DOM while the View Transition is running */
+html[data-magicui-theme-vt="active"],
+html[data-magicui-theme-vt="active"] *,
+html[data-magicui-theme-vt="active"] *::before,
+html[data-magicui-theme-vt="active"] *::after {
+  transition: none !important;
+}
+
+#theme-toggle {
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, background-color 0.2s ease;
+}
+
+#theme-toggle:hover {
+  transform: scale(1.06);
+}
+
+#theme-toggle:active {
+  transform: scale(0.92);
+}
+
+#theme-icon svg {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.15s ease;
+}
+

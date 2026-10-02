@@ -1,0 +1,112 @@
+  <!-- ==========================================================================
+       10. IN-PAGE CASE STUDY SLIDE-OVER DRAWER & BACKDROP
+       ========================================================================== -->
+
+  <!-- ==========================================================================
+       10. IN-PAGE CASE STUDY SLIDE-OVER DRAWER & BACKDROP
+       ========================================================================== -->
+  <div id="drawer-backdrop" class="drawer-backdrop"></div>
+
+  <!-- Drawer wrapper: positions aside + mobile bar as a flex column -->
+  <div id="drawer-wrapper" class="drawer-wrapper">
+    <aside id="case-study-drawer" class="case-study-drawer font-sans" aria-label="Case Study Deep Dive" aria-hidden="true" inert>
+      <!-- Reading Progress Line (§4.5) -->
+      <div id="drawer-progress" class="h-0.5 bg-blue-500 w-0 transition-all duration-75 sticky top-0 z-10 -mt-6 sm:-mt-10 mb-4 sm:mb-6 -mx-6 sm:-mx-10" aria-hidden="true"></div>
+
+      <div class="flex items-center justify-between pb-6 mb-6 border-b border-slate-200 dark:border-slate-800">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+          <span class="font-mono text-xs uppercase tracking-wider text-slate-500 dark:text-slate-400 font-bold">
+            Case Study &amp; Technical Runbook
+          </span>
+        </div>
+        <button id="drawer-close-btn" data-action="close-case-study" aria-label="Close Case Study (Esc)" class="w-11 h-11 min-w-[44px] min-h-[44px] rounded border border-slate-200 dark:border-slate-800 flex items-center justify-center text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors" title="Close Drawer (Esc)">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <!-- Drawer Content Rendered dynamically by js/portfolio.js -->
+      <div id="drawer-content"></div>
+    </aside>
+
+    <!-- Mobile Bottom Bar: sibling to aside, pinned at bottom of drawer-wrapper -->
+    <div id="drawer-mobile-bar" class="drawer-mobile-bar">
+      <button type="button" data-action="close-case-study" class="drawer-bar-btn drawer-bar-btn--ghost">
+        ✕ Close
+      </button>
+      <a href="https://github.com/abdulwahabsaim" target="_blank" rel="noopener noreferrer" class="drawer-bar-btn drawer-bar-btn--primary">
+        GitHub ↗
+      </a>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       CAMPUS TOPOLOGY DECK & 4K BLUEPRINT LIGHTBOX MODAL
+       ========================================================================== -->
+  <div id="topology-deck-modal" class="fixed inset-0 flex items-center justify-center p-2 sm:p-6 bg-slate-950/85 opacity-0 pointer-events-none transition-opacity duration-200" style="z-index: var(--z-modal, 100);" aria-modal="false" aria-hidden="true" role="dialog">
+    <div id="topology-deck-card" class="relative w-full max-w-5xl bg-white dark:bg-[#101318] rounded-xl shadow-2xl border border-slate-200 dark:border-slate-800 overflow-y-auto transform scale-95 transition-transform duration-200 flex flex-col max-h-[92vh]">
+      <div class="flex items-center justify-between px-3 sm:px-4 py-2.5 sm:py-3 border-b border-slate-200 dark:border-slate-800 bg-slate-100 dark:bg-slate-900 shrink-0 gap-2">
+        <div class="flex items-center gap-2 min-w-0">
+          <span class="w-2.5 h-2.5 rounded-full bg-blue-500 shrink-0"></span>
+          <span id="deck-modal-title" class="font-mono text-xs font-bold text-slate-800 dark:text-slate-200 truncate">Slide 01 — Campus Network Topology Architecture (15 Nodes)</span>
+        </div>
+        <div class="flex items-center gap-1 sm:gap-2 shrink-0">
+          <button data-action="prev-deck-slide" aria-label="Previous Slide" class="p-2 sm:px-3 sm:py-2 min-h-[40px] min-w-[40px] rounded bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-blue-600 hover:text-white transition-colors font-mono text-xs flex items-center justify-center gap-1">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+            <span class="hidden sm:inline">Prev</span>
+          </button>
+          <span id="deck-modal-counter" class="font-mono text-xs text-slate-500 px-1 font-bold">1 / 10</span>
+          <button data-action="next-deck-slide" aria-label="Next Slide" class="p-2 sm:px-3 sm:py-2 min-h-[40px] min-w-[40px] rounded bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-blue-600 hover:text-white transition-colors font-mono text-xs flex items-center justify-center gap-1">
+            <span class="hidden sm:inline">Next</span>
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+          </button>
+          <a id="deck-modal-download-btn" href="assets/labs/campus/mega-lab.png" download aria-label="Download Raw Blueprint" class="p-2 sm:px-3 sm:py-2 min-h-[40px] min-w-[40px] rounded bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-blue-600 hover:text-white transition-colors font-mono text-xs flex items-center justify-center gap-1">
+            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+            <span class="hidden sm:inline">Raw</span>
+          </a>
+          <button data-action="close-deck" aria-label="Close Lightbox Modal" class="w-10 h-10 min-w-[40px] min-h-[40px] rounded flex items-center justify-center text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-200 dark:hover:bg-slate-800 transition-colors ml-0.5">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="p-2 sm:p-4 bg-slate-950 flex-1 overflow-auto flex items-center justify-center min-h-[300px]">
+        <img id="deck-modal-img" src="assets/labs/campus/mega-lab.png" alt="Campus Architecture Topology" class="max-w-full max-h-[70vh] w-auto h-auto object-contain rounded shadow-2xl transition-all duration-200" />
+      </div>
+      <div class="px-4 py-2 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between font-mono text-xs text-slate-500 bg-slate-100 dark:bg-slate-900 shrink-0">
+        <span>15-Node Enterprise Campus Network Architecture</span>
+        <span>Cisco Packet Tracer &amp; GNS3</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       11. COMMAND PALETTE MODAL (§3, Native <dialog>)
+       ========================================================================== -->
+  <dialog id="cmd-dialog" class="cmd-dialog" aria-label="Command Palette">
+    <div class="cmd-card">
+      <div class="cmd-header">
+        <svg class="w-4 h-4 shrink-0" style="color: var(--accent);" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="cmd-input" type="search" placeholder="Jump to section, protocol, or lab..." autocomplete="off" spellcheck="false" class="cmd-input" role="combobox" aria-autocomplete="list" aria-controls="cmd-list" aria-expanded="false" />
+        <button id="cmd-close-btn" type="button" class="cmd-esc-btn" aria-label="Close dialog">ESC</button>
+      </div>
+      <div id="cmd-list" class="cmd-list" role="listbox" aria-label="Search Destinations">
+        <!-- Dynamically rendered items -->
+      </div>
+      <div class="cmd-footer">
+        <div class="flex items-center gap-3">
+          <span><kbd class="cmd-kbd">↑</kbd><kbd class="cmd-kbd">↓</kbd> navigate</span>
+          <span><kbd class="cmd-kbd">↵</kbd> select</span>
+          <span><kbd class="cmd-kbd">esc</kbd> close</span>
+        </div>
+        <span class="cmd-count" id="cmd-count">38 destinations</span>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Zero-CORS Precompiled Lab Repository Data -->
+  <script defer src="js/projects-data.js"></script>
+
+  <!-- Client Interaction Engine -->
+  <script defer src="js/portfolio.js"></script>
+</body>
+</html>

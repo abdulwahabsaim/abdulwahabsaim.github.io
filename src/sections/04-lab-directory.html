@@ -1,0 +1,935 @@
+    <!-- ==========================================================================
+         04. LAB EXPLORER / DIRECTORY (§4.4: Apple macOS Cupertino Interface)
+         ========================================================================== -->
+    <section id="directory" class="section-band relative space-y-6 pt-6 border-t border-slate-200 dark:border-slate-800">
+      <div class="section-inner space-y-6">
+        
+        <!-- Controls Header: Title & Spotlight Search -->
+        <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+          <div>
+            <span class="eyebrow block mb-1.5">Lab Directory</span>
+            <h2 class="font-display font-bold">All 32 Cisco Labs</h2>
+            <p id="results-count" class="text-xs font-mono mt-1" style="color: var(--muted);">
+              Showing 32 documented enterprise labs
+            </p>
+          </div>
+
+          <!-- Apple Spotlight Search Bar -->
+          <div class="apple-search-box">
+            <svg class="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input 
+              type="search" 
+              id="project-search" 
+              placeholder="Search OSPF, HSRP, DAI, NAT..." 
+              aria-label="Search labs by protocol, topic, or keyword"
+              enterkeyhint="search"
+              class="apple-search-input"
+            />
+            <button type="button" id="search-clear-btn" class="hidden absolute right-2.5 top-1/2 -translate-y-1/2 w-8 h-8 min-w-[32px] min-h-[32px] rounded-full flex items-center justify-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors cursor-pointer" aria-label="Clear search" aria-controls="project-search">
+              <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Category Filter Segmented Control (§4.4 Apple Style) -->
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="apple-segmented-bar px-1 overflow-visible" id="filter-pill-container" role="tablist" aria-label="Filter labs by discipline">
+            <button type="button" role="tab" aria-selected="true" aria-controls="explorer-table-body" data-filter-cat="all" class="apple-segment filter-active">
+              All (32)
+            </button>
+            <button type="button" role="tab" aria-selected="false" aria-controls="explorer-table-body" data-filter-cat="campus" class="apple-segment">
+              Flagship (1)
+            </button>
+            <button type="button" role="tab" aria-selected="false" aria-controls="explorer-table-body" data-filter-cat="routing" class="apple-segment">
+              Routing (13)
+            </button>
+            <button type="button" role="tab" aria-selected="false" aria-controls="explorer-table-body" data-filter-cat="security" class="apple-segment">
+              Security &amp; Switching (13)
+            </button>
+            <button type="button" role="tab" aria-selected="false" aria-controls="explorer-table-body" data-filter-cat="services" class="apple-segment">
+              Services (5)
+            </button>
+          </div>
+        </div>
+
+        <!-- Protocol Filter Chips (§4.4 Apple Micro-Chips) -->
+        <div class="flex flex-wrap items-center gap-1.5 pt-0.5" id="protocol-chip-container" aria-label="Filter labs by protocol">
+          <span class="text-xs font-mono font-medium mr-1 text-slate-400 dark:text-slate-500">Filter by:</span>
+          <button type="button" data-proto-filter="ospf" class="apple-proto-chip proto-chip">OSPF (6)</button>
+          <button type="button" data-proto-filter="hsrp" class="apple-proto-chip proto-chip">HSRP (3)</button>
+          <button type="button" data-proto-filter="etherchannel" class="apple-proto-chip proto-chip">EtherChannel (2)</button>
+          <button type="button" data-proto-filter="vlan" class="apple-proto-chip proto-chip">VLAN / Trunks (9)</button>
+          <button type="button" data-proto-filter="port security" class="apple-proto-chip proto-chip">Port Security (2)</button>
+          <button type="button" data-proto-filter="acl" class="apple-proto-chip proto-chip">ACLs (4)</button>
+          <button type="button" data-proto-filter="nat" class="apple-proto-chip proto-chip">NAT / PAT (13)</button>
+          <button type="button" data-proto-filter="dhcp" class="apple-proto-chip proto-chip">DHCP (5)</button>
+        </div>
+
+        <!-- macOS Directory Window Canvas -->
+        <div class="apple-directory-window">
+          <!-- Directory Table Header Bar -->
+          <div class="flex items-center justify-between px-4 py-3 border-b border-slate-200/80 dark:border-white/10 bg-slate-100/60 dark:bg-white/[0.03]">
+            <div class="flex items-center gap-2">
+              <span class="font-mono text-xs font-semibold text-slate-600 dark:text-slate-300">Cisco Enterprise Labs — 32 Documented Topologies</span>
+            </div>
+            <div class="hidden sm:flex items-center gap-3 text-xs font-mono text-slate-500 dark:text-slate-400">
+              <span class="inline-flex items-center gap-1.5"><span class="status-dot emerald"></span> Packet Tracer 8.2+ &amp; GNS3</span>
+            </div>
+          </div>
+
+          <!-- Table with Fixed Apple Proportion Layout -->
+          <!-- outer: horizontal scroll only (overflow-x: auto does NOT break sticky when overflow-y is visible/unset) -->
+          <!-- inner: vertical scroll with max-height — this is the sticky scroll root for thead -->
+          <div class="apple-table-outer-scroll overflow-hidden">
+          <div class="apple-table-container max-h-[404px] overflow-y-auto overflow-x-hidden apple-scrollbar">
+            <table class="apple-table text-left" aria-label="Cisco Networking Labs Directory">
+              <thead>
+                <tr>
+                  <th scope="col" class="col-idx" style="width:48px">#</th>
+                  <th scope="col" class="col-scenario">Lab Architecture &amp; Scenario</th>
+                  <th scope="col" class="col-discipline" style="width:170px">Discipline</th>
+                  <th scope="col" class="col-protocols" style="width:260px">Key Protocols</th>
+                  <th scope="col" class="col-action" style="width:136px">Action</th>
+                </tr>
+              </thead>
+              <tbody id="explorer-table-body">
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="campus" data-category="campus">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">01</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Enterprise Campus Capstone: Multi-Tier Hierarchical Network
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-campus">
+                      <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                      Flagship Campus
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">15 Nodes</span><span class="apple-tag-pill">L3 Core &amp; HSRPv2</span><span class="apple-tag-pill">OSPFv2 Multi-Area</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="campus" aria-label="View NOC Runbook for Enterprise Campus Capstone: Multi-Tier Hierarchical Network">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="routing-01-dynamic-routing-eigrp" data-category="routing">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">02</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Enterprise Dynamic Routing: EIGRP Autonomous System
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-routing">
+                      <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+                      Enterprise Routing
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">EIGRP AS 7</span><span class="apple-tag-pill">DUAL Metric</span><span class="apple-tag-pill">Feasible Successor</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="routing-01-dynamic-routing-eigrp" aria-label="View NOC Runbook for Enterprise Dynamic Routing: EIGRP Autonomous System">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="routing-02-dynamic-routing-multi-area-ospf" data-category="routing">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">03</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Enterprise Dynamic Routing: Multi-Area OSPF &amp; ABR Architecture
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-routing">
+                      <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+                      Enterprise Routing
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">OSPFv2 Multi--Area</span><span class="apple-tag-pill">OSPFv2</span><span class="apple-tag-pill">Area 0/1</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="routing-02-dynamic-routing-multi-area-ospf" aria-label="View NOC Runbook for Enterprise Dynamic Routing: Multi-Area OSPF &amp; ABR Architecture">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="routing-03-multi-router-wan-mesh-ecmp" data-category="routing">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">04</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Enterprise WAN Architecture: 5-Node Full-Mesh &amp; ECMP Load Balancing
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-routing">
+                      <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+                      Enterprise Routing
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">RIP Dynamic Routing</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="routing-03-multi-router-wan-mesh-ecmp" aria-label="View NOC Runbook for Enterprise WAN Architecture: 5-Node Full-Mesh &amp; ECMP Load Balancing">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="routing-04-multi-hop-static-routing" data-category="routing">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">05</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Enterprise Static Routing: Multi-Hop Transit WAN Architecture
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-routing">
+                      <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+                      Enterprise Routing
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">Cisco IOS-XE</span><span class="apple-tag-pill">Packet Tracer</span><span class="apple-tag-pill">CLI Verified</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="routing-04-multi-hop-static-routing" aria-label="View NOC Runbook for Enterprise Static Routing: Multi-Hop Transit WAN Architecture">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="routing-05-hsrp-gateway-redundancy" data-category="routing">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">06</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Enterprise High Availability: Dual-Segment HSRP Gateway Redundancy
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-routing">
+                      <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+                      Enterprise Routing
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">HSRP v2</span><span class="apple-tag-pill">HSRPv2</span><span class="apple-tag-pill">Virtual VIP</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="routing-05-hsrp-gateway-redundancy" aria-label="View NOC Runbook for Enterprise High Availability: Dual-Segment HSRP Gateway Redundancy">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="routing-06-intervlan-routing-multilayer-svi" data-category="routing">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">07</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Layer 3 Campus Architecture: Multilayer Switching &amp; SVI Inter-VLAN Routing
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-routing">
+                      <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+                      Enterprise Routing
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">802.1Q Trunk</span><span class="apple-tag-pill">Inter-VLAN SVI</span><span class="apple-tag-pill">VTPv3</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="routing-06-intervlan-routing-multilayer-svi" aria-label="View NOC Runbook for Layer 3 Campus Architecture: Multilayer Switching &amp; SVI Inter-VLAN Routing">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="routing-07-floating-static-routes-wan-failover" data-category="routing">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">08</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Enterprise WAN Failover: Floating Static Routes &amp; AD Tuning
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-routing">
+                      <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+                      Enterprise Routing
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">Cisco IOS-XE</span><span class="apple-tag-pill">Packet Tracer</span><span class="apple-tag-pill">CLI Verified</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="routing-07-floating-static-routes-wan-failover" aria-label="View NOC Runbook for Enterprise WAN Failover: Floating Static Routes &amp; AD Tuning">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="routing-08-ospf-neighbor-troubleshooting-lsdb" data-category="routing">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">09</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Enterprise Protocol Diagnostics: OSPFv2 Adjacency &amp; LSDB Troubleshooting
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-routing">
+                      <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+                      Enterprise Routing
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">Link--State</span><span class="apple-tag-pill">OSPFv2</span><span class="apple-tag-pill">Area 0/1</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="routing-08-ospf-neighbor-troubleshooting-lsdb" aria-label="View NOC Runbook for Enterprise Protocol Diagnostics: OSPFv2 Adjacency &amp; LSDB Troubleshooting">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="routing-09-ipv6-dual-stack-routing-slaac" data-category="routing">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">10</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      IPv6 Enterprise Routing: SLAAC, Link-Local Next-Hops &amp; Floating Failover
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-routing">
+                      <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+                      Enterprise Routing
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">IPv6 Dual--Stack</span><span class="apple-tag-pill">IPv6 Dual-Stack</span><span class="apple-tag-pill">SLAAC</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="routing-09-ipv6-dual-stack-routing-slaac" aria-label="View NOC Runbook for IPv6 Enterprise Routing: SLAAC, Link-Local Next-Hops &amp; Floating Failover">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="routing-10-enterprise-edge-nat-pat-overload" data-category="routing">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">11</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Enterprise Edge Architecture: Dynamic PAT (NAT Overload)
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-routing">
+                      <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+                      Enterprise Routing
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">NAT Overload</span><span class="apple-tag-pill">PAT Overload</span><span class="apple-tag-pill">NAT Pool</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="routing-10-enterprise-edge-nat-pat-overload" aria-label="View NOC Runbook for Enterprise Edge Architecture: Dynamic PAT (NAT Overload)">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="routing-11-modular-qos-traffic-prioritization" data-category="routing">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">12</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Modular QoS CLI (MQC): Traffic Prioritization &amp; DSCP Marking
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-routing">
+                      <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+                      Enterprise Routing
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">Modular QoS CLI</span><span class="apple-tag-pill">DSCP EF</span><span class="apple-tag-pill">Bandwidth Guarantee</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="routing-11-modular-qos-traffic-prioritization" aria-label="View NOC Runbook for Modular QoS CLI (MQC): Traffic Prioritization &amp; DSCP Marking">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="routing-12-site-to-site-gre-tunnel-ospf" data-category="routing">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">13</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Site-to-Site VPN Architecture: GRE Tunnels &amp; OSPF Overlay
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-routing">
+                      <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+                      Enterprise Routing
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">GRE</span><span class="apple-tag-pill">OSPFv2</span><span class="apple-tag-pill">Area 0/1</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="routing-12-site-to-site-gre-tunnel-ospf" aria-label="View NOC Runbook for Site-to-Site VPN Architecture: GRE Tunnels &amp; OSPF Overlay">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="routing-13-dynamic-routing-eigrp-variance" data-category="routing">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">14</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      EIGRP Advanced Architecture: DUAL Feasibility Condition &amp; Unequal-Cost Load Balancing (Variance)
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-routing">
+                      <span class="w-1.5 h-1.5 rounded-full bg-sky-500"></span>
+                      Enterprise Routing
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">EIGRP AS 100</span><span class="apple-tag-pill">EIGRP AS 7</span><span class="apple-tag-pill">DUAL Metric</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="routing-13-dynamic-routing-eigrp-variance" aria-label="View NOC Runbook for EIGRP Advanced Architecture: DUAL Feasibility Condition &amp; Unequal-Cost Load Balancing (Variance)">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="security-01-access-control-lists-acl" data-category="security">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">15</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Traffic Filtering &amp; Network Security: Standard &amp; Extended ACLs
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-security">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                      Layer 2 Security
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">TCP Port 23</span><span class="apple-tag-pill">Extended ACL</span><span class="apple-tag-pill">Stateful Filtering</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="security-01-access-control-lists-acl" aria-label="View NOC Runbook for Traffic Filtering &amp; Network Security: Standard &amp; Extended ACLs">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="security-02-vlan-trunking-and-vtp" data-category="security">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">16</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Layer 2 Infrastructure: VLAN Segmentation, 802.1Q Trunking &amp; VTP
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-security">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                      Layer 2 Security
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">802.1Q Trunk</span><span class="apple-tag-pill">Inter-VLAN SVI</span><span class="apple-tag-pill">VTPv3</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="security-02-vlan-trunking-and-vtp" aria-label="View NOC Runbook for Layer 2 Infrastructure: VLAN Segmentation, 802.1Q Trunking &amp; VTP">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="security-03-port-security-mac-limiting" data-category="security">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">17</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Layer 2 Security: Port Security, MAC Limiting &amp; Violation Modes
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-security">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                      Layer 2 Security
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">Port Security</span><span class="apple-tag-pill">Sticky MAC</span><span class="apple-tag-pill">Err-Disable</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="security-03-port-security-mac-limiting" aria-label="View NOC Runbook for Layer 2 Security: Port Security, MAC Limiting &amp; Violation Modes">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="security-04-stp-root-guard" data-category="security">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">18</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Layer 2 Hardening: Spanning Tree Protocol (STP) Root Guard
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-security">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                      Layer 2 Security
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">STP Root Guard</span><span class="apple-tag-pill">BPDU Guard</span><span class="apple-tag-pill">Loop Guard</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="security-04-stp-root-guard" aria-label="View NOC Runbook for Layer 2 Hardening: Spanning Tree Protocol (STP) Root Guard">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="security-05-stp-bpdu-filtering-and-loop-guard" data-category="security">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">19</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Layer 2 Loop Prevention: STP Loop Guard &amp; BPDU Filtering
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-security">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                      Layer 2 Security
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">STP Root Guard</span><span class="apple-tag-pill">BPDU Guard</span><span class="apple-tag-pill">Loop Guard</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="security-05-stp-bpdu-filtering-and-loop-guard" aria-label="View NOC Runbook for Layer 2 Loop Prevention: STP Loop Guard &amp; BPDU Filtering">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="security-06-etherchannel-lacp-pagp-layer3" data-category="security">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">20</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Campus Link Aggregation: LACP, PAgP &amp; L3 Routed EtherChannel
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-security">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                      Layer 2 Security
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">802</span><span class="apple-tag-pill">LACP 802.3ad</span><span class="apple-tag-pill">PAgP</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="security-06-etherchannel-lacp-pagp-layer3" aria-label="View NOC Runbook for Campus Link Aggregation: LACP, PAgP &amp; L3 Routed EtherChannel">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="security-07-cdp-lldp-discovery-and-hardening" data-category="security">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">21</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Layer 2 Discovery &amp; Security: LLDP Migration &amp; Access-Port Hardening
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-security">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                      Layer 2 Security
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">IEEE 802</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="security-07-cdp-lldp-discovery-and-hardening" aria-label="View NOC Runbook for Layer 2 Discovery &amp; Security: LLDP Migration &amp; Access-Port Hardening">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="security-08-secure-device-management-sshv2" data-category="security">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">22</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Secure Control Plane Management: SSHv2 &amp; VTY Access-Class Filtering
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-security">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                      Layer 2 Security
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">SSHv2</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="security-08-secure-device-management-sshv2" aria-label="View NOC Runbook for Secure Control Plane Management: SSHv2 &amp; VTY Access-Class Filtering">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="security-09-switchport-voice-vlan-telephony" data-category="security">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">23</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Converged Campus Edge: Voice VLANs &amp; IP Telephony Daisy-Chaining
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-security">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                      Layer 2 Security
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">802</span><span class="apple-tag-pill">802.1Q Trunk</span><span class="apple-tag-pill">Inter-VLAN SVI</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="security-09-switchport-voice-vlan-telephony" aria-label="View NOC Runbook for Converged Campus Edge: Voice VLANs &amp; IP Telephony Daisy-Chaining">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="security-10-dhcp-snooping-and-dynamic-arp-dai" data-category="security">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">24</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Layer 2 Security: DHCP Snooping &amp; Dynamic ARP Inspection (DAI)
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-security">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                      Layer 2 Security
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">DAI</span><span class="apple-tag-pill">ARP Poisoning Mitigation</span><span class="apple-tag-pill">Trusted Uplink</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="security-10-dhcp-snooping-and-dynamic-arp-dai" aria-label="View NOC Runbook for Layer 2 Security: DHCP Snooping &amp; Dynamic ARP Inspection (DAI)">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="security-11-stp-hsrp-active-root-alignment" data-category="security">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">25</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Layer 2/3 Convergence: STP &amp; HSRP Synchronization
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-security">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                      Layer 2 Security
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">HSRPv2</span><span class="apple-tag-pill">Virtual VIP</span><span class="apple-tag-pill">Preempt Failover</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="security-11-stp-hsrp-active-root-alignment" aria-label="View NOC Runbook for Layer 2/3 Convergence: STP &amp; HSRP Synchronization">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="security-12-vtp-modes-and-dtp-hardening" data-category="security">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">26</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Layer 2 Enterprise Switching: VTP Multi-Mode Architecture &amp; DTP Suppression
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-security">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                      Layer 2 Security
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">VTP v1</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="security-12-vtp-modes-and-dtp-hardening" aria-label="View NOC Runbook for Layer 2 Enterprise Switching: VTP Multi-Mode Architecture &amp; DTP Suppression">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="security-13-enterprise-extended-acls-service-filtering" data-category="security">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">27</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Enterprise Edge Security: Multi-Service Extended Access Control Lists (L4 Filtering)
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-security">
+                      <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                      Layer 2 Security
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">Extended ACL</span><span class="apple-tag-pill">Stateful Filtering</span><span class="apple-tag-pill">Port 80/443</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="security-13-enterprise-extended-acls-service-filtering" aria-label="View NOC Runbook for Enterprise Edge Security: Multi-Service Extended Access Control Lists (L4 Filtering)">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="services-01-core-network-services-dhcp-dns-http" data-category="services">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">28</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Core Network Services: Integrated DHCP, DNS &amp; HTTP Web Infrastructure
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-services">
+                      <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                      Network Services
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">Cisco IOS-XE</span><span class="apple-tag-pill">Packet Tracer</span><span class="apple-tag-pill">CLI Verified</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="services-01-core-network-services-dhcp-dns-http" aria-label="View NOC Runbook for Core Network Services: Integrated DHCP, DNS &amp; HTTP Web Infrastructure">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="services-02-centralized-dhcp-relay-ip-helper" data-category="services">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">29</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Enterprise IP Management: Centralized DHCP &amp; Cross-WAN Relay
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-services">
+                      <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                      Network Services
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">DHCP</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="services-02-centralized-dhcp-relay-ip-helper" aria-label="View NOC Runbook for Enterprise IP Management: Centralized DHCP &amp; Cross-WAN Relay">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="services-03-ntp-stratum-hierarchy-authentication" data-category="services">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">30</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Enterprise Time Synchronization: NTP Stratum Hierarchy &amp; MD5 Authentication
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-services">
+                      <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                      Network Services
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">NTPv4</span><span class="apple-tag-pill">NTP Stratum 2</span><span class="apple-tag-pill">MD5 Authentication</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="services-03-ntp-stratum-hierarchy-authentication" aria-label="View NOC Runbook for Enterprise Time Synchronization: NTP Stratum Hierarchy &amp; MD5 Authentication">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="services-04-centralized-syslog-telemetry" data-category="services">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">31</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Enterprise Network Telemetry: Centralized Syslog &amp; Severity Levels (0–7)
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-services">
+                      <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                      Network Services
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">Syslog</span><span class="apple-tag-pill">Syslog Trap 6</span><span class="apple-tag-pill">UDP 514</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="services-04-centralized-syslog-telemetry" aria-label="View NOC Runbook for Enterprise Network Telemetry: Centralized Syslog &amp; Severity Levels (0–7)">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+                <tr class="directory-row group cursor-pointer" data-action="open-case-study" data-lab-id="services-05-enterprise-wlc-centralized-wireless" data-category="services">
+                  <td class="col-idx">
+                    <span class="apple-index-badge">32</span>
+                  </td>
+                  <td class="col-scenario">
+                    <div class="font-display font-semibold text-xs sm:text-sm text-slate-900 dark:text-white group-hover:text-blue-500 transition-colors">
+                      Centralized Enterprise Wireless: Cisco 3504 WLC, CAPWAP &amp; Lightweight APs
+                    </div>
+                  </td>
+                  <td class="col-discipline whitespace-nowrap">
+                    <span class="apple-discipline-pill apple-discipline-services">
+                      <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
+                      Network Services
+                    </span>
+                  </td>
+                  <td class="col-protocols">
+                    <div class="flex flex-wrap gap-1">
+                      <span class="apple-tag-pill">Cisco 3504 WLC</span><span class="apple-tag-pill">CAPWAP Mobility</span><span class="apple-tag-pill">FlexConnect</span>
+                    </div>
+                  </td>
+                  <td class="col-action whitespace-nowrap">
+                    <button type="button" class="apple-action-btn" data-action="open-case-study" data-lab-id="services-05-enterprise-wlc-centralized-wireless" aria-label="View NOC Runbook for Centralized Enterprise Wireless: Cisco 3504 WLC, CAPWAP &amp; Lightweight APs">
+                      View Runbook <svg class="w-3.5 h-3.5 ml-1 inline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div><!-- /.apple-table-container (vertical scroll) -->
+          </div><!-- /.apple-table-outer-scroll (horizontal scroll) -->
+        </div>
+
+      </div>
+    </section>
