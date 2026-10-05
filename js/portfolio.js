@@ -1857,7 +1857,7 @@
           '<p class="terminal-line"><span class="t-kw">name</span> <strong class="t-val-strong">Abdul Wahab Saim</strong></p>',
           '<p class="terminal-line"><span class="t-kw">role</span> <span class="t-success">Junior Network &amp; NOC Engineer</span></p>',
           '<p class="terminal-line"><span class="t-kw">certification</span> <span class="t-val">Cisco CCNA 200-301 (CSCO15110282, valid to Feb 2029)</span></p>',
-          '<p class="terminal-line"><span class="t-kw">education</span> <span class="t-val">B.Sc. Computer Science (CGPA 3.58, University of Central Punjab)</span></p>',
+          '<p class="terminal-line"><span class="t-kw">education</span> <span class="t-val">B.Sc. Computer Science (In Progress, University of Central Punjab)</span></p>',
           '<p class="terminal-line"><span class="t-kw">location</span> <span class="t-val">Goes, Zeeland, Netherlands 🇳🇱</span></p>',
           '<p class="terminal-line"><span class="t-kw">work-auth</span> <span class="t-val">Authorised to work in the Netherlands</span></p>',
           '<p class="terminal-line"><span class="t-kw">portfolio</span> <span class="t-val">32 Documented Labs · 15-Node Flagship Enterprise Campus Network</span></p>'
