@@ -8,31 +8,43 @@ import gh from '../data/github.json';
 import { profile, repoBlurbs } from '../data/site';
 
 type Day = [string, number, number];
-const days = gh.days as Day[];
+type Year = { year: number; total: number; days: Day[] };
 const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
 const monthFmt = new Intl.DateTimeFormat('en-US', { month: 'short', timeZone: 'UTC' });
+const today = new Date().toISOString().slice(0, 10);
 
-// Columns are weeks starting on Sunday, like GitHub.
-const firstDow = new Date(`${days[0][0]}T00:00:00Z`).getUTCDay();
-const cells = days.map(([date, count, level], i) => {
-  const idx = i + firstDow;
-  return { date, count, level, col: Math.floor(idx / 7), row: idx % 7 };
-});
-const cols = cells[cells.length - 1].col + 1;
-const months: { col: number; label: string }[] = [];
-cells.forEach((c) => {
-  if (c.date.endsWith('-01') || (c.col === 0 && c.row === firstDow)) {
-    const col = c.row === 0 ? c.col : c.col + 1;
-    if (!months.some((m) => Math.abs(m.col - col) < 3)) months.push({ col, label: monthFmt.format(new Date(`${c.date}T00:00:00Z`)) });
-  }
-});
+/** Lay one calendar out like GitHub: columns are weeks starting on Sunday. */
+function grid(days: Day[]) {
+  const firstDow = new Date(`${days[0][0]}T00:00:00Z`).getUTCDay();
+  const cells = days.map(([date, count, level], i) => {
+    const idx = i + firstDow;
+    return { date, count, level, future: date > today, col: Math.floor(idx / 7), row: idx % 7 };
+  });
+  const cols = cells[cells.length - 1].col + 1;
+  const months: { col: number; label: string }[] = [];
+  cells.forEach((c) => {
+    if (c.date.endsWith('-01') || (c.col === 0 && c.row === firstDow)) {
+      const col = c.row === 0 ? c.col : c.col + 1;
+      if (!months.some((m) => Math.abs(m.col - col) < 3)) months.push({ col, label: monthFmt.format(new Date(`${c.date}T00:00:00Z`)) });
+    }
+  });
+  return { cells, cols, months };
+}
+
+// Year tabs like the GitHub profile; older snapshots without per-year data fall back to the last 12 months.
+const years: Year[] = (gh as { years?: Year[] }).years?.length
+  ? (gh as { years: Year[] }).years
+  : [{ year: new Date().getUTCFullYear(), total: gh.lastYearTotal, days: gh.days as Day[] }];
+const panels = years.map((y) => ({ ...y, ...grid(y.days) }));
+const allTime = years.reduce((a, y) => a + y.total, 0);
+const since = years[years.length - 1].year;
 
 const totalCommits = gh.repos.reduce((a, r) => a + (r.commits ?? 0), 0);
 const updated = (iso: string) => new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' }).format(new Date(iso));
 const stats = [
-  { value: gh.lastYearTotal, label: 'contributions in the last year' },
+  { value: allTime, label: `contributions on GitHub since ${since}` },
   { value: totalCommits, label: 'commits across the lab repositories' },
-  { value: gh.repos.length, label: 'public lab repositories' },
+  { value: gh.publicRepos ?? gh.repos.length, label: 'public repositories on GitHub' },
 ];
 ---
 
@@ -60,25 +72,53 @@ const stats = [
         }
       </dl>
 
-      <div class="gh__scroll" data-gh-scroll data-hscroll>
-        <div class="gh__graph" style={`--cols:${cols}`} data-gh-graph>
-          <div class="gh__months" aria-hidden="true">
-            {months.map((m) => <span style={`grid-column:${m.col + 1}`}>{m.label}</span>)}
-          </div>
-          <div class="gh__cells" role="img" aria-label={`${gh.lastYearTotal} contributions in the last year`}>
-            {
-              cells.map((c) => (
-                <span
-                  class="gh__cell"
-                  data-l={c.level}
-                  style={`grid-column:${c.col + 1};grid-row:${c.row + 1};--c:${c.col}`}
-                  data-tip={`${c.count === 0 ? 'No' : c.count} contribution${c.count === 1 ? '' : 's'} on ${fmt.format(new Date(`${c.date}T00:00:00Z`))}`}
-                />
-              ))
-            }
-          </div>
+      <div class="gh__bar">
+        <p class="gh__year-total" data-gh-total aria-live="polite">
+          {panels[0].total} contributions in {panels[0].year}
+        </p>
+        <div class="gh__tabs mono" role="tablist" aria-label="Contribution year">
+          {
+            panels.map((p, i) => (
+              <button
+                type="button"
+                role="tab"
+                class="gh__tab"
+                id={`gh-tab-${p.year}`}
+                aria-controls={`gh-year-${p.year}`}
+                aria-selected={i === 0 ? 'true' : 'false'}
+                tabindex={i === 0 ? 0 : -1}
+                data-gh-tab={p.year}
+                data-total={p.total}
+              >
+                {p.year}
+              </button>
+            ))
+          }
         </div>
       </div>
+
+      {
+        panels.map((p, i) => (
+          <div class="gh__scroll" data-gh-scroll data-hscroll data-current={i === 0 ? '' : undefined} id={`gh-year-${p.year}`} role="tabpanel" aria-labelledby={`gh-tab-${p.year}`} hidden={i !== 0}>
+            <div class="gh__graph" style={`--cols:${p.cols}`}>
+              <div class="gh__months" aria-hidden="true">
+                {p.months.map((m) => <span style={`grid-column:${m.col + 1}`}>{m.label}</span>)}
+              </div>
+              <div class="gh__cells" role="img" aria-label={`${p.total} contributions in ${p.year}`}>
+                {p.cells.map((c) => (
+                  <span
+                    class="gh__cell"
+                    data-l={c.level}
+                    data-future={c.future ? '' : undefined}
+                    style={`grid-column:${c.col + 1};grid-row:${c.row + 1};--c:${c.col}`}
+                    data-tip={c.future ? undefined : `${c.count === 0 ? 'No' : c.count} contribution${c.count === 1 ? '' : 's'} on ${fmt.format(new Date(`${c.date}T00:00:00Z`))}`}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+        ))
+      }
       <div class="gh__legend mono" aria-hidden="true">
         <span>Less</span>
         {[0, 1, 2, 3, 4].map((l) => <span class="gh__cell" data-l={l} />)}
@@ -143,6 +183,57 @@ const stats = [
     color: var(--text-2);
   }
 
+  .gh__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px 20px;
+    margin-bottom: 18px;
+  }
+
+  .gh__year-total {
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .gh__tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .gh__tab {
+    padding: 6px 12px;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    color: var(--text-2);
+    box-shadow: 0 0 0 1px var(--line-2);
+    transition:
+      background-color 0.2s,
+      color 0.2s,
+      box-shadow 0.2s;
+  }
+
+  .gh__tab:hover {
+    color: var(--text);
+  }
+
+  .gh__tab[aria-selected='true'] {
+    background: var(--accent);
+    color: #fff;
+    box-shadow: none;
+  }
+
+  .gh__tab:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .gh__scroll[hidden] {
+    display: none;
+  }
+
   .gh__scroll {
     overflow-x: auto;
     padding-bottom: 6px;
@@ -199,6 +290,10 @@ const stats = [
     background: var(--accent);
   }
 
+  .gh__cell[data-future] {
+    background: rgb(var(--text-rgb) / 0.03);
+  }
+
   :global(.js) .gh__cells .gh__cell {
     opacity: 0;
     transform: scale(0.4);
@@ -207,6 +302,12 @@ const stats = [
   :global(.js) .gh__card.is-in .gh__cells .gh__cell {
     animation: cell-in 0.5s var(--ease-out) forwards;
     animation-delay: calc(var(--c) * 14ms + 150ms);
+  }
+
+  /* Switching years: a quicker sweep than the first reveal. */
+  :global(.js) .gh__card.is-switched .gh__cells .gh__cell {
+    animation-duration: 0.3s;
+    animation-delay: calc(var(--c) * 4ms);
   }
 
   @keyframes cell-in {
@@ -355,13 +456,39 @@ const stats = [
 
 <script>
   const card = document.querySelector<HTMLElement>('.gh__card')!;
-  const scroller = document.querySelector<HTMLElement>('[data-gh-scroll]')!;
   const tip = document.querySelector<HTMLElement>('[data-gh-tip]')!;
+  const total = card.querySelector<HTMLElement>('[data-gh-total]')!;
+  const tabs = [...card.querySelectorAll<HTMLButtonElement>('[data-gh-tab]')];
 
-  // Phones: start scrolled to the most recent weeks.
-  const toEnd = () => (scroller.scrollLeft = scroller.scrollWidth);
-  toEnd();
-  window.addEventListener('resize', toEnd);
+  // Phones: the current year opens on its latest weeks, older years on January.
+  const align = () => {
+    const open = card.querySelector<HTMLElement>('[data-gh-scroll]:not([hidden])');
+    if (open) open.scrollLeft = open.hasAttribute('data-current') ? open.scrollWidth : 0;
+  };
+  align();
+  window.addEventListener('resize', align);
+
+  // Year tabs.
+  const select = (tab: HTMLButtonElement, focus = false) => {
+    tabs.forEach((t) => {
+      const on = t === tab;
+      t.setAttribute('aria-selected', String(on));
+      t.tabIndex = on ? 0 : -1;
+      document.getElementById(t.getAttribute('aria-controls')!)!.hidden = !on;
+    });
+    total.textContent = `${tab.dataset.total} contributions in ${tab.dataset.ghTab}`;
+    card.classList.add('is-switched');
+    tip.hidden = true;
+    align();
+    if (focus) tab.focus();
+  };
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => select(t));
+    t.addEventListener('keydown', (e) => {
+      const step = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (step) select(tabs[(i + step + tabs.length) % tabs.length], true);
+    });
+  });
 
   // Count the numbers up when the card comes into view.
   const io = new IntersectionObserver(
@@ -387,7 +514,7 @@ const stats = [
 
   card.addEventListener('pointerover', (e) => {
     const cell = (e.target as HTMLElement).closest<HTMLElement>('.gh__cells .gh__cell');
-    if (!cell) {
+    if (!cell || !cell.dataset.tip) {
       tip.hidden = true;
       return;
     }

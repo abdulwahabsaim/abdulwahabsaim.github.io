@@ -7,6 +7,7 @@
 import { toggleTheme, currentTheme } from './theme';
 import { setSound, soundOn, tick, click } from './sound';
 import { prefersReduced, scrollToTarget } from './core';
+import { motion } from '../config/motion';
 
 export interface TermData {
   profile: { name: string; role: string; email: string; github: string; linkedin: string; cv: string; location: string };
@@ -81,7 +82,7 @@ export function mountTerminal(el: HTMLElement, data: TermData) {
       const row = 'line' in l ? render(l.line, l.cls) : render(l);
       if (!fast) {
         row.classList.add('is-in');
-        await new Promise((r) => setTimeout(r, 14));
+        await new Promise((r) => setTimeout(r, motion.terminal.lineDelay));
       }
       scrollDown();
     }
@@ -455,9 +456,9 @@ export function mountTerminal(el: HTMLElement, data: TermData) {
     // Type the first command like a person would.
     for (const ch of cmd) {
       input.value += ch;
-      await new Promise((r) => setTimeout(r, 70));
+      await new Promise((r) => setTimeout(r, motion.terminal.typeDelay));
     }
-    await new Promise((r) => setTimeout(r, 180));
+    await new Promise((r) => setTimeout(r, motion.terminal.afterType));
     input.value = '';
     await run(cmd);
   }

@@ -42,4 +42,7 @@ export const motion = {
 
   /** Sound effects (Web Audio, synthesized). */
   sound: { master: 0.55, tickThrottle: 55 },
+
+  /** Terminal (saim-shell) pacing, in ms. */
+  terminal: { lineDelay: 30, typeDelay: 80, afterType: 220 },
 } as const;
