@@ -1,0 +1,561 @@
+---
+import { Icon } from 'astro-icon/components';
+import { nav, profile } from '../data/site';
+
+interface Props {
+  home?: boolean;
+}
+const { home = false } = Astro.props;
+const href = (h: string) => (home ? h : `/${h}`);
+---
+
+<header class="nav" data-nav>
+  <div class="nav__inner">
+    <a class="nav__brand" href={home ? '#top' : '/'} aria-label={`${profile.name}, home`}>
+      <span class="port" aria-hidden="true"></span>
+      <span class="nav__name">{profile.name}</span>
+    </a>
+
+    <nav class="nav__pill" aria-label="Primary">
+      <span class="nav__indicator" aria-hidden="true"></span>
+      {nav.map((l) => <a href={href(l.href)} data-spy={l.href.slice(1)}>{l.label}</a>)}
+    </nav>
+
+    <div class="nav__tools">
+      <button class="icon-btn nav__desktop" type="button" data-cmd-open aria-label="Search labs" title="Search labs (Ctrl K)">
+        <Icon name="ph:magnifying-glass" />
+      </button>
+      <button class="icon-btn nav__desktop" type="button" data-sound-toggle aria-pressed="true" aria-label="Sound effects" title="Sound effects">
+        <Icon name="ph:speaker-high" class="i-on" />
+        <Icon name="ph:speaker-slash" class="i-off" />
+      </button>
+      <button class="icon-btn" type="button" data-theme-toggle aria-label="Switch to dark theme" title="Switch theme">
+        <Icon name="ph:sun" class="i-sun" />
+        <Icon name="ph:moon" class="i-moon" />
+      </button>
+      <a class="btn btn--accent btn--sm nav__cv" href={profile.cv} download>
+        <span>Download CV</span>
+        <Icon name="ph:download-simple" class="i-down" />
+      </a>
+      <button class="icon-btn nav__menu-btn" type="button" aria-expanded="false" aria-controls="menu" aria-label="Open menu" data-menu-toggle>
+        <span class="burger" aria-hidden="true"><span></span><span></span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="menu" id="menu" data-menu hidden>
+  <nav class="menu__links" aria-label="Mobile">
+    {
+      nav.map((l, i) => (
+        <a href={href(l.href)} style={`--i:${i}`} data-menu-link>
+          <span class="menu__idx mono">0{i + 1}</span>
+          {l.label}
+        </a>
+      ))
+    }
+  </nav>
+  <div class="menu__foot">
+    <div class="menu__tools">
+      <button class="btn btn--ghost btn--sm" type="button" data-cmd-open>
+        <Icon name="ph:magnifying-glass" /> Search labs
+      </button>
+      <button class="btn btn--ghost btn--sm" type="button" data-sound-toggle aria-pressed="true">
+        <Icon name="ph:speaker-high" class="i-on" />
+        <Icon name="ph:speaker-slash" class="i-off" />
+        <span>Sound</span>
+      </button>
+    </div>
+    <a class="btn btn--accent" href={profile.cv} download>
+      <span>Download CV</span>
+      <Icon name="ph:download-simple" class="i-down" />
+    </a>
+    <a class="menu__mail mono" href={`mailto:${profile.email}`}>{profile.email}</a>
+  </div>
+</div>
+
+<style>
+  .nav {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: var(--z-nav);
+    padding-top: max(12px, env(safe-area-inset-top));
+    pointer-events: none;
+    transition: transform 0.5s var(--ease-out);
+  }
+
+  /* Once scrolled, a frosted band sits behind the whole nav and fades out at its lower edge,
+     so the name and controls stay readable over any heading passing underneath. */
+  .nav::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 -28px;
+    z-index: -1;
+    background: rgb(var(--bg-rgb) / 0.7);
+    backdrop-filter: blur(16px) saturate(150%);
+    -webkit-backdrop-filter: blur(16px) saturate(150%);
+    -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+    mask-image: linear-gradient(to bottom, #000 55%, transparent);
+    opacity: 0;
+    transition:
+      opacity 0.4s ease,
+      background-color 0.35s ease;
+  }
+
+  /* Over dark blocks ([data-nav-dark]: the terminal, the contact panel) the band turns dark and
+     the name and icons go light, instead of a light slab over black. */
+  .nav.is-on-dark::before {
+    /* Blur only: the dark block blurs to dark behind the light text, and the page edges stay untinted. */
+    background: transparent;
+  }
+
+  .nav__brand,
+  .nav__tools .icon-btn {
+    transition: color 0.35s ease;
+  }
+
+  .nav.is-on-dark .nav__brand,
+  .nav.is-on-dark .nav__tools > .icon-btn {
+    color: #f1f1f3;
+  }
+
+  .nav.is-scrolled::before {
+    opacity: 1;
+  }
+
+  .nav.is-hidden {
+    transform: translateY(-120%);
+  }
+
+  .nav__inner {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    max-width: calc(var(--container) + var(--gutter) * 2);
+    margin-inline: auto;
+    padding-inline: var(--gutter);
+    height: var(--nav-h);
+  }
+
+  .nav__inner > * {
+    pointer-events: auto;
+  }
+
+  .nav__brand {
+    justify-self: start;
+    display: inline-flex;
+    align-items: center;
+    gap: 11px;
+    padding: 8px 4px;
+    font-weight: 650;
+    font-size: 1.2rem;
+    letter-spacing: -0.025em;
+    white-space: nowrap;
+  }
+
+  .nav__brand :global(.port) {
+    width: 22px;
+    height: 22px;
+  }
+
+
+  @media (hover: hover) {
+    .nav__brand:hover .port {
+      transform: rotate(-90deg);
+    }
+  }
+
+  .nav__pill {
+    position: relative;
+    display: flex;
+    gap: 2px;
+    padding: 4px;
+    border-radius: var(--r-pill);
+    background: rgb(var(--bg-rgb) / 0.72);
+    box-shadow:
+      inset 0 0 0 1px var(--line-2),
+      0 10px 30px -12px rgb(var(--shadow-tint) / 0.25);
+    backdrop-filter: blur(16px) saturate(160%);
+    -webkit-backdrop-filter: blur(16px) saturate(160%);
+  }
+
+  .nav__pill a {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    height: 38px;
+    padding-inline: 16px;
+    border-radius: var(--r-pill);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-2);
+    transition: color 0.3s ease;
+  }
+
+  @media (hover: hover) {
+    .nav__pill a:hover {
+      color: var(--text);
+    }
+  }
+
+  .nav__pill a.is-active {
+    color: var(--bg);
+  }
+
+  .nav__indicator {
+    position: absolute;
+    top: 4px;
+    left: 0;
+    height: 38px;
+    width: var(--w, 0px);
+    border-radius: var(--r-pill);
+    background: var(--text);
+    transform: translateX(var(--x, 0px));
+    opacity: 0;
+    transition:
+      transform 0.55s var(--ease-out),
+      width 0.55s var(--ease-out),
+      opacity 0.3s ease;
+  }
+
+  .nav__pill.has-active .nav__indicator {
+    opacity: 1;
+  }
+
+  .nav__tools {
+    justify-self: end;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .nav__cv {
+    margin-left: 8px;
+  }
+
+  [data-sound-toggle] .i-off,
+  [data-sound-toggle][aria-pressed='false'] .i-on {
+    display: none;
+  }
+
+  [data-sound-toggle][aria-pressed='false'] .i-off {
+    display: block;
+  }
+
+  [data-theme-toggle] .i-moon {
+    display: none;
+  }
+
+  :global([data-theme='dark']) [data-theme-toggle] .i-sun {
+    display: none;
+  }
+
+  :global([data-theme='dark']) [data-theme-toggle] .i-moon {
+    display: block;
+  }
+
+  .nav__menu-btn {
+    display: none;
+  }
+
+  .burger {
+    position: relative;
+    width: 18px;
+    height: 10px;
+  }
+
+  .burger span {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 1.5px;
+    border-radius: 2px;
+    background: currentColor;
+    transition: transform 0.45s var(--ease-out);
+  }
+
+  .burger span:first-child {
+    top: 0;
+  }
+
+  .burger span:last-child {
+    bottom: 0;
+  }
+
+  [aria-expanded='true'] .burger span:first-child {
+    transform: translateY(4.25px) rotate(45deg);
+  }
+
+  [aria-expanded='true'] .burger span:last-child {
+    transform: translateY(-4.25px) rotate(-45deg);
+  }
+
+  /* ---------- Mobile menu ---------- */
+  .menu {
+    position: fixed;
+    inset: 0;
+    z-index: calc(var(--z-nav) - 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 32px;
+    padding: calc(var(--nav-h) + max(28px, env(safe-area-inset-top))) var(--gutter) max(28px, env(safe-area-inset-bottom));
+    background: var(--bg);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    clip-path: circle(0px at calc(100% - 40px) 40px);
+    transition: clip-path 0.7s var(--ease-in-out);
+  }
+
+  .menu.is-open {
+    clip-path: circle(150vmax at calc(100% - 40px) 40px);
+  }
+
+  .menu[hidden] {
+    display: none;
+  }
+
+  .menu__links {
+    display: grid;
+    gap: 4px;
+  }
+
+  .menu__links a {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding-block: 6px;
+    font-size: clamp(2.1rem, 10vw, 3.4rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1.1;
+    opacity: 0;
+    transform: translateY(24px);
+    transition:
+      opacity 0.6s var(--ease-out),
+      transform 0.6s var(--ease-out);
+    transition-delay: calc(0.12s + var(--i) * 0.05s);
+  }
+
+  .menu.is-open .menu__links a {
+    opacity: 1;
+    transform: none;
+  }
+
+  .menu__idx {
+    font-size: 0.8rem;
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--text-3);
+  }
+
+  .menu__foot {
+    display: grid;
+    gap: 14px;
+  }
+
+  .menu__tools {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .menu__tools .btn {
+    flex: 1 1 140px;
+  }
+
+  .menu__mail {
+    font-size: 0.85rem;
+    color: var(--text-2);
+    text-align: center;
+    word-break: break-all;
+  }
+
+  @media (max-width: 1100px) {
+    .nav__name {
+      display: none;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .nav__pill,
+    .nav__desktop,
+    .nav__cv {
+      display: none;
+    }
+    .nav__menu-btn {
+      display: inline-grid;
+    }
+    .nav__name {
+      display: inline;
+    }
+    /* One floating glass bar on phones so the name never sits on top of page text. */
+    .nav__inner {
+      grid-template-columns: 1fr auto;
+      width: auto;
+      height: 58px;
+      margin-inline: 12px;
+      padding: 0 6px 0 16px;
+      border-radius: var(--r-pill);
+      background: rgb(var(--bg-rgb) / 0.78);
+      box-shadow:
+        inset 0 0 0 1px var(--line-2),
+        0 10px 30px -14px rgb(var(--shadow-tint) / 0.3);
+      backdrop-filter: blur(18px) saturate(160%);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
+    }
+    .nav::before {
+      display: none;
+    }
+    .nav__brand {
+      padding: 0;
+      font-size: 1.1rem;
+    }
+    .nav__tools {
+      gap: 2px;
+    }
+  }
+
+  @media (max-width: 340px) {
+    .nav__name {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import { ScrollTrigger, lockScroll } from '../scripts/core';
+  import { toggleTheme, currentTheme } from '../scripts/theme';
+  import { onSound, setSound, soundOn, click } from '../scripts/sound';
+
+  const nav = document.querySelector<HTMLElement>('[data-nav]')!;
+  const pill = nav.querySelector<HTMLElement>('.nav__pill')!;
+  const indicator = pill.querySelector<HTMLElement>('.nav__indicator')!;
+  const links = [...pill.querySelectorAll<HTMLAnchorElement>('a[data-spy]')];
+  const menu = document.querySelector<HTMLElement>('[data-menu]')!;
+  const menuBtn = nav.querySelector<HTMLButtonElement>('[data-menu-toggle]')!;
+
+  // ---- Scroll state: background fade, hide on scroll down (phones only) ----
+  ScrollTrigger.create({
+    start: 0,
+    end: 'max',
+    onUpdate(self) {
+      const y = self.scroll();
+      nav.classList.toggle('is-scrolled', y > 24);
+      const mobile = window.innerWidth <= 900;
+      const hide = mobile && self.direction === 1 && y > 320 && !menu.classList.contains('is-open');
+      nav.classList.toggle('is-hidden', hide);
+    },
+  });
+
+  // ---- Dark blocks under the nav: flip the band and text to light-on-dark ----
+  const darks = [...document.querySelectorAll<HTMLElement>('[data-nav-dark]')];
+  if (darks.length) {
+    const under = new Set<Element>();
+    const navH = () => nav.getBoundingClientRect().bottom;
+    let io: IntersectionObserver;
+    const watch = () => {
+      io?.disconnect();
+      under.clear();
+      io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => (e.isIntersecting ? under.add(e.target) : under.delete(e.target)));
+          nav.classList.toggle('is-on-dark', under.size > 0);
+        },
+        // Only the strip the nav covers counts.
+        { rootMargin: `0px 0px -${Math.max(0, window.innerHeight - navH() + 8)}px 0px` },
+      );
+      darks.forEach((d) => io.observe(d));
+    };
+    watch();
+    window.addEventListener('resize', watch);
+  }
+
+  // ---- Scroll spy with a sliding indicator ----
+  function moveIndicator(a: HTMLAnchorElement | null) {
+    links.forEach((l) => l.classList.toggle('is-active', l === a));
+    pill.classList.toggle('has-active', !!a);
+    if (!a) return;
+    indicator.style.setProperty('--x', `${a.offsetLeft}px`);
+    indicator.style.setProperty('--w', `${a.offsetWidth}px`);
+  }
+
+  const sections = links
+    .map((l) => document.getElementById(l.dataset.spy!))
+    .filter((s): s is HTMLElement => !!s);
+  if (sections.length) {
+    const visible = new Map<string, boolean>();
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => visible.set(e.target.id, e.isIntersecting));
+        const active = sections.find((s) => visible.get(s.id));
+        moveIndicator(active ? (links.find((l) => l.dataset.spy === active.id) ?? null) : null);
+      },
+      { rootMargin: '-45% 0px -50% 0px' },
+    );
+    sections.forEach((s) => io.observe(s));
+  }
+  window.addEventListener('resize', () => moveIndicator(links.find((l) => l.classList.contains('is-active')) ?? null));
+
+  // ---- Theme ----
+  const themeBtns = document.querySelectorAll<HTMLButtonElement>('[data-theme-toggle]');
+  const labelTheme = () =>
+    themeBtns.forEach((b) =>
+      b.setAttribute('aria-label', currentTheme() === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'),
+    );
+  labelTheme();
+  window.addEventListener('themechange', labelTheme);
+  themeBtns.forEach((b) =>
+    b.addEventListener('click', (e) => {
+      click();
+      const r = b.getBoundingClientRect();
+      const x = (e as MouseEvent).clientX || r.left + r.width / 2;
+      const y = (e as MouseEvent).clientY || r.top + r.height / 2;
+      toggleTheme(x, y);
+    }),
+  );
+
+  // ---- Sound ----
+  const soundBtns = document.querySelectorAll<HTMLButtonElement>('[data-sound-toggle]');
+  onSound((on) => soundBtns.forEach((b) => b.setAttribute('aria-pressed', String(on))));
+  soundBtns.forEach((b) => b.addEventListener('click', () => setSound(!soundOn())));
+
+  // ---- Mobile menu ----
+  let lastFocus: HTMLElement | null = null;
+  function setMenu(open: boolean) {
+    menuBtn.setAttribute('aria-expanded', String(open));
+    menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    if (open) {
+      lastFocus = document.activeElement as HTMLElement;
+      menu.hidden = false;
+      requestAnimationFrame(() => requestAnimationFrame(() => menu.classList.add('is-open')));
+      lockScroll(true);
+      nav.classList.remove('is-hidden');
+      setTimeout(() => menu.querySelector<HTMLElement>('a')?.focus({ preventScroll: true }), 320);
+    } else {
+      menu.classList.remove('is-open');
+      lockScroll(false);
+      setTimeout(() => {
+        if (!menu.classList.contains('is-open')) menu.hidden = true;
+      }, 700);
+      lastFocus?.focus({ preventScroll: true });
+    }
+  }
+  menuBtn.addEventListener('click', () => {
+    click();
+    setMenu(menuBtn.getAttribute('aria-expanded') !== 'true');
+  });
+  menu.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement;
+    if (t.closest('[data-menu-link]') || t.closest('[data-cmd-open]')) setMenu(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && menu.classList.contains('is-open')) setMenu(false);
+  });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 900 && menu.classList.contains('is-open')) setMenu(false);
+  });
+</script>

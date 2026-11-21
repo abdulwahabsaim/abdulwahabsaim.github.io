@@ -1,0 +1,232 @@
+---
+/*
+ * Full-page dotted canvas (inspired by ujjwalportfolio2). Dots near the pointer light up and
+ * link to it like a small star topology; a click sends a "ping" ripple through the grid.
+ * Touch devices and reduced motion get the static grid only.
+ */
+---
+
+<canvas class="dotfield" aria-hidden="true" data-dotfield></canvas>
+<span class="dotfield-probe" aria-hidden="true" data-dot-probe></span>
+<span class="dotfield-probe dotfield-probe--hot" aria-hidden="true" data-dot-probe-hot></span>
+
+<style>
+  .dotfield {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: var(--z-canvas);
+    pointer-events: none;
+  }
+
+  .dotfield-probe {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    color: var(--dot);
+  }
+
+  .dotfield-probe--hot {
+    color: var(--dot-hot);
+  }
+</style>
+
+<script>
+  import { prefersReduced, finePointer } from '../scripts/core';
+  import { motion } from '../config/motion';
+
+  const D = motion.dots;
+
+  const canvas = document.querySelector<HTMLCanvasElement>('[data-dotfield]')!;
+  const ctx = canvas.getContext('2d')!;
+  const probe = document.querySelector<HTMLElement>('[data-dot-probe]')!;
+  const probeHot = document.querySelector<HTMLElement>('[data-dot-probe-hot]')!;
+  const base = document.createElement('canvas');
+  const bctx = base.getContext('2d')!;
+
+  const interactive = finePointer() && !prefersReduced();
+  const R = D.radius;
+  const LINK = D.linkLength;
+  let w = 0,
+    h = 0,
+    dpr = 1,
+    gap = 26,
+    ox = 0,
+    oy = 0;
+  let dotColor = 'rgba(0,0,0,0.1)';
+  let hotColor = 'rgba(255,106,31,0.9)';
+  let hotRGB = [255, 106, 31];
+  let px = -9999,
+    py = -9999,
+    ex = -9999,
+    ey = -9999,
+    heat = 0,
+    targetHeat = 0,
+    raf = 0;
+  const ripples: { x: number; y: number; t: number }[] = [];
+
+  function readColors() {
+    dotColor = getComputedStyle(probe).color;
+    hotColor = getComputedStyle(probeHot).color;
+    const m = hotColor.match(/[\d.]+/g);
+    if (m) hotRGB = [Number(m[0]), Number(m[1]), Number(m[2])];
+  }
+
+  function resize() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth;
+    h = window.innerHeight;
+    gap = w < 640 ? D.gap.mobile : D.gap.desktop;
+    ox = ((w % gap) + gap) / 2;
+    oy = ((h % gap) + gap) / 2;
+    for (const c of [canvas, base]) {
+      c.width = Math.round(w * dpr);
+      c.height = Math.round(h * dpr);
+    }
+    canvas.style.width = `${w}px`;
+    canvas.style.height = `${h}px`;
+    drawBase();
+    frame();
+  }
+
+  function drawBase() {
+    bctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    bctx.clearRect(0, 0, w, h);
+    bctx.fillStyle = dotColor;
+    for (let x = ox; x < w; x += gap) {
+      for (let y = oy; y < h; y += gap) {
+        bctx.fillRect(x - 0.75, y - 0.75, 1.5, 1.5);
+      }
+    }
+  }
+
+  function frame() {
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(base, 0, 0);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const now = performance.now();
+    for (let i = ripples.length - 1; i >= 0; i--) if (now - ripples[i].t > D.rippleLife) ripples.splice(i, 1);
+
+    const [r, g, b] = hotRGB;
+    const links: { x: number; y: number; d: number }[] = [];
+
+    // Dots around the pointer.
+    if (heat > 0.01) {
+      const x0 = Math.max(ox, ox + Math.floor((ex - R - ox) / gap) * gap);
+      const y0 = Math.max(oy, oy + Math.floor((ey - R - oy) / gap) * gap);
+      for (let x = x0; x <= ex + R && x < w; x += gap) {
+        for (let y = y0; y <= ey + R && y < h; y += gap) {
+          const dx = x - ex,
+            dy = y - ey;
+          const d = Math.hypot(dx, dy);
+          if (d > R) continue;
+          const t = (1 - d / R) ** 2 * heat;
+          const push = d > 0 ? (t * D.push) / d : 0;
+          const sx = x + dx * push,
+            sy = y + dy * push;
+          ctx.fillStyle = `rgba(${r},${g},${b},${Math.min(1, 0.15 + t * 0.95)})`;
+          const s = 1.5 + t * 1.8;
+          ctx.fillRect(sx - s / 2, sy - s / 2, s, s);
+          if (d < LINK) links.push({ x: sx, y: sy, d });
+        }
+      }
+      links.sort((a, b2) => a.d - b2.d);
+      ctx.lineWidth = 1;
+      for (const l of links.slice(0, D.links)) {
+        ctx.strokeStyle = `rgba(${r},${g},${b},${(1 - l.d / LINK) * 0.45 * heat})`;
+        ctx.beginPath();
+        ctx.moveTo(ex, ey);
+        ctx.lineTo(l.x, l.y);
+        ctx.stroke();
+      }
+    }
+
+    // Ping ripples.
+    for (const rp of ripples) {
+      const age = now - rp.t;
+      const radius = age * D.rippleSpeed;
+      const fade = 1 - age / D.rippleLife;
+      const band = 26;
+      const x0 = ox + Math.floor((rp.x - radius - band - ox) / gap) * gap;
+      const y0 = oy + Math.floor((rp.y - radius - band - oy) / gap) * gap;
+      for (let x = Math.max(ox, x0); x <= rp.x + radius + band && x < w; x += gap) {
+        for (let y = Math.max(oy, y0); y <= rp.y + radius + band && y < h; y += gap) {
+          const d = Math.hypot(x - rp.x, y - rp.y);
+          const off = Math.abs(d - radius);
+          if (off > band) continue;
+          const t = (1 - off / band) * fade;
+          ctx.fillStyle = `rgba(${r},${g},${b},${t * 0.9})`;
+          const s = 1.5 + t * 1.6;
+          ctx.fillRect(x - s / 2, y - s / 2, s, s);
+        }
+      }
+    }
+  }
+
+  function loop() {
+    ex += (px - ex) * 0.16;
+    ey += (py - ey) * 0.16;
+    heat += (targetHeat - heat) * 0.08;
+    frame();
+    const moving = Math.abs(px - ex) > 0.3 || Math.abs(py - ey) > 0.3 || Math.abs(targetHeat - heat) > 0.01;
+    raf = moving || ripples.length ? requestAnimationFrame(loop) : 0;
+  }
+
+  const kick = () => {
+    if (!raf && !document.hidden) raf = requestAnimationFrame(loop);
+  };
+
+  readColors();
+  resize();
+
+  let resizeT = 0;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeT);
+    resizeT = window.setTimeout(resize, 120);
+  });
+  window.addEventListener('themechange', () => {
+    requestAnimationFrame(() => {
+      readColors();
+      drawBase();
+      frame();
+    });
+  });
+
+  if (interactive) {
+    window.addEventListener(
+      'pointermove',
+      (e) => {
+        if (e.pointerType !== 'mouse') return;
+        if (ex < -9000) {
+          ex = e.clientX;
+          ey = e.clientY;
+        }
+        px = e.clientX;
+        py = e.clientY;
+        targetHeat = 1;
+        kick();
+      },
+      { passive: true },
+    );
+    document.documentElement.addEventListener('pointerleave', () => {
+      targetHeat = 0;
+      kick();
+    });
+    window.addEventListener('pointerdown', (e) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      ripples.push({ x: e.clientX, y: e.clientY, t: performance.now() });
+      if (ripples.length > 4) ripples.shift();
+      kick();
+    });
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden && raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+    });
+  }
+</script>

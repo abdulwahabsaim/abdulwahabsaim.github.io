@@ -1,0 +1,220 @@
+/* Long-form lab write-ups rendered from the README markdown. */
+.prose {
+  --measure: 72ch;
+  min-width: 0;
+  color: var(--text-2);
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.prose > * + * {
+  margin-top: 1.1em;
+}
+
+.prose :is(p, ul, ol, blockquote, h2, h3, h4) {
+  max-width: var(--measure);
+}
+
+.prose h2 {
+  margin-top: 2.6em;
+  padding-top: 1.2em;
+  border-top: 1px solid var(--line);
+  color: var(--text);
+  font-size: clamp(1.45rem, 2.2vw, 1.9rem);
+  line-height: 1.2;
+  letter-spacing: -0.03em;
+  scroll-margin-top: calc(var(--nav-h) + 32px);
+}
+
+.prose > h2:first-child {
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
+}
+
+.prose h3 {
+  margin-top: 2em;
+  color: var(--text);
+  font-size: 1.2rem;
+  letter-spacing: -0.02em;
+  scroll-margin-top: calc(var(--nav-h) + 32px);
+}
+
+.prose h4 {
+  margin-top: 1.6em;
+  color: var(--text);
+  font-size: 1.02rem;
+}
+
+.prose strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.prose a {
+  color: var(--accent-text);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.3em;
+}
+
+.prose li + li {
+  margin-top: 0.4em;
+}
+
+.prose li::marker {
+  color: var(--text-3);
+}
+
+.prose :not(pre) > code {
+  padding: 0.12em 0.4em;
+  border-radius: 6px;
+  background: rgb(var(--text-rgb) / 0.07);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 0.86em;
+  overflow-wrap: anywhere;
+}
+
+.prose blockquote {
+  padding: 16px 20px;
+  border-radius: var(--r-media);
+  border-left: 3px solid var(--accent);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--line);
+}
+
+.prose blockquote > * + * {
+  margin-top: 0.6em;
+}
+
+/* Tables scroll inside their own box on narrow screens. */
+.prose .table-wrap {
+  max-width: 100%;
+  overflow-x: auto;
+  border-radius: var(--r-media);
+  box-shadow: inset 0 0 0 1px var(--line-2);
+  -webkit-overflow-scrolling: touch;
+}
+
+.prose table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.prose th,
+.prose td {
+  padding: 11px 14px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--line);
+}
+
+.prose th {
+  background: var(--surface-2);
+  color: var(--text);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.prose tr:last-child td {
+  border-bottom: 0;
+}
+
+/* CLI blocks: dark in both themes, prompts in accent, comments muted. */
+.prose .codeblock {
+  position: relative;
+  max-width: 100%;
+}
+
+.prose .codeblock::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 10px;
+  left: 16px;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #8a8a94;
+}
+
+.prose pre {
+  margin: 0;
+  padding: 40px 18px 18px;
+  border-radius: var(--r-media);
+  background: var(--code-bg);
+  color: var(--code-text);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.06);
+  overflow-x: auto;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.65;
+  tab-size: 4;
+}
+
+.prose pre code {
+  font-family: inherit;
+}
+
+.prose .cli-prompt {
+  color: #ff8a4c;
+}
+
+.prose .cli-cmd {
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.prose .cli-top {
+  color: #ffffff;
+  font-weight: 600;
+}
+
+.prose .cli-comment {
+  color: #7b7b86;
+}
+
+.prose .codeblock-copy {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  height: 28px;
+  padding-inline: 10px;
+  border-radius: var(--r-pill);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: #c9c9d1;
+  background: rgb(255 255 255 / 0.06);
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.12);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.prose .codeblock-copy:hover {
+  background: rgb(255 255 255 / 0.12);
+  color: #fff;
+}
+
+.prose .codeblock-copy[data-state='done'] {
+  color: #ff8a4c;
+}
+
+@media (max-width: 640px) {
+  .prose {
+    font-size: 0.98rem;
+  }
+  .prose pre {
+    font-size: 0.76rem;
+    padding: 38px 14px 14px;
+  }
+}

@@ -1,114 +1,61 @@
-# Abdul Wahab Saim — CCNA-certified Network & NOC Engineer Portfolio
+# abdulwahabsaim.github.io
 
-[![Live Site](https://img.shields.io/badge/Live_Site-abdulwahabsaim.github.io-4C8DFF?style=flat-square&logo=github)](https://abdulwahabsaim.github.io)
-[![CCNA](https://img.shields.io/badge/Cisco-CCNA_200--301-1BA0D7?style=flat-square&logo=cisco)](https://www.cisco.com/go/verifycertificate)
-[![Location](https://img.shields.io/badge/Location-Goes,_Netherlands-22D3EE?style=flat-square)](https://maps.app.goo.gl/Goes)
+Portfolio of **Abdul Wahab Saim**, CCNA-certified junior network engineer in the Netherlands.
+32 documented Cisco labs plus Cisco ASA firewall labs in progress, each with its own page.
 
----
+Live: https://abdulwahabsaim.github.io
 
-## Overview
+## Stack
 
-Enterprise network engineering portfolio showcasing **32 documented Cisco IOS labs** across routing, switching, Layer 2 security, and network services. Built to demonstrate hands-on CCNA-level competencies to hiring teams at NOC and junior network roles in the Netherlands.
+| Layer | Choice | Why |
+| --- | --- | --- |
+| Framework | [Astro 7](https://astro.build) | Ships plain HTML, CSS and a little JS. Generates one page per lab from Markdown. |
+| Styling | Plain CSS with design tokens | Every colour, radius, spacing and easing lives in `src/styles/tokens.css`. |
+| Motion | GSAP + ScrollTrigger, Lenis | Scroll-driven tunnel, sticky stack, process wave and timeline. Lenis smooths desktop wheel scrolling only. |
+| Fonts | Geist and Geist Mono (self-hosted via Fontsource) | No third-party font requests. |
+| Icons | Phosphor and Simple Icons via `astro-icon` | Inlined SVG at build time. |
+| Hosting | GitHub Pages via GitHub Actions | Rebuilds on push and once a day to refresh the GitHub heatmap. |
 
-**Live at → [abdulwahabsaim.github.io](https://abdulwahabsaim.github.io)**
+Node 22.23.4 or newer is required (`.nvmrc` pins 26).
 
----
-
-## Lab Coverage
-
-| Category | Labs |
-|---|---|
-| Routing (OSPF, EIGRP, RIP, GRE, NAT) | 13 labs |
-| Layer 2 Security (STP, VLAN, ACL, DAI) | 13 labs |
-| Network Services (DHCP, DNS, NTP, WLC) | 5 labs |
-| Flagship Campus (15-node enterprise) | 1 mega-lab |
-
----
-
-## Tech Stack
-
-- **Pure static HTML/CSS/JS** — zero frameworks, zero npm, zero runtime dependencies
-- **Modular build system** — `scripts/build.py` compiles `src/` → `index.html` + `css/portfolio.css` in < 15ms
-- **Hosted on GitHub Pages** — zero-cost, zero-config deployment
-
----
-
-## Project Structure
-
-```
-abdulwahabsaim.github.io/
-│
-├── index.html                  ← Compiled entry point (GitHub Pages)
-├── favicon.svg / apple-touch-icon.png
-├── robots.txt / sitemap.xml
-├── .gitignore
-│
-├── css/
-│   ├── portfolio.css           ← Compiled CSS bundle (build output)
-│   └── tokens.css              ← Design tokens (build output)
-│
-├── js/
-│   ├── portfolio.js            ← Main interaction engine (~3,000 lines)
-│   └── projects-data.js        ← Lab data registry (32 labs)
-│
-├── assets/
-│   ├── Abdul-Wahab-Saim-CV.pdf ← Resume
-│   ├── portfolio-preview.jpg   ← OG/Twitter card image
-│   └── labs/                   ← 32 × topology PNGs
-│
-├── src/                        ← Source of truth (edit here)
-│   ├── layout/base.html        ← HTML shell & head
-│   ├── sections/               ← 10 modular section components
-│   └── css/
-│       ├── tokens.css          ← Design token definitions
-│       ├── modules/            ← 12 desktop CSS modules
-│       └── mobile/             ← 10 dedicated mobile CSS modules
-│
-├── data/                       ← Source data
-│   ├── portfolio.json
-│   └── projects.json
-│
-├── scripts/                    ← Dev tooling
-│   ├── build.py                ← Zero-dependency compiler
-│   ├── verify_portfolio.py     ← Headless Chrome verification suite
-│   ├── triage.py               ← CSS/HTML search & scope tool
-│   └── build_projects_data.py  ← Lab data generator
-│
-└── docs/                       ← Internal documentation
-    ├── DESIGN.md               ← Design system & token spec
-    └── ARCHITECTURE.md         ← Modular architecture guide
-```
-
----
-
-## Local Development
+## Commands
 
 ```bash
-# Build the site (< 15ms)
-python3 scripts/build.py
-
-# Watch for changes and auto-rebuild
-python3 scripts/build.py --watch
-
-# Run verification suite (HTML integrity + headless Chrome)
-python3 scripts/verify_portfolio.py
-
-# Search for a CSS class or HTML element across src/
-python3 scripts/triage.py "mobile-floating-dock"
+npm install
 ```
 
----
+```bash
+npm run dev
+```
 
-## Contact
+```bash
+npm run build
+```
 
-| | |
-|---|---|
-| **Email** | abdulwahabsaim58.nl@gmail.com |
-| **LinkedIn** | [linkedin.com/in/abdulwahabsaim](https://linkedin.com/in/abdulwahabsaim) |
-| **GitHub** | [github.com/abdulwahabsaim](https://github.com/abdulwahabsaim) |
-| **Location** | Goes, Zeeland, Netherlands 🇳🇱 |
-| **CCNA** | CSCO15110282 — [Verify](https://www.cisco.com/go/verifycertificate) |
+```bash
+npm run sync:labs
+```
 
----
+```bash
+npm run sync:github
+```
 
-*Authorised to work in the Netherlands · Available immediately*
+- `dev` starts the site at http://localhost:4321.
+- `build` writes the static site to `dist/`.
+- `sync:labs` regenerates `src/content/labs/` and the topology images from the five lab repositories next to this folder. Run it after changing a lab README.
+- `sync:github` refreshes the contribution heatmap snapshot in `src/data/github.json`. CI runs it before every build.
+
+## Where to change things
+
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). Short version:
+
+- Copy, facts, credentials, experience, toolbox: `src/data/site.ts`
+- Colours, fonts, radii, spacing: `src/styles/tokens.css`
+- Motion numbers (tunnel depth, dot radius, scroll smoothing, sound volume): `src/config/motion.ts`
+- Lab names and tags: the `CURATED` map in `scripts/sync-labs.mjs`, then `npm run sync:labs`
+- CV: replace `public/Abdul-Wahab-Saim-CV.pdf`
+
+## Deploying
+
+The workflow in `.github/workflows/deploy.yml` builds and publishes on every push to `main`.
+One-time setup in the GitHub repository: **Settings, Pages, Build and deployment, Source: GitHub Actions**.

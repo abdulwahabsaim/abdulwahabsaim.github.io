@@ -1,0 +1,530 @@
+---
+/*
+ * "Scroll of time" timeline (parthh.in idea), oldest first. The rail fills as you scroll and the
+ * portrait rides it as the marker, but only up to "now". Beyond that, upcoming goals sit on a
+ * dashed rail as unlocking nodes. Phones show the first paragraph of each entry; the rest opens on tap.
+ */
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import portrait from '../assets/portrait.jpg';
+import { experience } from '../data/site';
+
+const lastDone = experience.map((e) => e.status).lastIndexOf('done');
+---
+
+<section class="section xp" id="experience" aria-labelledby="xp-title">
+  <div class="container">
+    <header class="section-head xp__head">
+      <h2 class="h2" id="xp-title" data-reveal>Experience and training</h2>
+      <p class="lead" data-reveal style="--d:80">From a part-time IT role to CCNA, and what I'm unlocking next.</p>
+    </header>
+
+    <div class="tl" data-tl>
+      <div class="tl__rail" aria-hidden="true">
+        <span class="tl__fill" data-tl-fill></span>
+        <span class="tl__future" data-tl-future></span>
+        <span class="tl__marker" data-tl-marker>
+          <Image src={portrait} alt="" width={96} height={96} widths={[48, 96]} sizes="48px" loading="lazy" />
+        </span>
+      </div>
+
+      {
+        experience.map((e, i) => (
+          <>
+            <article class:list={['tl__item', { 'is-next': e.status === 'next' }]} data-tl-item data-status={e.status}>
+              <div class="tl__meta">
+                <p class="tl__period mono">{e.period}</p>
+                <h3 class="tl__org">{e.org}</h3>
+                <p class="tl__facts">
+                  {e.place && (
+                    <span class="tl__fact">
+                      <Icon name="ph:map-pin" />
+                      {e.place}
+                    </span>
+                  )}
+                  <span class="tl__fact">
+                    <Icon name={e.status === 'next' ? 'ph:hourglass-medium' : 'ph:tag-simple'} />
+                    {e.kind}
+                  </span>
+                </p>
+              </div>
+              <span class="tl__node" aria-hidden="true">
+                <Icon name={e.icon} />
+              </span>
+              <div class="tl__content">
+                <h4 class="tl__role">{e.role}</h4>
+                {e.note && <p class="tl__note mono">{e.note}</p>}
+                {e.status === 'next' && (
+                  <p class="tl__unlock mono">
+                    <span class="tl__bar" aria-hidden="true" />
+                    Unlocking
+                  </p>
+                )}
+                <p class="tl__text">{e.body[0]}</p>
+                {e.body.length > 1 && (
+                  <div class="tl__extra" data-tl-extra>
+                    {e.body.slice(1).map((p) => (
+                      <p class="tl__text">{p}</p>
+                    ))}
+                  </div>
+                )}
+                {e.body.length > 1 && (
+                  <button class="tl__toggle" type="button" aria-expanded="false" data-tl-toggle>
+                    <span>Read more</span>
+                    <Icon name="ph:caret-down" />
+                  </button>
+                )}
+                <ul class="tl__tags">
+                  {e.tags.map((t) => (
+                    <li class="chip">{t}</li>
+                  ))}
+                </ul>
+              </div>
+            </article>
+            {i === lastDone && (
+              <div class="tl__now" data-tl-now aria-hidden="true">
+                <span class="mono">Now</span>
+              </div>
+            )}
+          </>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .xp__head {
+    margin-inline: auto;
+    text-align: center;
+    justify-items: center;
+  }
+
+  .tl {
+    --rail-x: 38%;
+    position: relative;
+    display: grid;
+    gap: clamp(56px, 8vw, 112px);
+    padding-block: 24px;
+  }
+
+  /* ---------- Rail ---------- */
+  .tl__rail {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--rail-x);
+    width: 2px;
+    margin-left: -1px;
+  }
+
+  .tl__rail::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: var(--now, 100%);
+    border-radius: 2px;
+    background: var(--line-2);
+  }
+
+  .tl__fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: var(--now, 100%);
+    border-radius: 2px;
+    background: linear-gradient(to bottom, rgb(var(--accent-rgb) / 0.15), var(--accent));
+    transform: scaleY(var(--p, 0));
+    transform-origin: 0 0;
+  }
+
+  /* The future: a dashed rail after "now". */
+  .tl__future {
+    position: absolute;
+    top: var(--now, 100%);
+    bottom: 0;
+    left: 0;
+    width: 2px;
+    background: repeating-linear-gradient(to bottom, var(--line-2) 0 6px, transparent 6px 12px);
+  }
+
+  .tl__marker {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 48px;
+    height: 48px;
+    margin: -24px 0 0 -24px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--paper);
+    box-shadow:
+      0 0 0 3px var(--bg),
+      0 0 0 5px var(--accent),
+      0 12px 30px -10px rgb(var(--shadow-tint) / 0.5);
+    transform: translateY(var(--y, 0px));
+    will-change: transform;
+    z-index: 2;
+  }
+
+  .tl__marker img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 22%;
+  }
+
+  .tl__now {
+    position: relative;
+    height: 0;
+    margin-block: calc(clamp(56px, 8vw, 112px) / -2);
+  }
+
+  .tl__now span {
+    position: absolute;
+    left: calc(var(--rail-x) + 36px);
+    top: 0;
+    transform: translateY(-50%);
+    padding: 4px 10px;
+    border-radius: var(--r-pill);
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    z-index: 1;
+  }
+
+  /* ---------- Entries ---------- */
+  .tl__item {
+    position: relative;
+    display: grid;
+    grid-template-columns: var(--rail-x) 1fr;
+    align-items: start;
+  }
+
+  .tl__meta {
+    display: grid;
+    gap: 10px;
+    justify-items: end;
+    padding-right: clamp(44px, 6vw, 88px);
+    text-align: right;
+  }
+
+  .tl__period {
+    font-size: 0.8rem;
+    color: var(--text-3);
+    letter-spacing: 0.02em;
+  }
+
+  .tl__org {
+    font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+  }
+
+  .tl__facts {
+    display: grid;
+    gap: 8px;
+    justify-items: end;
+  }
+
+  .tl__fact {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    color: var(--text-2);
+  }
+
+  .tl__fact svg {
+    width: 17px;
+    height: 17px;
+    color: var(--text-3);
+  }
+
+  .tl__node {
+    position: absolute;
+    left: var(--rail-x);
+    top: 0;
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    margin-left: -16px;
+    border-radius: 50%;
+    background: var(--bg);
+    color: var(--text-3);
+    box-shadow: inset 0 0 0 2px var(--line-2);
+    transition:
+      background-color 0.4s ease,
+      color 0.4s ease,
+      box-shadow 0.4s ease,
+      transform 0.5s var(--ease-spring);
+  }
+
+  .tl__node svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .tl__item.is-on .tl__node {
+    background: var(--accent);
+    color: var(--accent-ink);
+    box-shadow: 0 0 0 6px rgb(var(--accent-rgb) / 0.16);
+    transform: scale(1.08);
+  }
+
+  .tl__item.is-next .tl__node {
+    background: var(--bg);
+    color: var(--accent-text);
+    box-shadow: inset 0 0 0 2px rgb(var(--accent-rgb) / 0.6);
+    border: 0;
+  }
+
+  .tl__content {
+    display: grid;
+    gap: 12px;
+    padding-left: clamp(44px, 6vw, 88px);
+    max-width: 680px;
+    opacity: 0.45;
+    transition: opacity 0.6s ease;
+  }
+
+  .tl__item.is-on .tl__content,
+  .tl__item.is-next .tl__content {
+    opacity: 1;
+  }
+
+  .tl__item.is-next :is(.tl__role, .tl__org) {
+    color: var(--text-2);
+  }
+
+  .tl__role {
+    font-size: clamp(1.2rem, 1.8vw, 1.5rem);
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+  }
+
+  .tl__note {
+    font-size: 0.8rem;
+    color: var(--accent-text);
+    margin-top: -4px;
+  }
+
+  .tl__unlock {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent-text);
+  }
+
+  /* Indeterminate progress: a real "in progress" state, not decoration. */
+  .tl__bar {
+    position: relative;
+    width: 72px;
+    height: 4px;
+    border-radius: 4px;
+    background: rgb(var(--accent-rgb) / 0.18);
+    overflow: hidden;
+  }
+
+  .tl__bar::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    width: 40%;
+    border-radius: inherit;
+    background: var(--accent);
+    animation: unlock 1.8s var(--ease-in-out) infinite;
+  }
+
+  @keyframes unlock {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(250%);
+    }
+  }
+
+  .tl__text {
+    color: var(--text-2);
+    line-height: 1.65;
+  }
+
+  .tl__extra {
+    display: grid;
+    gap: 12px;
+  }
+
+  .tl__toggle {
+    display: none;
+  }
+
+  .tl__tags {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  /* ---------- Phones ---------- */
+  @media (max-width: 800px) {
+    .tl {
+      --rail-x: 19px;
+      gap: 44px;
+    }
+    .tl__now {
+      margin-block: -22px;
+    }
+    .tl__marker {
+      width: 38px;
+      height: 38px;
+      margin: -19px 0 0 -19px;
+    }
+    .tl__item {
+      grid-template-columns: 1fr;
+      padding-left: 52px;
+      gap: 12px;
+    }
+    .tl__meta {
+      justify-items: start;
+      text-align: left;
+      padding-right: 0;
+      gap: 4px;
+    }
+    .tl__org {
+      font-size: 1.3rem;
+    }
+    .tl__facts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px 14px;
+      justify-items: start;
+      font-size: 0.88rem;
+    }
+    .tl__node {
+      width: 28px;
+      height: 28px;
+      margin-left: -14px;
+      top: -2px;
+    }
+    .tl__node svg {
+      width: 13px;
+      height: 13px;
+    }
+    .tl__content {
+      padding-left: 0;
+      gap: 10px;
+    }
+    .tl__role {
+      font-size: 1.1rem;
+    }
+    /* Tags repeat the text on phones; drop them to keep the timeline short. */
+    .tl__tags {
+      display: none;
+    }
+    .tl__now span {
+      left: calc(var(--rail-x) + 28px);
+    }
+    .tl__text {
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+    .tl__extra {
+      display: none;
+    }
+    .tl__extra.is-open {
+      display: grid;
+    }
+    .tl__toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      width: fit-content;
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--accent-text);
+    }
+    .tl__toggle svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.35s var(--ease-out);
+    }
+    .tl__toggle[aria-expanded='true'] svg {
+      transform: rotate(180deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tl__content {
+      opacity: 1;
+    }
+    .tl__bar::after {
+      animation: none;
+      width: 60%;
+    }
+  }
+</style>
+
+<script>
+  import { ScrollTrigger, prefersReduced } from '../scripts/core';
+
+  const tl = document.querySelector<HTMLElement>('[data-tl]')!;
+  const rail = tl.querySelector<HTMLElement>('.tl__rail')!;
+  const fill = tl.querySelector<HTMLElement>('[data-tl-fill]')!;
+  const marker = tl.querySelector<HTMLElement>('[data-tl-marker]')!;
+  const nowEl = tl.querySelector<HTMLElement>('[data-tl-now]');
+  const items = [...tl.querySelectorAll<HTMLElement>('[data-tl-item]')];
+  const done = items.filter((i) => i.dataset.status === 'done');
+
+  // Where "now" sits on the rail: the rail fills and the marker travels only this far.
+  let nowY = tl.offsetHeight;
+  const measure = () => {
+    nowY = nowEl ? nowEl.offsetTop : tl.offsetHeight;
+    rail.style.setProperty('--now', `${nowY}px`);
+  };
+  measure();
+
+  // Phones: "Read more" toggles.
+  tl.querySelectorAll<HTMLButtonElement>('[data-tl-toggle]').forEach((btn) => {
+    const extra = btn.previousElementSibling as HTMLElement;
+    btn.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') !== 'true';
+      btn.setAttribute('aria-expanded', String(open));
+      btn.querySelector('span')!.textContent = open ? 'Read less' : 'Read more';
+      extra.classList.toggle('is-open', open);
+      measure();
+      ScrollTrigger.refresh();
+    });
+  });
+
+  if (prefersReduced()) {
+    done.forEach((i) => i.classList.add('is-on'));
+    fill.style.setProperty('--p', '1');
+    marker.style.setProperty('--y', `${nowY}px`);
+  } else {
+    ScrollTrigger.create({
+      trigger: tl,
+      start: 'top 55%',
+      end: () => `top+=${nowY} 55%`,
+      onRefresh: measure,
+      onUpdate(self) {
+        const y = self.progress * nowY;
+        fill.style.setProperty('--p', self.progress.toFixed(4));
+        marker.style.setProperty('--y', `${y.toFixed(1)}px`);
+        done.forEach((it) => it.classList.toggle('is-on', y >= it.offsetTop + 14));
+      },
+    });
+  }
+  window.addEventListener('resize', measure);
+</script>

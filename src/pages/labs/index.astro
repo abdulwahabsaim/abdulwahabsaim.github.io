@@ -1,0 +1,141 @@
+---
+import { Icon } from 'astro-icon/components';
+import Base from '../../layouts/Base.astro';
+import LabRows from '../../components/LabRows.astro';
+import Contact from '../../components/Contact.astro';
+import Footer from '../../components/Footer.astro';
+import { getLabs } from '../../lib/labs';
+import { categories, profile } from '../../data/site';
+
+const labs = await getLabs();
+const campus = labs.find((l) => l.data.categorySlug === 'campus');
+const groups = categories.map((c) => ({ ...c, labs: labs.filter((l) => l.data.categorySlug === c.slug) }));
+---
+
+<Base title={`Lab library | ${profile.name}`} description={`All ${labs.length} Cisco labs by ${profile.name}: routing, Layer 2 security, network services and Cisco ASA firewalls, each with topology, configs and verification output.`}>
+  <header class="container index__head">
+    <h1 class="index__title">Lab library</h1>
+    <p class="lead">
+      {labs.length} labs, each with its topology, addressing, configuration notes and the CLI output that proves it works.
+    </p>
+    <div class="index__jump">
+      {groups.map((g) => <a class="chip" href={`#${g.slug}`}>{g.label}<span class="index__n">{g.labs.length}</span></a>)}
+      <button class="chip index__search" type="button" data-cmd-open><Icon name="ph:magnifying-glass" /> Search</button>
+    </div>
+  </header>
+
+  {
+    campus && (
+      <section class="container">
+        <a class="flag" href={`/labs/${campus.id}/`} data-cursor="view" data-cursor-label="Open">
+          <span class="label">Flagship</span>
+          <span class="flag__name">{campus.data.name}</span>
+          <span class="flag__text">{campus.data.summary}</span>
+          <Icon name="ph:arrow-up-right" class="flag__go" />
+        </a>
+      </section>
+    )
+  }
+
+  {
+    groups.map((g) => (
+      <section class="container group" id={g.slug} aria-labelledby={`h-${g.slug}`}>
+        <div class="group__head">
+          <h2 class="h3" id={`h-${g.slug}`}>{g.label}</h2>
+          <p class="muted">{g.blurb}</p>
+        </div>
+        <LabRows labs={g.labs} />
+      </section>
+    ))
+  }
+
+  <Contact />
+  <Footer slot="after" />
+</Base>
+
+<style>
+  .index__head {
+    display: grid;
+    gap: 22px;
+    padding-top: calc(var(--nav-h) + clamp(56px, 9vw, 112px));
+    padding-bottom: clamp(40px, 6vw, 72px);
+  }
+
+  .index__title {
+    font-size: var(--fs-display);
+    line-height: 0.96;
+    letter-spacing: -0.045em;
+  }
+
+  .index__jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .index__jump .chip {
+    height: 36px;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--text);
+  }
+
+  .index__n {
+    color: var(--text-3);
+  }
+
+  .index__search svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .flag {
+    position: relative;
+    display: grid;
+    gap: 10px;
+    padding: clamp(24px, 4vw, 40px);
+    border-radius: var(--r-panel);
+    background: var(--surface);
+    box-shadow: 0 0 0 1px var(--line-2);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .flag__name {
+    font-size: clamp(1.5rem, 3vw, 2.4rem);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
+    padding-right: 40px;
+  }
+
+  .flag__text {
+    color: var(--text-2);
+    max-width: 70ch;
+  }
+
+  .flag__go {
+    position: absolute;
+    top: clamp(24px, 4vw, 40px);
+    right: clamp(24px, 4vw, 40px);
+    width: 26px;
+    height: 26px;
+    color: var(--accent-text);
+  }
+
+  @media (hover: hover) {
+    .flag:hover {
+      box-shadow: 0 0 0 1px var(--accent);
+    }
+  }
+
+  .group {
+    margin-top: clamp(64px, 9vw, 112px);
+    scroll-margin-top: calc(var(--nav-h) + 24px);
+  }
+
+  .group__head {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+</style>

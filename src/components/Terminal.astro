@@ -1,0 +1,306 @@
+---
+/*
+ * "Prefer a terminal?" A small portfolio shell (src/scripts/terminal.ts) over the site's own data.
+ * Concept carried over from the original portfolio's CLI, rebuilt as a portfolio shell, not a router.
+ */
+import { getLabs } from '../lib/labs';
+import { profile, facts, toolbox, categories, credentials, training, experience } from '../data/site';
+
+const labs = await getLabs();
+const data = {
+  profile: { name: profile.name, role: profile.role, email: profile.email, github: profile.github, linkedin: profile.linkedin, cv: profile.cv, location: profile.location },
+  facts,
+  toolbox,
+  labs: labs.map((l) => ({ id: l.id, name: l.data.name, category: l.data.category, categorySlug: l.data.categorySlug, tags: l.data.tags, summary: l.data.summary, status: l.data.status })),
+  categories: categories.map((c) => ({ slug: c.slug, label: c.label })),
+  credentials: credentials.map((c) => ({ id: c.id, title: c.title, issuer: c.issuer, code: c.code, date: c.date, verify: c.verify?.href })),
+  training: training.map((t) => ({ label: t.label, status: t.status })),
+  experience: experience.map((e) => ({ period: e.period, org: e.org, role: e.role, status: e.status })),
+};
+const chips = ['help', 'about', 'skills', 'ls labs', 'certs', 'experience', 'contact', 'cv', 'sudo hire'];
+---
+
+<section class="section term-section" id="terminal" aria-labelledby="term-title">
+  <div class="container">
+    <header class="section-head">
+      <h2 class="h2" id="term-title" data-reveal>Prefer a terminal?</h2>
+      <p class="lead" data-reveal style="--d:80">The whole portfolio as a small shell. Type <code>help</code>, or tap a command.</p>
+    </header>
+
+    <div class="term" data-term data-reveal data-nav-dark>
+      <div class="term__bar" aria-hidden="true">
+        <span class="term__dots"><i></i><i></i><i></i></span>
+        <span class="term__title mono">saim-shell</span>
+      </div>
+      <div class="term__screen mono" data-term-screen data-scroll-inner>
+        <div class="term__out" data-term-out role="log" aria-live="polite" aria-label="Terminal output"></div>
+        <label class="term__input">
+          <span class="t-prompt" data-term-prompt>visitor@saim:~$</span>
+          <span class="sr-only">Command</span>
+          <input
+            type="text"
+            data-term-input
+            autocomplete="off"
+            autocapitalize="off"
+            autocorrect="off"
+            spellcheck="false"
+            enterkeyhint="go"
+          />
+        </label>
+        <p class="term__hint" data-term-hint>Tab completes. Up and down recall history.</p>
+      </div>
+      <div class="term__chips" data-rail-free>
+        {chips.map((c) => <button type="button" class="term__chip mono" data-run={c}>{c}</button>)}
+      </div>
+    </div>
+  </div>
+  <script type="application/json" data-term-data set:html={JSON.stringify(data)} />
+</section>
+
+<style>
+  .term-section .lead code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    padding: 0.1em 0.4em;
+    border-radius: 6px;
+    background: rgb(var(--text-rgb) / 0.07);
+    color: var(--text);
+  }
+
+  /* A dark terminal in both themes. */
+  .term {
+    --t-bg: #0f0f11;
+    --t-text: #e6e6ea;
+    --t-muted: #8c8c96;
+    --t-line: rgb(255 255 255 / 0.08);
+    border-radius: var(--r-panel);
+    background: var(--t-bg);
+    color: var(--t-text);
+    box-shadow:
+      0 0 0 1px rgb(255 255 255 / 0.06),
+      0 40px 80px -40px rgb(var(--shadow-tint) / 0.55);
+    overflow: hidden;
+  }
+
+  .term__bar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    height: 44px;
+    padding-inline: 18px;
+    border-bottom: 1px solid var(--t-line);
+  }
+
+  .term__dots {
+    display: flex;
+    gap: 7px;
+  }
+
+  .term__dots i {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #3a3a40;
+  }
+
+  .term__dots i:first-child {
+    background: var(--accent);
+  }
+
+  .term__title {
+    font-size: 0.78rem;
+    color: var(--t-muted);
+  }
+
+  .term__screen {
+    height: clamp(320px, 46vh, 460px);
+    padding: 18px 20px 14px;
+    overflow-y: auto;
+    font-size: 0.86rem;
+    line-height: 1.65;
+    cursor: text;
+    scrollbar-width: thin;
+    scrollbar-color: rgb(255 255 255 / 0.18) transparent;
+  }
+
+  .term__out :global(.term-line) {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .term__out :global(.term-line.is-in) {
+    animation: term-in 0.25s var(--ease-out);
+  }
+
+  @keyframes term-in {
+    from {
+      opacity: 0;
+      transform: translateY(3px);
+    }
+  }
+
+  .term__out :global(.is-cmd) {
+    margin-top: 10px;
+  }
+
+  .term__out :global(.is-cmd:first-child) {
+    margin-top: 0;
+  }
+
+  .term :global(.t-prompt) {
+    color: var(--accent);
+  }
+
+  .term :global(.t-cmd),
+  .term :global(.t-strong) {
+    color: #fff;
+    font-weight: 600;
+  }
+
+  .term :global(.t-muted) {
+    color: var(--t-muted);
+  }
+
+  .term :global(.t-key) {
+    color: #ffb38a;
+  }
+
+  .term :global(.t-accent) {
+    color: var(--accent);
+  }
+
+  .term :global(.t-ok) {
+    color: #7ee2a8;
+  }
+
+  .term :global(.t-err) {
+    color: #ff8a80;
+  }
+
+  .term :global(.t-dir) {
+    color: #8ab4ff;
+    font-weight: 600;
+  }
+
+  .term :global(.t-file) {
+    color: var(--t-text);
+  }
+
+  .term :global(.t-link) {
+    color: #fff;
+    text-decoration: underline;
+    text-decoration-color: rgb(255 255 255 / 0.35);
+    text-underline-offset: 3px;
+  }
+
+  .term :global(.t-run) {
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    text-decoration: underline dotted rgb(255 255 255 / 0.3);
+    text-underline-offset: 3px;
+  }
+
+  @media (hover: hover) {
+    .term :global(.t-run:hover),
+    .term :global(.t-link:hover) {
+      color: var(--accent);
+      text-decoration-color: currentColor;
+    }
+  }
+
+  .term__input {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    margin-top: 10px;
+  }
+
+  .term__input input {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    color: #fff;
+    font: inherit;
+    caret-color: var(--accent);
+  }
+
+  .term__hint {
+    margin-top: 6px;
+    font-size: 0.75rem;
+    color: var(--t-muted);
+  }
+
+  /* Mouse and trackpad: the browser must never hand leftover scroll to the page itself;
+     page movement only comes from the smooth-scroll handoff in core.ts. Touch keeps native chaining. */
+  @media (hover: hover) and (pointer: fine) {
+    .term__screen {
+      overscroll-behavior: contain;
+    }
+  }
+
+  .term__chips {
+    display: flex;
+    gap: 8px;
+    padding: 12px 16px 14px;
+    border-top: 1px solid var(--t-line);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .term__chips::-webkit-scrollbar {
+    display: none;
+  }
+
+  .term__chip {
+    flex: none;
+    height: 32px;
+    padding-inline: 12px;
+    border-radius: var(--r-pill);
+    font-size: 0.78rem;
+    color: var(--t-text);
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16);
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      transform 0.3s var(--ease-out);
+  }
+
+  .term__chip:active {
+    transform: scale(0.96);
+  }
+
+  @media (hover: hover) {
+    .term__chip:hover {
+      background: var(--accent);
+      color: var(--accent-ink);
+      box-shadow: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .term__screen {
+      height: 340px;
+      padding: 14px 14px 12px;
+      font-size: 0.8rem;
+    }
+    /* 16px stops iOS from zooming into the input. */
+    .term__input input {
+      font-size: 16px;
+    }
+    .term__hint {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  import { mountTerminal, type TermData } from '../scripts/terminal';
+
+  const el = document.querySelector<HTMLElement>('[data-term]');
+  const raw = document.querySelector('[data-term-data]')?.textContent;
+  if (el && raw) mountTerminal(el, JSON.parse(raw) as TermData);
+</script>

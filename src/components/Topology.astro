@@ -1,0 +1,35 @@
+---
+/*
+ * Inline, theme-aware lab topology. Rendering and label placement live in src/lib/topology.ts
+ * so the same output also feeds the standalone thumbnails (/topology/<lab>.svg).
+ */
+import { getImage } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import type { Topology } from '../data/topologies';
+import { renderSvg } from '../lib/topology';
+
+interface Props {
+  topo: Topology;
+  title: string;
+  class?: string;
+}
+const { topo, title, class: cls } = Astro.props;
+
+const files = import.meta.glob<{ default: ImageMetadata }>('../assets/topology-icons/*.png', { eager: true });
+const icons: Record<string, string> = {};
+for (const name of new Set(topo.nodes.map((n) => n.icon))) {
+  const mod = files[`../assets/topology-icons/${name}.png`];
+  if (mod) icons[name] = (await getImage({ src: mod.default, width: 144, format: 'webp', quality: 90 })).src;
+}
+const svg = renderSvg(topo, { title, icons, className: cls });
+---
+
+<Fragment set:html={svg} />
+
+<style is:global>
+  .topo {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+</style>

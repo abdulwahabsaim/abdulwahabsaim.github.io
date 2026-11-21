@@ -1,0 +1,555 @@
+---
+import { render } from 'astro:content';
+import { Image, getImage } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import Base from '../../layouts/Base.astro';
+import Contact from '../../components/Contact.astro';
+import Footer from '../../components/Footer.astro';
+import { getLabs, type Lab } from '../../lib/labs';
+import { profile } from '../../data/site';
+import { topologies } from '../../data/topologies';
+import Topology from '../../components/Topology.astro';
+import '../../styles/prose.css';
+
+export async function getStaticPaths() {
+  const labs = await getLabs();
+  return labs.map((lab, i) => ({
+    params: { slug: lab.id },
+    props: { lab, prev: labs[i - 1] ?? null, next: labs[i + 1] ?? null },
+  }));
+}
+
+interface Props {
+  lab: Lab;
+  prev: Lab | null;
+  next: Lab | null;
+}
+
+const { lab, prev, next } = Astro.props;
+const d = lab.data;
+const topo = topologies[lab.id];
+const { Content, headings } = await render(lab);
+const toc = headings.filter((h) => h.depth === 2);
+const full = d.image ? (await getImage({ src: d.image, width: 2000, format: 'webp', quality: 85 })).src : null;
+const slides = d.slides
+  ? await Promise.all(
+      d.slides.map(async (s, i) => ({
+        thumb: s,
+        full: (await getImage({ src: s, width: 1600, format: 'webp', quality: 82 })).src,
+        n: i + 1,
+      })),
+    )
+  : [];
+const og = d.image ? (await getImage({ src: d.image, width: 1200, height: 630, fit: 'contain', background: '#ffffff', format: 'png' })).src : undefined;
+---
+
+<Base title={`${d.name} | Cisco lab by ${profile.name}`} description={d.summary} ogImage={og}>
+  <article class="lab">
+    <header class="container lab__head">
+      <nav class="crumbs mono" aria-label="Breadcrumb">
+        <a href="/labs/">Labs</a>
+        <span aria-hidden="true">/</span>
+        <a href={`/labs/#${d.categorySlug}`}>{d.category}</a>
+      </nav>
+      <h1 class="lab__title">{d.name}</h1>
+      <p class="lead lab__lead">{d.summary}</p>
+      <dl class="lab__meta">
+        <div><dt class="label">Category</dt><dd>{d.category}</dd></div>
+        <div><dt class="label">Built in</dt><dd>{d.platform}</dd></div>
+        <div><dt class="label">Status</dt><dd>{d.status === 'complete' ? 'Configured and verified' : 'In progress'}</dd></div>
+        <div><dt class="label">Repository</dt><dd class="mono lab__repo">{d.repo}</dd></div>
+      </dl>
+      <ul class="lab__tags">{d.tags.map((t) => <li class="chip">{t}</li>)}</ul>
+      <div class="lab__actions">
+        <a class="btn btn--accent" href={d.url} target="_blank" rel="noopener">
+          <span>View on GitHub</span>
+          <Icon name="ph:arrow-up-right" class="i-arrow" />
+        </a>
+        <a class="btn btn--ghost" href="/labs/">
+          <span>All labs</span>
+        </a>
+      </div>
+    </header>
+
+    {
+      topo && (
+        <figure class="container lab__figure">
+          <button
+            class="lab__topo lab__topo--svg"
+            type="button"
+            data-lightbox-inline
+            data-caption={`Topology: ${d.name}`}
+            data-cursor="view"
+            data-cursor-label="Zoom"
+            aria-label="Open the topology full screen"
+          >
+            <Topology topo={topo} title={d.name} />
+          </button>
+          <figcaption class="mono">
+            Topology redrawn from the lab. Select to zoom.
+            {full && (
+              <button class="lab__orig" type="button" data-lightbox={full} data-caption={`Packet Tracer screenshot: ${d.name}`}>
+                View the original Packet Tracer screenshot
+              </button>
+            )}
+          </figcaption>
+        </figure>
+      )
+    }
+
+    {
+      !topo && d.image && (
+        <figure class="container lab__figure">
+          <button
+            class="lab__topo"
+            style={`--ratio:${(d.image.width / d.image.height).toFixed(4)};--nat:${d.image.width}px`}
+            type="button"
+            data-lightbox={full}
+            data-caption={`Topology: ${d.name}`}
+            data-cursor="view"
+            data-cursor-label="Zoom"
+            aria-label="Open the topology full size"
+          >
+            <Image src={d.image} alt={`Network topology for ${d.name}`} widths={[640, 1000, 1400]} sizes="(max-width: 1240px) 94vw, 1180px" loading="eager" />
+          </button>
+          <figcaption class="mono">Topology. Select to zoom.</figcaption>
+        </figure>
+      )
+    }
+
+    {
+      d.acknowledgement && (
+        <aside class="container lab__ack">
+          <Icon name="ph:seal-check" />
+          <p>{d.acknowledgement}</p>
+        </aside>
+      )
+    }
+
+    {
+      slides.length > 0 && (
+        <section class="deck" aria-labelledby="deck-title">
+          <div class="container deck__head">
+            <h2 class="h3" id="deck-title">Architecture deck</h2>
+            <p class="muted">{slides.length} slides I designed to explain the build. Swipe or scroll sideways.</p>
+          </div>
+          <ul class="deck__track" data-hscroll>
+            {slides.map((s) => (
+              <li>
+                <button
+                  class="deck__slide"
+                  type="button"
+                  data-lightbox={s.full}
+                  data-group="deck"
+                  data-caption={`Slide ${s.n} of ${slides.length}`}
+                  data-cursor="view"
+                  data-cursor-label="View"
+                  aria-label={`Open slide ${s.n}`}
+                >
+                  <Image src={s.thumb} alt={`Architecture slide ${s.n}`} widths={[320, 480]} sizes="300px" loading="lazy" />
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )
+    }
+
+    <div class="container lab__body">
+      {
+        toc.length > 2 && (
+          <aside class="toc" aria-label="On this page">
+            <details class="toc__box" open data-toc>
+              <summary class="label">On this page</summary>
+              <ol>
+                {toc.map((h) => (
+                  <li>
+                    <a href={`#${h.slug}`} data-toc-link={h.slug}>
+                      {h.text}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </details>
+          </aside>
+        )
+      }
+      <div class="prose">
+        <Content />
+      </div>
+    </div>
+
+    <nav class="container pager" aria-label="More labs">
+      {
+        prev ? (
+          <a class="pager__link" href={`/labs/${prev.id}/`}>
+            <span class="label">Previous lab</span>
+            <span class="pager__name">{prev.data.name}</span>
+          </a>
+        ) : (
+          <span />
+        )
+      }
+      {
+        next && (
+          <a class="pager__link pager__link--next" href={`/labs/${next.id}/`}>
+            <span class="label">Next lab</span>
+            <span class="pager__name">{next.data.name}</span>
+          </a>
+        )
+      }
+    </nav>
+  </article>
+  <Contact />
+  <Footer slot="after" />
+</Base>
+
+<style>
+  .lab__head {
+    display: grid;
+    gap: 22px;
+    padding-top: calc(var(--nav-h) + clamp(48px, 8vw, 96px));
+    padding-bottom: clamp(32px, 5vw, 56px);
+  }
+
+  .crumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    font-size: 0.8rem;
+    color: var(--text-3);
+  }
+
+  .crumbs a:hover {
+    color: var(--text);
+  }
+
+  .lab__title {
+    max-width: 18ch;
+    font-size: clamp(2.3rem, 5.6vw, 4.6rem);
+    line-height: 1;
+    letter-spacing: -0.045em;
+  }
+
+  .lab__lead {
+    max-width: 64ch;
+  }
+
+  .lab__meta {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1px;
+    margin-top: 8px;
+    border-radius: var(--r-card);
+    overflow: hidden;
+    background: var(--line);
+    box-shadow: 0 0 0 1px var(--line);
+  }
+
+  .lab__meta > div {
+    display: grid;
+    gap: 6px;
+    padding: 16px 18px;
+    background: var(--surface);
+  }
+
+  .lab__meta dd {
+    font-weight: 500;
+  }
+
+  .lab__repo {
+    font-size: 0.85rem;
+    overflow-wrap: anywhere;
+  }
+
+  .lab__tags {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .lab__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .lab__figure {
+    display: grid;
+    gap: 12px;
+  }
+
+  .lab__topo {
+    display: grid;
+    place-items: center;
+    padding: clamp(12px, 3vw, 40px);
+    border-radius: var(--r-panel);
+    background: var(--paper);
+    box-shadow:
+      0 0 0 1px var(--line-2),
+      0 40px 80px -50px rgb(var(--shadow-tint) / 0.5);
+  }
+
+  .lab__topo img {
+    width: min(100%, calc(78vh * var(--ratio)), var(--nat));
+    height: auto;
+    border-radius: 8px;
+  }
+
+  :global([data-theme='dark']) .lab__topo img {
+    filter: brightness(0.95);
+  }
+
+  .lab__figure figcaption {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 16px;
+    font-size: 0.75rem;
+    color: var(--text-3);
+  }
+
+  .lab__topo--svg {
+    --topo-surface: var(--surface);
+    background: var(--surface);
+    padding: clamp(12px, 3vw, 36px);
+  }
+
+  .lab__topo--svg :global(.topo) {
+    width: 100%;
+    max-height: 76vh;
+  }
+
+  .lab__orig {
+    color: var(--accent-text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .lab__ack {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 14px;
+    margin-top: 28px;
+    align-items: start;
+  }
+
+  .lab__ack svg {
+    width: 22px;
+    height: 22px;
+    color: var(--accent-text);
+    margin-top: 2px;
+  }
+
+  .lab__ack p {
+    max-width: 72ch;
+    color: var(--text-2);
+  }
+
+  .deck {
+    margin-top: clamp(56px, 8vw, 96px);
+  }
+
+  .deck__head {
+    display: grid;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .deck__track {
+    list-style: none;
+    margin: 0;
+    display: flex;
+    gap: 16px;
+    padding: 4px max(var(--gutter), calc((100vw - var(--container)) / 2)) 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: max(var(--gutter), calc((100vw - var(--container)) / 2));
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+  }
+
+  .deck__track li {
+    flex: none;
+    scroll-snap-align: start;
+  }
+
+  .deck__slide {
+    display: block;
+    width: clamp(220px, 24vw, 300px);
+    border-radius: var(--r-media);
+    overflow: hidden;
+    box-shadow: 0 0 0 1px var(--line-2);
+    transition: transform 0.5s var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .deck__slide:hover {
+      transform: translateY(-4px);
+    }
+  }
+
+  .lab__body {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+    margin-top: clamp(64px, 9vw, 112px);
+  }
+
+  .lab__body:not(:has(.toc)) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .toc {
+    position: sticky;
+    top: calc(var(--nav-h) + 32px);
+    max-height: calc(100dvh - var(--nav-h) - 64px);
+    overflow-y: auto;
+  }
+
+  .toc summary {
+    list-style: none;
+    cursor: pointer;
+    margin-bottom: 14px;
+  }
+
+  .toc summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .toc ol {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 2px;
+    border-left: 1px solid var(--line-2);
+  }
+
+  .toc a {
+    display: block;
+    padding: 6px 0 6px 14px;
+    margin-left: -1px;
+    border-left: 2px solid transparent;
+    font-size: 0.875rem;
+    line-height: 1.35;
+    color: var(--text-3);
+    transition:
+      color 0.2s ease,
+      border-color 0.2s ease;
+  }
+
+  .toc a:hover {
+    color: var(--text);
+  }
+
+  .toc a.is-active {
+    color: var(--text);
+    border-left-color: var(--accent);
+  }
+
+  .pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: clamp(72px, 10vw, 120px);
+  }
+
+  .pager__link {
+    display: grid;
+    gap: 8px;
+    padding: 22px 24px;
+    border-radius: var(--r-card);
+    box-shadow: inset 0 0 0 1px var(--line-2);
+    transition:
+      box-shadow 0.3s ease,
+      transform 0.4s var(--ease-out);
+  }
+
+  .pager__link--next {
+    text-align: right;
+    grid-column: 2;
+  }
+
+  .pager__name {
+    font-size: 1.1rem;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  @media (hover: hover) {
+    .pager__link:hover {
+      box-shadow: inset 0 0 0 1px var(--accent);
+      transform: translateY(-2px);
+    }
+  }
+
+  @media (max-width: 960px) {
+    .lab__body {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .toc {
+      position: relative;
+      top: 0;
+      max-height: none;
+    }
+    .toc__box {
+      padding: 16px 18px;
+      border-radius: var(--r-card);
+      box-shadow: inset 0 0 0 1px var(--line-2);
+    }
+    .toc summary {
+      margin-bottom: 0;
+    }
+    .toc__box[open] summary {
+      margin-bottom: 14px;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .lab__meta {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 560px) {
+    .pager {
+      grid-template-columns: 1fr;
+    }
+    .pager__link--next {
+      grid-column: 1;
+    }
+    .lab__actions .btn {
+      flex: 1 1 auto;
+    }
+  }
+</style>
+
+<script>
+  import { ScrollTrigger } from '../../scripts/core';
+
+  // Collapse the index on small screens; highlight the section being read.
+  const box = document.querySelector<HTMLDetailsElement>('[data-toc]');
+  if (box && window.matchMedia('(max-width: 960px)').matches) box.open = false;
+  const links = [...document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]')];
+  if (links.length) {
+    const heads = links.map((l) => document.getElementById(l.dataset.tocLink!)).filter(Boolean) as HTMLElement[];
+    const setActive = (id: string) => links.forEach((l) => l.classList.toggle('is-active', l.dataset.tocLink === id));
+    // Each section is "active" from its heading until the next heading crosses 30% of the viewport.
+    heads.forEach((h, i) => {
+      ScrollTrigger.create({
+        trigger: h,
+        start: 'top 30%',
+        endTrigger: heads[i + 1] ?? document.querySelector('.prose') ?? h,
+        end: heads[i + 1] ? 'top 30%' : 'bottom 30%',
+        onToggle: (self) => self.isActive && setActive(h.id),
+      });
+    });
+    links.forEach((l) =>
+      l.addEventListener('click', () => {
+        if (window.matchMedia('(max-width: 960px)').matches && box) box.open = false;
+      }),
+    );
+  }
+</script>

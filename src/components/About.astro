@@ -1,0 +1,323 @@
+---
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import portrait from '../assets/portrait.jpg';
+import { facts, toolbox, profile } from '../data/site';
+---
+
+<section class="section about" id="about" aria-labelledby="about-title">
+  <div class="container about__grid">
+    <figure class="about__photo" data-reveal>
+      <Image
+        src={portrait}
+        alt={`Portrait of ${profile.name}`}
+        widths={[360, 520, 720]}
+        sizes="(max-width: 900px) 60vw, 380px"
+        loading="lazy"
+      />
+    </figure>
+
+    <div class="about__body">
+      <h2 class="h2" id="about-title" data-reveal>
+        Networking first. <span class="about__soft">Systems close behind.</span>
+      </h2>
+      <div class="about__copy" data-reveal style="--d:100">
+        <p class="lead">
+          I'm a CCNA-certified network engineer with 3.5 years of Computer Science behind me. I build enterprise topologies in
+          Packet Tracer, GNS3 and EVE-NG, configure every device from the Cisco IOS CLI, and keep the runbooks in Git.
+        </p>
+        <p class="lead">
+          I've done the hands-on side too: imaging Windows machines, upgrading hardware and keeping a print shop's PCs and
+          printers running. Ubuntu Linux has been my main operating system for over a year.
+        </p>
+      </div>
+      <dl class="facts" data-reveal style="--d:200">
+        {
+          facts.map((f) => (
+            <div class="facts__item">
+              <dt class="label">{f.label}</dt>
+              <dd>{f.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="toolbox__head" data-reveal>
+      <h3 class="toolbox__title">What I work with</h3>
+      <p class="toolbox__key"><span class="tool__chip is-core">Filled</span> the ones I use most</p>
+    </div>
+    <div class="toolbox" data-reveal data-rail>
+      {
+        toolbox.map((g) => (
+          <article class="tool">
+            <header class="tool__head">
+              <span class="tool__icon" aria-hidden="true">
+                <Icon name={g.icon} />
+              </span>
+              <h4 class="tool__name">{g.title}</h4>
+            </header>
+            <ul class="tool__chips">
+              {g.items.map((i) => (
+                <li class:list={['tool__chip', { 'is-core': g.core.includes(i) }]}>{i}</li>
+              ))}
+            </ul>
+            <a class="tool__proof" href={g.href}>
+              <span>{g.proof}</span>
+              <Icon name="ph:arrow-up-right" />
+            </a>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .about__grid {
+    display: grid;
+    grid-template-columns: minmax(240px, 380px) 1fr;
+    gap: clamp(40px, 7vw, 112px);
+    align-items: start;
+  }
+
+  .about__photo {
+    position: sticky;
+    top: calc(var(--nav-h) + 40px);
+    border-radius: var(--r-card);
+    overflow: hidden;
+    background: var(--paper);
+    box-shadow:
+      0 0 0 1px var(--line),
+      0 40px 80px -40px rgb(var(--shadow-tint) / 0.4);
+    aspect-ratio: 7 / 9;
+  }
+
+  .about__photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 50% 20%;
+  }
+
+  .about__body {
+    display: grid;
+    gap: 32px;
+  }
+
+  .about__soft {
+    color: var(--text-3);
+  }
+
+  .about__copy {
+    display: grid;
+    gap: 18px;
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1px;
+    margin-top: 8px;
+    border-radius: var(--r-card);
+    overflow: hidden;
+    background: var(--line);
+    box-shadow: 0 0 0 1px var(--line);
+  }
+
+  .facts__item {
+    display: grid;
+    gap: 6px;
+    align-content: start;
+    padding: 20px 22px;
+    background: var(--surface);
+  }
+
+  .facts dd {
+    font-size: 1rem;
+    line-height: 1.45;
+    font-weight: 500;
+  }
+
+  .toolbox__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px 24px;
+    margin-top: clamp(72px, 10vw, 128px);
+    margin-bottom: 24px;
+  }
+
+  .toolbox__key {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--text-3);
+  }
+
+  .toolbox__key .tool__chip {
+    font-size: 0.78rem;
+    padding: 3px 10px;
+  }
+
+  .toolbox__title {
+    font-size: clamp(1.4rem, 2.2vw, 1.85rem);
+    letter-spacing: -0.03em;
+  }
+
+  .toolbox {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: clamp(14px, 1.6vw, 20px);
+  }
+
+  .tool {
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 18px;
+    padding: clamp(20px, 2.4vw, 28px);
+    border-radius: var(--r-card);
+    background: var(--surface);
+    box-shadow: inset 0 0 0 1px var(--line-2);
+    transition:
+      box-shadow 0.35s ease,
+      transform 0.45s var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .tool:hover {
+      box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.55);
+      transform: translateY(-3px);
+    }
+    .tool:hover .tool__icon {
+      background: var(--accent);
+      color: var(--accent-ink);
+    }
+  }
+
+  .tool__head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .tool__icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    flex: none;
+    border-radius: 12px;
+    background: rgb(var(--accent-rgb) / 0.12);
+    color: var(--accent-text);
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
+  }
+
+  .tool__icon svg {
+    width: 22px;
+    height: 22px;
+  }
+
+  .tool__name {
+    font-size: 1.15rem;
+    letter-spacing: -0.02em;
+  }
+
+  .tool__chips {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-content: start;
+  }
+
+  .tool__chip {
+    padding: 6px 12px;
+    border-radius: var(--r-pill);
+    font-size: 0.88rem;
+    line-height: 1.3;
+    color: var(--text-2);
+    box-shadow: inset 0 0 0 1px var(--line-2);
+  }
+
+  .tool__chip.is-core {
+    color: var(--text);
+    font-weight: 500;
+    background: rgb(var(--text-rgb) / 0.06);
+    box-shadow: inset 0 0 0 1px rgb(var(--text-rgb) / 0.22);
+  }
+
+  .tool__proof {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    font-size: 0.86rem;
+    color: var(--text-3);
+    transition: color 0.2s ease;
+  }
+
+  .tool__proof svg {
+    width: 16px;
+    height: 16px;
+    flex: none;
+    transition: transform 0.4s var(--ease-out);
+  }
+
+  @media (hover: hover) {
+    .tool__proof:hover {
+      color: var(--accent-text);
+    }
+    .tool__proof:hover svg {
+      transform: translate(2px, -2px);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .about__grid {
+      grid-template-columns: 1fr;
+    }
+    .about__photo {
+      position: relative;
+      top: 0;
+      width: min(320px, 72vw);
+    }
+  }
+
+  @media (max-width: 700px) {
+    .about__photo {
+      width: 132px;
+      border-radius: var(--r-card);
+    }
+    .facts__item {
+      padding: 14px 16px;
+    }
+    .facts dd {
+      font-size: 0.92rem;
+    }
+    .about__body {
+      gap: 24px;
+    }
+    /* Toolbox cards become a swipeable row. */
+    .toolbox {
+      --rail-w: 84%;
+    }
+    .toolbox__head {
+      margin-top: 56px;
+      margin-bottom: 18px;
+    }
+    .tool__chip {
+      font-size: 0.84rem;
+      padding: 5px 10px;
+    }
+  }
+</style>

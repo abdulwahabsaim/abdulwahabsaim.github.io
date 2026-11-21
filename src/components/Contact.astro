@@ -1,0 +1,352 @@
+---
+/*
+ * Contact panel with a "lamp" (codesval footer idea): two conic light cones fan out from a bar
+ * when the panel scrolls into view, the bar flickers on, and the heading rises into the light.
+ */
+import { Icon } from 'astro-icon/components';
+import { profile } from '../data/site';
+---
+
+<section class="section contact" id="contact" aria-labelledby="contact-title">
+  <div class="container">
+    <div class="cta" data-lamp data-nav-dark>
+      <div class="lamp" aria-hidden="true">
+        <span class="lamp__cone lamp__cone--l"></span>
+        <span class="lamp__cone lamp__cone--r"></span>
+        <span class="lamp__glow"></span>
+        <span class="lamp__core"></span>
+        <span class="lamp__bar"></span>
+        <span class="lamp__cover"></span>
+      </div>
+
+      <div class="cta__content">
+        <h2 class="cta__title" id="contact-title">
+          Hiring for a network or NOC role? <span>Let's talk.</span>
+        </h2>
+        <p class="cta__text">
+          Available full-time from now and open to relocating within the Netherlands. Shifts and on-call are fine.
+        </p>
+        <div class="cta__actions">
+          <a class="btn btn--accent" href={`mailto:${profile.email}`}>
+            <span>Email me</span>
+            <Icon name="ph:arrow-up-right" class="i-arrow" />
+          </a>
+          <button class="btn btn--ghost cta__copy" type="button" data-copy={profile.email}>
+            <Icon name="ph:copy" />
+            <span data-copy-label>Copy address</span>
+          </button>
+          <a class="btn btn--ghost" href={profile.linkedin} target="_blank" rel="noopener">
+            <Icon name="simple-icons:linkedin" />
+            <span>LinkedIn</span>
+          </a>
+        </div>
+        <p class="cta__mail mono">{profile.email}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .contact {
+    padding-bottom: clamp(64px, 8vw, 104px);
+  }
+
+  /* A deliberate dark panel in both themes: local tokens keep text and buttons readable. */
+  .cta {
+    --panel: #0c0c0e;
+    --text: #f1f1f3;
+    --text-rgb: 241 241 243;
+    --text-2: #b4b4bd;
+    --bg: #0b0b0c;
+    --bg-rgb: 11 11 12;
+    --line-2: rgb(255 255 255 / 0.18);
+    --accent-text: #ff8a4c;
+    --lamp-y: clamp(5.5rem, 9vw, 7.5rem); /* where the light bar sits */
+    --lamp-w: min(30rem, 70%); /* full width of the bar when on */
+    position: relative;
+    border-radius: clamp(24px, 3vw, 36px);
+    background: var(--panel);
+    color: var(--text);
+    text-align: center;
+    overflow: hidden;
+    isolation: isolate;
+    box-shadow: 0 0 0 1px rgb(255 255 255 / 0.06);
+  }
+
+  /* ---------- Lamp ---------- */
+  .lamp {
+    position: absolute;
+    inset: 0 0 auto;
+    height: calc(var(--lamp-y) + 16rem);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .lamp > span {
+    position: absolute;
+    left: 50%;
+  }
+
+  .lamp__cone {
+    top: var(--lamp-y);
+    width: var(--lamp-w);
+    height: 15rem;
+    opacity: 0.35;
+    transform: scaleX(0.5);
+    transition:
+      transform 1s cubic-bezier(0.45, 0, 0.55, 1) 0.3s,
+      opacity 1s cubic-bezier(0.45, 0, 0.55, 1) 0.3s;
+    /* Fade the cone into the panel at its far edge and bottom. */
+    -webkit-mask-image: linear-gradient(to bottom, #000 30%, transparent), linear-gradient(var(--side), transparent, #000 45%);
+    -webkit-mask-composite: source-in;
+    mask-image: linear-gradient(to bottom, #000 30%, transparent), linear-gradient(var(--side), transparent, #000 45%);
+    mask-composite: intersect;
+  }
+
+  .lamp__cone--l {
+    --side: to right;
+    transform-origin: 100% 0;
+    margin-left: calc(var(--lamp-w) * -1);
+    background: conic-gradient(from 70deg at 50% 0%, var(--accent), transparent 50%, transparent);
+  }
+
+  .lamp__cone--r {
+    --side: to left;
+    transform-origin: 0 0;
+    background: conic-gradient(from 290deg at 50% 0%, transparent, transparent 50%, var(--accent));
+  }
+
+  .lamp__glow {
+    top: calc(var(--lamp-y) - 3.5rem);
+    width: min(28rem, 80%);
+    height: 7rem;
+    margin-left: calc(min(28rem, 80%) / -2);
+    border-radius: 50%;
+    background: var(--accent);
+    filter: blur(48px);
+    opacity: 0;
+    transition: opacity 1.2s ease 0.5s;
+  }
+
+  .lamp__core {
+    top: calc(var(--lamp-y) - 2.6rem);
+    width: 16rem;
+    height: 5.2rem;
+    margin-left: -8rem;
+    border-radius: 50%;
+    background: #ff9a5c;
+    filter: blur(28px);
+    opacity: 0;
+    transform: scaleX(0.5);
+    transition: transform 1s cubic-bezier(0.45, 0, 0.55, 1) 0.3s;
+  }
+
+  .lamp__bar {
+    top: var(--lamp-y);
+    width: var(--lamp-w);
+    height: 2px;
+    margin-left: calc(var(--lamp-w) / -2);
+    border-radius: 2px;
+    background: linear-gradient(90deg, transparent, #ffb38a 12%, #fff1e8 50%, #ffb38a 88%, transparent);
+    box-shadow: 0 0 14px rgb(var(--accent-rgb) / 0.9);
+    opacity: 0.25;
+    transform: scaleX(0.5);
+    transition: transform 1s cubic-bezier(0.45, 0, 0.55, 1) 0.3s;
+  }
+
+  /* Hides the light above the bar so it only shines downward. */
+  .lamp__cover {
+    top: 0;
+    width: 100%;
+    height: var(--lamp-y);
+    margin-left: -50%;
+    background: var(--panel);
+  }
+
+  /* ---------- On ---------- */
+  .cta.is-on .lamp__cone {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+
+  .cta.is-on .lamp__core,
+  .cta.is-on .lamp__bar {
+    transform: scaleX(1);
+    animation: lamp-flicker 1.3s linear 0.15s both;
+  }
+
+  .cta.is-on .lamp__glow {
+    opacity: 0.5;
+  }
+
+  @keyframes lamp-flicker {
+    0% {
+      opacity: 0.25;
+    }
+    8% {
+      opacity: 1;
+    }
+    12% {
+      opacity: 0.3;
+    }
+    20% {
+      opacity: 1;
+    }
+    25% {
+      opacity: 0.55;
+    }
+    32%,
+    100% {
+      opacity: 1;
+    }
+  }
+
+  /* ---------- Content ---------- */
+  .cta__content {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    justify-items: center;
+    gap: 24px;
+    padding: calc(var(--lamp-y) + clamp(56px, 7vw, 88px)) clamp(20px, 5vw, 64px) clamp(56px, 8vw, 96px);
+    opacity: 0.4;
+    transform: translateY(48px);
+    transition:
+      opacity 0.9s ease-in-out 0.3s,
+      transform 0.9s ease-in-out 0.3s;
+  }
+
+  .cta.is-on .cta__content {
+    opacity: 1;
+    transform: none;
+  }
+
+  .cta__title {
+    max-width: 16ch;
+    font-size: clamp(2.1rem, 5.2vw, 4.4rem);
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+  }
+
+  .cta__title span {
+    display: block;
+    color: var(--accent);
+  }
+
+  .cta__text {
+    max-width: 50ch;
+    color: var(--text-2);
+    font-size: var(--fs-lead);
+  }
+
+  .cta__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .cta__actions svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .cta__copy[data-state='done'] {
+    box-shadow: inset 0 0 0 1px var(--accent);
+    color: var(--accent-text);
+  }
+
+  .cta__mail {
+    font-size: 0.85rem;
+    color: var(--text-2);
+    word-break: break-all;
+  }
+
+  @media (max-width: 560px) {
+    .cta {
+      --lamp-w: 86%;
+    }
+    .lamp__glow {
+      width: 60%;
+      margin-left: -30%;
+      opacity: 0;
+    }
+    .cta.is-on .lamp__glow {
+      opacity: 0.32;
+    }
+    .lamp__core {
+      width: 10rem;
+      margin-left: -5rem;
+    }
+    .cta__actions {
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+      max-width: 340px;
+    }
+  }
+
+  /* No JS or reduced motion: the lamp is simply on. */
+  :global(html:not(.js)) .cta .lamp__cone,
+  :global(html:not(.js)) .cta .lamp__core,
+  :global(html:not(.js)) .cta .lamp__bar {
+    opacity: 1;
+    transform: none;
+  }
+
+  :global(html:not(.js)) .cta .cta__content {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cta .lamp__cone,
+    .cta .lamp__core,
+    .cta .lamp__bar,
+    .cta .cta__content {
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+    .cta .lamp__glow {
+      opacity: 0.5;
+    }
+  }
+</style>
+
+<script>
+  import { click } from '../scripts/sound';
+
+  // Switch the lamp on once the panel is well into view.
+  document.querySelectorAll<HTMLElement>('[data-lamp]').forEach((panel) => {
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          panel.classList.add('is-on');
+          io.disconnect();
+        }
+      },
+      { threshold: 0.35 },
+    );
+    io.observe(panel);
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('[data-copy]').forEach((btn) => {
+    const label = btn.querySelector<HTMLElement>('[data-copy-label]')!;
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy!);
+        label.textContent = 'Copied';
+        btn.dataset.state = 'done';
+        click();
+      } catch {
+        label.textContent = 'Copy failed';
+      }
+      setTimeout(() => {
+        label.textContent = 'Copy address';
+        delete btn.dataset.state;
+      }, 1800);
+    });
+  });
+</script>

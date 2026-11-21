@@ -1,0 +1,402 @@
+---
+/*
+ * GitHub activity (shafisma idea): contribution heatmap from a build-time snapshot
+ * (scripts/sync-github.mjs, refreshed by the daily deploy) plus the lab repositories.
+ */
+import { Icon } from 'astro-icon/components';
+import gh from '../data/github.json';
+import { profile, repoBlurbs } from '../data/site';
+
+type Day = [string, number, number];
+const days = gh.days as Day[];
+const fmt = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
+const monthFmt = new Intl.DateTimeFormat('en-US', { month: 'short', timeZone: 'UTC' });
+
+// Columns are weeks starting on Sunday, like GitHub.
+const firstDow = new Date(`${days[0][0]}T00:00:00Z`).getUTCDay();
+const cells = days.map(([date, count, level], i) => {
+  const idx = i + firstDow;
+  return { date, count, level, col: Math.floor(idx / 7), row: idx % 7 };
+});
+const cols = cells[cells.length - 1].col + 1;
+const months: { col: number; label: string }[] = [];
+cells.forEach((c) => {
+  if (c.date.endsWith('-01') || (c.col === 0 && c.row === firstDow)) {
+    const col = c.row === 0 ? c.col : c.col + 1;
+    if (!months.some((m) => Math.abs(m.col - col) < 3)) months.push({ col, label: monthFmt.format(new Date(`${c.date}T00:00:00Z`)) });
+  }
+});
+
+const totalCommits = gh.repos.reduce((a, r) => a + (r.commits ?? 0), 0);
+const updated = (iso: string) => new Intl.DateTimeFormat('en-US', { month: 'short', year: 'numeric' }).format(new Date(iso));
+const stats = [
+  { value: gh.lastYearTotal, label: 'contributions in the last year' },
+  { value: totalCommits, label: 'commits across the lab repositories' },
+  { value: gh.repos.length, label: 'public lab repositories' },
+];
+---
+
+<section class="section gh" id="github" aria-labelledby="gh-title">
+  <div class="container">
+    <header class="section-head">
+      <h2 class="h2" id="gh-title" data-reveal>Everything lives in Git</h2>
+      <p class="lead" data-reveal style="--d:80">
+        Configs, topologies and runbooks for every lab, pushed one file per commit.
+      </p>
+    </header>
+
+    <div class="gh__card" data-reveal>
+      <dl class="gh__stats">
+        {
+          stats.map((s) => (
+            <div>
+              <dt class="sr-only">{s.label}</dt>
+              <dd class="gh__num" data-count={s.value}>
+                {s.value}
+              </dd>
+              <dd class="gh__label">{s.label}</dd>
+            </div>
+          ))
+        }
+      </dl>
+
+      <div class="gh__scroll" data-gh-scroll data-hscroll>
+        <div class="gh__graph" style={`--cols:${cols}`} data-gh-graph>
+          <div class="gh__months" aria-hidden="true">
+            {months.map((m) => <span style={`grid-column:${m.col + 1}`}>{m.label}</span>)}
+          </div>
+          <div class="gh__cells" role="img" aria-label={`${gh.lastYearTotal} contributions in the last year`}>
+            {
+              cells.map((c) => (
+                <span
+                  class="gh__cell"
+                  data-l={c.level}
+                  style={`grid-column:${c.col + 1};grid-row:${c.row + 1};--c:${c.col}`}
+                  data-tip={`${c.count === 0 ? 'No' : c.count} contribution${c.count === 1 ? '' : 's'} on ${fmt.format(new Date(`${c.date}T00:00:00Z`))}`}
+                />
+              ))
+            }
+          </div>
+        </div>
+      </div>
+      <div class="gh__legend mono" aria-hidden="true">
+        <span>Less</span>
+        {[0, 1, 2, 3, 4].map((l) => <span class="gh__cell" data-l={l} />)}
+        <span>More</span>
+      </div>
+      <div class="gh__tip mono" data-gh-tip hidden></div>
+    </div>
+
+    <ul class="repos" data-rail data-reveal>
+      {
+        gh.repos.map((r, i) => (
+          <li>
+            <a class="repo" href={r.url} target="_blank" rel="noopener">
+              <span class="repo__top">
+                <Icon name="ph:git-commit" />
+                <span class="repo__commits mono">{r.commits ?? '-'} commits</span>
+                <Icon name="ph:arrow-up-right" class="repo__go" />
+              </span>
+              <span class="repo__name mono">{r.name}</span>
+              <span class="repo__blurb">{repoBlurbs[r.name] ?? r.description}</span>
+              <span class="repo__date">Updated {updated(r.pushedAt)}</span>
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+
+    <a class="gh__profile" href={profile.github} target="_blank" rel="noopener" data-reveal>
+      <Icon name="simple-icons:github" />
+      <span class="link">github.com/abdulwahabsaim</span>
+    </a>
+  </div>
+</section>
+
+<style>
+  .gh__card {
+    position: relative;
+    padding: clamp(20px, 3vw, 36px);
+    border-radius: var(--r-panel);
+    background: var(--surface);
+    box-shadow: 0 0 0 1px var(--line-2);
+  }
+
+  .gh__stats {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+    margin-bottom: clamp(24px, 3vw, 36px);
+  }
+
+  .gh__num {
+    font-size: clamp(2rem, 4vw, 3.2rem);
+    font-weight: 600;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .gh__label {
+    margin-top: 8px;
+    font-size: 0.9rem;
+    color: var(--text-2);
+  }
+
+  .gh__scroll {
+    overflow-x: auto;
+    padding-bottom: 6px;
+    scrollbar-width: thin;
+  }
+
+  .gh__graph {
+    --cell: 13px;
+    --gap: 4px;
+    width: max-content;
+    margin-inline: auto;
+  }
+
+  .gh__months,
+  .gh__cells {
+    display: grid;
+    grid-template-columns: repeat(var(--cols), var(--cell));
+    gap: var(--gap);
+  }
+
+  .gh__months {
+    margin-bottom: 8px;
+    font-size: 0.72rem;
+    color: var(--text-3);
+    height: 14px;
+  }
+
+  .gh__months span {
+    white-space: nowrap;
+  }
+
+  .gh__cells {
+    grid-template-rows: repeat(7, var(--cell));
+  }
+
+  .gh__cell {
+    display: block;
+    width: var(--cell, 12px);
+    height: var(--cell, 12px);
+    border-radius: 3px;
+    background: rgb(var(--text-rgb) / 0.07);
+  }
+
+  .gh__cell[data-l='1'] {
+    background: rgb(var(--accent-rgb) / 0.32);
+  }
+  .gh__cell[data-l='2'] {
+    background: rgb(var(--accent-rgb) / 0.55);
+  }
+  .gh__cell[data-l='3'] {
+    background: rgb(var(--accent-rgb) / 0.8);
+  }
+  .gh__cell[data-l='4'] {
+    background: var(--accent);
+  }
+
+  :global(.js) .gh__cells .gh__cell {
+    opacity: 0;
+    transform: scale(0.4);
+  }
+
+  :global(.js) .gh__card.is-in .gh__cells .gh__cell {
+    animation: cell-in 0.5s var(--ease-out) forwards;
+    animation-delay: calc(var(--c) * 14ms + 150ms);
+  }
+
+  @keyframes cell-in {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .gh__legend {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+    margin-top: 16px;
+    font-size: 0.72rem;
+    color: var(--text-3);
+  }
+
+  .gh__legend .gh__cell {
+    --cell: 11px;
+  }
+
+  .gh__tip {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 3;
+    padding: 7px 10px;
+    border-radius: 8px;
+    background: var(--text);
+    color: var(--bg);
+    font-size: 0.75rem;
+    white-space: nowrap;
+    pointer-events: none;
+    transform: translate(-50%, calc(-100% - 10px));
+  }
+
+  .repos {
+    list-style: none;
+    padding: 0;
+    margin-top: clamp(14px, 1.6vw, 20px);
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+    gap: clamp(14px, 1.6vw, 20px);
+  }
+
+  .repo {
+    display: grid;
+    gap: 10px;
+    height: 100%;
+    padding: 20px;
+    border-radius: var(--r-card);
+    box-shadow: inset 0 0 0 1px var(--line-2);
+    transition:
+      background-color 0.3s ease,
+      box-shadow 0.3s ease,
+      transform 0.4s var(--ease-out);
+  }
+
+  .repo__top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-3);
+  }
+
+  .repo__top svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .repo__commits {
+    font-size: 0.75rem;
+  }
+
+  .repo__go {
+    margin-left: auto;
+    transition: transform 0.4s var(--ease-out);
+  }
+
+  .repo__name {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--text);
+    overflow-wrap: anywhere;
+  }
+
+  .repo__blurb {
+    font-size: 0.9rem;
+    color: var(--text-2);
+    line-height: 1.5;
+  }
+
+  .repo__date {
+    font-size: 0.8rem;
+    color: var(--text-3);
+    margin-top: auto;
+  }
+
+  @media (hover: hover) {
+    .repo:hover {
+      background: var(--surface);
+      box-shadow: inset 0 0 0 1px rgb(var(--accent-rgb) / 0.6);
+      transform: translateY(-3px);
+    }
+    .repo:hover .repo__go {
+      color: var(--accent-text);
+      transform: translate(2px, -2px);
+    }
+  }
+
+  .gh__profile {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 28px;
+    font-weight: 500;
+  }
+
+  .gh__profile svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  @media (max-width: 700px) {
+    .gh__stats {
+      gap: 12px;
+    }
+    .gh__num {
+      font-size: 1.9rem;
+    }
+    .gh__label {
+      font-size: 0.75rem;
+      line-height: 1.35;
+    }
+    .repos {
+      --rail-w: 74%;
+    }
+    .gh__graph {
+      --cell: 11px;
+      --gap: 3px;
+    }
+  }
+</style>
+
+<script>
+  const card = document.querySelector<HTMLElement>('.gh__card')!;
+  const scroller = document.querySelector<HTMLElement>('[data-gh-scroll]')!;
+  const tip = document.querySelector<HTMLElement>('[data-gh-tip]')!;
+
+  // Phones: start scrolled to the most recent weeks.
+  const toEnd = () => (scroller.scrollLeft = scroller.scrollWidth);
+  toEnd();
+  window.addEventListener('resize', toEnd);
+
+  // Count the numbers up when the card comes into view.
+  const io = new IntersectionObserver(
+    (entries) => {
+      if (!entries[0].isIntersecting) return;
+      io.disconnect();
+      card.classList.add('is-in');
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      card.querySelectorAll<HTMLElement>('[data-count]').forEach((el) => {
+        const target = Number(el.dataset.count);
+        const t0 = performance.now();
+        const run = (t: number) => {
+          const k = Math.min(1, (t - t0) / 1400);
+          el.textContent = String(Math.round(target * (1 - Math.pow(1 - k, 4))));
+          if (k < 1) requestAnimationFrame(run);
+        };
+        requestAnimationFrame(run);
+      });
+    },
+    { threshold: 0.3 },
+  );
+  io.observe(card);
+
+  card.addEventListener('pointerover', (e) => {
+    const cell = (e.target as HTMLElement).closest<HTMLElement>('.gh__cells .gh__cell');
+    if (!cell) {
+      tip.hidden = true;
+      return;
+    }
+    const r = cell.getBoundingClientRect();
+    const c = card.getBoundingClientRect();
+    tip.textContent = cell.dataset.tip || '';
+    tip.hidden = false;
+    tip.style.left = `${r.left - c.left + r.width / 2}px`;
+    tip.style.top = `${r.top - c.top}px`;
+  });
+  card.addEventListener('pointerleave', () => (tip.hidden = true));
+</script>

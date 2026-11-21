@@ -1,0 +1,454 @@
+---
+import { getCollection } from 'astro:content';
+import { getImage } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import { profile } from '../data/site';
+import { topologies } from '../data/topologies';
+
+/* The tunnel flies through real lab topologies. Order = depth: first is nearest. */
+const pick = [
+  'campus',
+  'routing-hsrp-gateway-redundancy',
+  'security-dhcp-snooping-and-dynamic-arp-dai',
+  'routing-dynamic-routing-multi-area-ospf',
+  'services-enterprise-wlc-centralized-wireless',
+  'firewall-nat-pat-dmz-server-publishing',
+  'security-etherchannel-lacp-pagp-layer3',
+  'routing-site-to-site-gre-tunnel-ospf',
+  'routing-enterprise-edge-nat-pat-overload',
+  'security-stp-hsrp-active-root-alignment',
+  'services-centralized-dhcp-relay-ip-helper',
+  'routing-multi-router-wan-mesh-ecmp',
+  'security-port-security-mac-limiting',
+  'routing-ipv6-dual-stack-routing-slaac',
+  'firewall-extended-acls-object-groups-filtering',
+  'services-ntp-stratum-hierarchy-authentication',
+  'routing-intervlan-routing-multilayer-svi',
+  'security-switchport-voice-vlan-telephony',
+];
+const labs = await getCollection('labs');
+const cards = await Promise.all(
+  pick
+    .map((id) => labs.find((l) => l.id === id))
+    .filter((l) => l && (topologies[l.id] || l.data.image))
+    .map(async (l) => ({
+      name: l!.data.name,
+      src: topologies[l!.id]
+        ? `/topology/${l!.id}.svg`
+        : (await getImage({ src: l!.data.image!, width: 440, format: 'webp', quality: 72 })).src,
+    })),
+);
+const rings = Array.from({ length: 7 });
+---
+
+<section class="hero" id="top" data-hero aria-labelledby="hero-title">
+  <div class="hero__stage" data-hero-stage>
+    <div class="tunnel" aria-hidden="true" data-tunnel>
+      {rings.map(() => <div class="tunnel__ring" data-ring />)}
+      {
+        cards.map((c, i) => (
+          <figure class="tcard" data-card style={`--i:${i}`}>
+            <div class="tcard__paper">
+              <img
+                src={c.src}
+                width="440"
+                height="330"
+                alt=""
+                decoding="async"
+                loading={i < 8 ? 'eager' : 'lazy'}
+                fetchpriority={i < 3 ? 'high' : 'low'}
+              />
+            </div>
+            <figcaption class="mono">{c.name}</figcaption>
+          </figure>
+        ))
+      }
+    </div>
+
+    <div class="hero__content" data-hero-content>
+      <p class="hero__eyebrow" data-reveal style="--d:80">
+        <span class="live" aria-hidden="true"></span>
+        <span>{profile.name}, open to work</span>
+      </p>
+      <h1 class="display hero__title" id="hero-title" data-reveal style="--d:160">
+        Junior network engineer, <span class="hero__accent">ready to join your team.</span>
+      </h1>
+      <p class="lead hero__lead" data-reveal style="--d:260">
+        CCNA certified and available full-time in the Netherlands. 32 documented Cisco labs show exactly how I work.
+      </p>
+      <div class="hero__ctas" data-reveal style="--d:360">
+        <a class="btn btn--accent" href="#work">
+          <span>Explore the labs</span>
+          <Icon name="ph:arrow-right" class="i-right" />
+        </a>
+        <a class="btn btn--ghost" href={profile.cv} download>
+          <span>Download CV</span>
+          <Icon name="ph:download-simple" class="i-down" />
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    z-index: var(--z-content);
+    min-height: 100svh;
+  }
+
+  :global(html.js) .hero.is-tunnel {
+    height: var(--tunnel-h, 290vh);
+  }
+
+  /* Only the tunnel pins the stage; without it the hero is a normal block that can grow. */
+  .hero.is-tunnel .hero__stage {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    min-height: 0;
+  }
+
+  .hero__stage {
+    position: relative;
+    min-height: 100svh;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    contain: paint;
+  }
+
+  /* ---------- Tunnel ---------- */
+  .tunnel {
+    position: absolute;
+    inset: 0;
+    perspective: 1000px;
+    perspective-origin: var(--po-x, 50%) var(--po-y, 50%);
+    transform-style: preserve-3d;
+    pointer-events: none;
+    visibility: hidden;
+  }
+
+  .hero.is-tunnel .tunnel {
+    visibility: visible;
+  }
+
+  .tunnel__ring,
+  .tcard {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+  }
+
+  .tunnel__ring {
+    width: 86vw;
+    height: 80vh;
+    margin: -40vh 0 0 -43vw;
+    border-radius: 48px;
+    border: 1px solid var(--line-2);
+    opacity: 0;
+  }
+
+  .tcard {
+    --cw: clamp(150px, 17vw, 280px);
+    width: var(--cw);
+    margin-left: calc(var(--cw) / -2);
+    margin-top: calc(var(--cw) * -0.42);
+    opacity: 0;
+  }
+
+  .tcard__paper {
+    aspect-ratio: 4 / 3;
+    padding: 6px;
+    border-radius: var(--r-media);
+    background: var(--paper);
+    box-shadow:
+      0 0 0 1px rgb(var(--text-rgb) / 0.08),
+      0 24px 50px -24px rgb(var(--shadow-tint) / 0.45);
+  }
+
+  .tcard__paper img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 7px;
+  }
+
+  :global([data-theme='dark']) .tcard__paper img {
+    filter: brightness(0.94);
+  }
+
+  .tcard figcaption {
+    margin-top: 8px;
+    font-size: 0.7rem;
+    color: var(--text-3);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* ---------- Content ---------- */
+  .hero__content {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    justify-items: center;
+    gap: clamp(18px, 2.4vw, 28px);
+    width: 100%;
+    max-width: 1140px;
+    padding: calc(var(--nav-h) + 24px) var(--gutter) 40px;
+    text-align: center;
+  }
+
+  /* A soft clearing behind the copy keeps it legible while cards pass. */
+  .hero__content::before {
+    content: '';
+    position: absolute;
+    inset: -10% -6%;
+    z-index: -1;
+    background: radial-gradient(closest-side, rgb(var(--bg-rgb) / 0.92), rgb(var(--bg-rgb) / 0.6) 55%, rgb(var(--bg-rgb) / 0));
+    pointer-events: none;
+  }
+
+  .hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 6px 14px 6px 10px;
+    border-radius: var(--r-pill);
+    font-size: 0.85rem;
+    color: var(--text-2);
+    background: rgb(var(--bg-rgb) / 0.7);
+    box-shadow: inset 0 0 0 1px var(--line-2);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .live {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+
+  .live::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: live 2.2s var(--ease-out) infinite;
+  }
+
+  @keyframes live {
+    from {
+      transform: scale(1);
+      opacity: 0.6;
+    }
+    to {
+      transform: scale(3.2);
+      opacity: 0;
+    }
+  }
+
+  /* Two phrases, one line each on desktop: "Junior network engineer," / "ready to join your team." */
+  .hero__title {
+    max-width: 25ch;
+    font-size: clamp(2.5rem, 5.6vw, 5.5rem);
+  }
+
+  .hero__accent {
+    display: block;
+    color: var(--accent);
+    padding-bottom: 0.06em;
+  }
+
+  .hero__lead {
+    max-width: 40ch;
+    color: var(--text-2);
+  }
+
+  .hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 6px;
+  }
+
+  @media (max-width: 640px) {
+    .hero__ctas {
+      width: 100%;
+      flex-direction: column;
+      align-items: stretch;
+      max-width: 340px;
+    }
+    .tunnel__ring {
+      border-radius: 32px;
+    }
+  }
+
+  /* Short landscape phones: keep the CTA in view. */
+  @media (max-height: 620px) and (orientation: landscape) {
+    .hero__content {
+      gap: 14px;
+      padding-top: calc(var(--nav-h) + 8px);
+    }
+    .hero__title {
+      font-size: clamp(2rem, 6.5vh, 3.4rem);
+      max-width: 20ch;
+    }
+    .hero__lead {
+      font-size: 0.95rem;
+      max-width: 60ch;
+    }
+    .hero__ctas {
+      flex-direction: row;
+      width: auto;
+      max-width: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .live::after {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  import { gsap, ScrollTrigger, prefersReduced, finePointer } from '../scripts/core';
+  import { motion } from '../config/motion';
+
+  const T = motion.tunnel;
+
+  const hero = document.querySelector<HTMLElement>('[data-hero]')!;
+  const stage = hero.querySelector<HTMLElement>('[data-hero-stage]')!;
+  const tunnel = hero.querySelector<HTMLElement>('[data-tunnel]')!;
+  const cards = [...hero.querySelectorAll<HTMLElement>('[data-card]')];
+  const content = hero.querySelector<HTMLElement>('[data-hero-content]')!;
+  const rings = [...hero.querySelectorAll<HTMLElement>('[data-ring]')];
+
+  const DEPTH = T.depth;
+  const NEAR = T.near;
+  const BACK = T.startBack;
+  const TRAVEL = DEPTH + NEAR + 200 + BACK;
+  const GOLDEN = Math.PI * (3 - Math.sqrt(5));
+
+  type Item = { el: HTMLElement; x: number; y: number; z0: number; on: boolean };
+  let items: Item[] = [];
+  let ringItems: { el: HTMLElement; z0: number }[] = [];
+  // Keep-out zone around the copy (relative to the stage centre). Cards fade where they overlap it.
+  const keep = { x0: 0, x1: 0, y0: 0, y1: 0 };
+  let cardHW = 100,
+    cardHH = 80;
+  const state = { p: 0, intro: -1600 };
+  let introPlayed = false;
+
+  function layout() {
+    const w = stage.clientWidth;
+    const h = stage.clientHeight;
+    const mobile = w < 700;
+    const count = Math.min(cards.length, mobile ? T.cardsMobile : T.cardsDesktop);
+    const rx = w * (mobile ? T.radiusX.mobile : T.radiusX.desktop);
+    const ry = h * (mobile ? T.radiusY.mobile : T.radiusY.desktop);
+    items = cards.map((el, i) => {
+      const a = i * GOLDEN + 0.6;
+      const rho = 0.86 + ((i * 37) % 10) / 34;
+      el.style.display = i < count ? '' : 'none';
+      return { el, x: Math.cos(a) * rx * rho, y: Math.sin(a) * ry * rho, z0: -(i / count) * DEPTH, on: i < count };
+    });
+    ringItems = rings.map((el, i) => ({ el, z0: -((i + 0.5) / rings.length) * DEPTH }));
+
+    const sr = stage.getBoundingClientRect();
+    const kids = [...content.children].map((c) => c.getBoundingClientRect());
+    const cx = sr.left + sr.width / 2;
+    const cy = sr.top + sr.height / 2;
+    keep.x0 = Math.min(...kids.map((r) => r.left)) - cx - 28;
+    keep.x1 = Math.max(...kids.map((r) => r.right)) - cx + 28;
+    keep.y0 = Math.min(...kids.map((r) => r.top)) - cy - 20;
+    keep.y1 = Math.max(...kids.map((r) => r.bottom)) - cy + 20;
+    cardHW = cards[0].offsetWidth / 2;
+    cardHH = cards[0].offsetHeight / 2;
+    render();
+  }
+
+  function render() {
+    const shift = state.p * TRAVEL + state.intro - BACK;
+    for (const it of items) {
+      if (!it.on) continue;
+      const z = it.z0 + shift;
+      const fadeIn = gsap.utils.clamp(0, 1, (z + DEPTH + BACK) / (DEPTH * 0.28));
+      const fadeOut = gsap.utils.clamp(0, 1, (NEAR - z) / 260);
+      // Projected rect of the card, then how much of it sits on the copy.
+      const s = T.perspective / (T.perspective - Math.min(z, T.perspective - 1));
+      const px = it.x * s,
+        py = it.y * s,
+        hw = cardHW * s,
+        hh = cardHH * s;
+      const ox = Math.max(0, Math.min(px + hw, keep.x1) - Math.max(px - hw, keep.x0));
+      const oy = Math.max(0, Math.min(py + hh, keep.y1) - Math.max(py - hh, keep.y0));
+      const overlap = (ox * oy) / (4 * hw * hh);
+      const o = fadeIn * fadeOut * (1 - 0.9 * Math.min(1, overlap * 1.6));
+      it.el.style.opacity = o.toFixed(3);
+      it.el.style.visibility = o < 0.01 ? 'hidden' : 'visible';
+      it.el.style.transform = `translate3d(${it.x.toFixed(1)}px, ${it.y.toFixed(1)}px, ${z.toFixed(1)}px)`;
+    }
+    for (const r of ringItems) {
+      const z = r.z0 + shift;
+      const fadeIn = gsap.utils.clamp(0, 1, (z + DEPTH + BACK) / (DEPTH * 0.5));
+      const fadeOut = gsap.utils.clamp(0, 1, (300 - z) / 400);
+      r.el.style.opacity = (fadeIn * fadeOut * 0.9).toFixed(3);
+      r.el.style.transform = `translate3d(0, 0, ${z.toFixed(1)}px)`;
+    }
+  }
+
+  // The tunnel only runs when there is room for it: no reduced motion, and a screen at least
+  // 520px tall (landscape phones get the compact static hero so the CTAs are always reachable).
+  if (!prefersReduced()) {
+    const mm = gsap.matchMedia();
+    mm.add('(min-height: 520px)', () => {
+      hero.classList.add('is-tunnel');
+      hero.style.setProperty('--tunnel-h', `${window.innerWidth < 700 ? T.scrollLength.mobile : T.scrollLength.desktop}vh`);
+      layout();
+      if (!introPlayed) {
+        introPlayed = true;
+        gsap.to(state, { intro: 0, duration: T.introDuration, ease: 'expo.out', delay: 0.1, onUpdate: render });
+      } else {
+        state.intro = 0;
+      }
+      const st = ScrollTrigger.create({
+        trigger: hero,
+        start: 'top top',
+        end: 'bottom bottom',
+        onUpdate(self) {
+          state.p = self.progress;
+          render();
+        },
+        onRefresh: layout,
+      });
+
+      // Subtle parallax: the vanishing point follows the mouse a little.
+      let onMove: ((e: PointerEvent) => void) | null = null;
+      if (finePointer()) {
+        const po = { x: 50, y: 50 };
+        const setX = gsap.quickTo(po, 'x', { duration: 1.2, ease: 'power3.out', onUpdate: () => tunnel.style.setProperty('--po-x', `${po.x}%`) });
+        const setY = gsap.quickTo(po, 'y', { duration: 1.2, ease: 'power3.out', onUpdate: () => tunnel.style.setProperty('--po-y', `${po.y}%`) });
+        onMove = (e) => {
+          setX(50 + (e.clientX / window.innerWidth - 0.5) * T.parallax);
+          setY(50 + (e.clientY / window.innerHeight - 0.5) * T.parallax);
+        };
+        hero.addEventListener('pointermove', onMove);
+      }
+
+      return () => {
+        st.kill();
+        if (onMove) hero.removeEventListener('pointermove', onMove);
+        hero.classList.remove('is-tunnel');
+      };
+    });
+  }
+</script>

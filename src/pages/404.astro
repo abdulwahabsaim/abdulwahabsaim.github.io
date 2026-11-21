@@ -1,0 +1,75 @@
+---
+import { Icon } from 'astro-icon/components';
+import Base from '../layouts/Base.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<Base title="Destination host unreachable | Abdul Wahab Saim" description="This page does not exist.">
+  <section class="container nf">
+    <p class="label">Error 404</p>
+    <h1 class="nf__title">Destination host unreachable.</h1>
+    <pre class="nf__cli mono" aria-label="Ping output"><span class="p">saim@lab:~$</span> ping <span data-path>this page</span>
+Request timed out.
+Request timed out.
+Request timed out.
+<span class="m">--- 3 packets transmitted, 0 received, 100% packet loss ---</span></pre>
+    <p class="lead">The route to this page does not exist. The labs are all reachable from here:</p>
+    <div class="nf__actions">
+      <a class="btn btn--accent" href="/"><span>Back to home</span><Icon name="ph:arrow-right" class="i-right" /></a>
+      <a class="btn btn--ghost" href="/labs/"><span>Browse the labs</span></a>
+    </div>
+  </section>
+  <Footer slot="after" />
+</Base>
+
+<style>
+  .nf {
+    display: grid;
+    gap: 24px;
+    justify-items: start;
+    min-height: 80dvh;
+    align-content: center;
+    padding-top: calc(var(--nav-h) + 48px);
+    padding-bottom: 64px;
+  }
+
+  .nf__title {
+    max-width: 14ch;
+    font-size: var(--fs-h2);
+    line-height: 1.02;
+    letter-spacing: -0.04em;
+  }
+
+  .nf__cli {
+    width: 100%;
+    max-width: 640px;
+    padding: 20px;
+    border-radius: var(--r-media);
+    background: var(--code-bg);
+    color: var(--code-text);
+    font-size: 0.85rem;
+    line-height: 1.7;
+    overflow-x: auto;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  .nf__cli .p {
+    color: #ff8a4c;
+  }
+
+  .nf__cli .m {
+    color: #8a8a94;
+  }
+
+  .nf__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+</style>
+
+<script>
+  const el = document.querySelector('[data-path]');
+  if (el) el.textContent = location.pathname;
+</script>

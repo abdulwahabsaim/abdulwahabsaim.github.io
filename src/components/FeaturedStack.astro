@@ -1,0 +1,301 @@
+---
+import { getCollection } from 'astro:content';
+import { Image } from 'astro:assets';
+import { Icon } from 'astro-icon/components';
+import { featured } from '../data/site';
+import { topologies } from '../data/topologies';
+import Topology from './Topology.astro';
+
+const labs = (await getCollection('labs'))
+  .filter((l) => l.data.featured)
+  .sort((a, b) => a.data.featured! - b.data.featured!);
+---
+
+<section class="section work" id="work" aria-labelledby="work-title">
+  <div class="container">
+    <header class="section-head">
+      <h2 class="h2" id="work-title" data-reveal>Selected work</h2>
+      <p class="lead" data-reveal style="--d:80">
+        Five labs that cover most of a campus network, from the routed core down to the access port.
+      </p>
+    </header>
+
+    <div class="stack" data-stack>
+      {
+        labs.map((l, i) => {
+          const copy = featured[l.id];
+          return (
+            <article class="scard" data-scard style={`--i:${i}`} aria-labelledby={`scard-${l.id}`}>
+              <div class="scard__inner" data-scard-inner>
+                <div class="scard__text">
+                  <p class="scard__meta mono">
+                    <span class="scard__no">{String(i + 1).padStart(2, '0')}</span>
+                    <span>{l.data.category}</span>
+                    <span class="scard__sep" aria-hidden="true" />
+                    <span>{l.data.platform}</span>
+                  </p>
+                  <h3 class="scard__title" id={`scard-${l.id}`}>
+                    {l.data.name}
+                  </h3>
+                  <p class="scard__lede">{copy?.lede ?? l.data.summary}</p>
+                  {copy && (
+                    <ul class="scard__points">
+                      {copy.points.map((p) => (
+                        <li>
+                          <Icon name="ph:check" />
+                          <span>{p}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  <div class="scard__links">
+                    <a class="btn btn--accent btn--sm" href={`/labs/${l.id}/`}>
+                      <span>Read the lab</span>
+                      <Icon name="ph:arrow-right" class="i-right" />
+                    </a>
+                    <a class="btn btn--ghost btn--sm" href={l.data.url} target="_blank" rel="noopener">
+                      <span>GitHub</span>
+                      <Icon name="ph:arrow-up-right" class="i-arrow" />
+                    </a>
+                  </div>
+                </div>
+                <a
+                  class:list={['scard__media', { 'scard__media--topo': !!topologies[l.id] }]}
+                  href={`/labs/${l.id}/`}
+                  data-cursor="view"
+                  data-cursor-label="Open"
+                  aria-label={`Open the ${l.data.name} lab`}
+                  tabindex="-1"
+                >
+                  {topologies[l.id] ? (
+                    <Topology topo={topologies[l.id]} title={l.data.name} />
+                  ) : l.data.image && (
+                    <Image
+                      src={l.data.image}
+                      alt={`Topology diagram: ${l.data.name}`}
+                      widths={[560, 840, 1200]}
+                      sizes="(max-width: 900px) 92vw, 680px"
+                      loading="lazy"
+                    />
+                  )}
+                </a>
+              </div>
+            </article>
+          );
+        })
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .stack {
+    display: grid;
+    gap: clamp(28px, 4vw, 48px);
+    padding-bottom: 4vh;
+  }
+
+  .scard {
+    position: sticky;
+    top: calc(var(--nav-h) + 28px + var(--i) * 14px);
+  }
+
+  .scard__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(24px, 4vw, 56px);
+    align-items: center;
+    min-height: min(600px, calc(100dvh - var(--nav-h) - 96px));
+    padding: clamp(20px, 3vw, 40px);
+    border-radius: var(--r-panel);
+    background: var(--surface);
+    box-shadow:
+      0 0 0 1px var(--line-2),
+      0 -20px 60px -40px rgb(var(--shadow-tint) / 0.35);
+    transform-origin: 50% 0;
+    will-change: transform;
+  }
+
+  /* Dimming layer driven by GSAP as the next card slides over. */
+  .scard__inner::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: var(--bg);
+    opacity: var(--dim, 0);
+    pointer-events: none;
+  }
+
+  .scard__text {
+    display: grid;
+    gap: 18px;
+    align-content: center;
+  }
+
+  .scard__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.78rem;
+    color: var(--text-3);
+  }
+
+  .scard__no {
+    color: var(--accent-text);
+  }
+
+  .scard__sep {
+    width: 14px;
+    height: 1px;
+    background: currentColor;
+  }
+
+  .scard__title {
+    font-size: clamp(1.7rem, 3vw, 2.6rem);
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+  }
+
+  .scard__lede {
+    color: var(--text-2);
+    font-size: 1.02rem;
+    max-width: 46ch;
+  }
+
+  .scard__points {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  .scard__points li {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 10px;
+    font-size: 0.94rem;
+    line-height: 1.45;
+  }
+
+  .scard__points svg {
+    width: 16px;
+    height: 16px;
+    margin-top: 3px;
+    color: var(--accent-text);
+  }
+
+  .scard__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 6px;
+  }
+
+  .scard__media {
+    display: grid;
+    place-items: center;
+    align-self: stretch;
+    padding: clamp(12px, 2vw, 24px);
+    border-radius: var(--r-card);
+    background: var(--paper);
+    box-shadow: inset 0 0 0 1px rgb(var(--text-rgb) / 0.06);
+    overflow: hidden;
+  }
+
+  .scard__media img {
+    width: 100%;
+    max-height: min(480px, calc(100dvh - var(--nav-h) - 200px));
+    object-fit: contain;
+    border-radius: 8px;
+    transition: transform 0.8s var(--ease-out);
+  }
+
+  /* Rendered topologies sit on the page tone instead of white paper, in both themes. */
+  .scard__media--topo {
+    --topo-surface: var(--bg);
+    background: var(--bg);
+    box-shadow: inset 0 0 0 1px var(--line);
+  }
+
+  .scard__media--topo :global(.topo) {
+    max-height: min(480px, calc(100dvh - var(--nav-h) - 200px));
+  }
+
+  :global([data-theme='dark']) .scard__media img {
+    filter: brightness(0.95);
+  }
+
+  @media (hover: hover) {
+    .scard__media:hover img {
+      transform: scale(1.03);
+    }
+  }
+
+  @media (max-width: 900px) {
+    .scard__inner {
+      grid-template-columns: 1fr;
+      min-height: 0;
+      gap: 20px;
+    }
+    .scard__media {
+      order: -1;
+      padding: 10px;
+    }
+    .scard__media img {
+      max-height: 26dvh;
+    }
+    .scard__points {
+      display: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .scard__lede {
+      font-size: 0.95rem;
+    }
+    .scard__links .btn {
+      flex: 1 1 auto;
+    }
+  }
+
+  /* Short screens (landscape phones, small laptops): no sticky stacking, content must never be cut off. */
+  @media (max-height: 620px) {
+    .scard {
+      position: relative;
+      top: 0;
+    }
+  }
+</style>
+
+<script>
+  import { gsap, prefersReduced } from '../scripts/core';
+  import { motion } from '../config/motion';
+
+  const cards = [...document.querySelectorAll<HTMLElement>('[data-scard]')];
+  const S = motion.stack;
+
+  if (!prefersReduced() && cards.length > 1) {
+    const mm = gsap.matchMedia();
+    mm.add('(min-height: 621px)', () => {
+      cards.forEach((card, i) => {
+        if (i === cards.length - 1) return;
+        const inner = card.querySelector<HTMLElement>('[data-scard-inner]')!;
+        const depth = cards.length - 1 - i;
+        gsap.to(inner, {
+          scale: S.scaleTo + (1 - S.scaleTo) * (1 - Math.min(1, depth / 4)) * 0.5,
+          '--dim': S.dimTo,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: cards[i + 1],
+            start: 'top bottom',
+            end: 'top top+=120',
+            scrub: true,
+          },
+        });
+      });
+    });
+  }
+</script>

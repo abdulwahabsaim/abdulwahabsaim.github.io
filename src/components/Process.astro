@@ -1,0 +1,363 @@
+---
+/*
+ * Process: a wave "cable" draws itself as you scroll, a packet rides the leading edge and each
+ * checkpoint lights up when the packet reaches it (codesval process idea, told as a packet path).
+ * Desktop: pinned. Phones and short screens: a vertical rail.
+ */
+import { Icon } from 'astro-icon/components';
+import { process } from '../data/site';
+
+const W = 1200;
+const H = 160;
+const pts: [number, number][] = [
+  [0, 80],
+  [120, 34],
+  [360, 126],
+  [600, 34],
+  [840, 126],
+  [1080, 34],
+  [1200, 80],
+];
+// Catmull-Rom through the points, converted to cubic Bezier segments.
+let d = `M${pts[0][0]},${pts[0][1]}`;
+for (let i = 0; i < pts.length - 1; i++) {
+  const p0 = pts[i - 1] ?? pts[i];
+  const p1 = pts[i];
+  const p2 = pts[i + 1];
+  const p3 = pts[i + 2] ?? p2;
+  const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+  const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+  d += ` C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0]},${p2[1]}`;
+}
+const nodes = pts.slice(1, -1).map(([x, y]) => ({ x: (x / W) * 100, y: (y / H) * 100, px: x }));
+---
+
+<section class="process" id="process" aria-labelledby="process-title" data-process>
+  <div class="process__stage">
+    <div class="container">
+      <header class="section-head process__head">
+        <h2 class="h2" id="process-title" data-reveal>How every lab gets built</h2>
+        <p class="lead" data-reveal style="--d:80">
+          The same five steps each time, so any lab can be rebuilt from its repository.
+        </p>
+      </header>
+
+      <div class="wave" data-wave aria-hidden="true">
+        <svg viewBox={`0 0 ${W} ${H}`} fill="none">
+          <path class="wave__base" d={d}></path>
+          <path class="wave__line" d={d} pathLength="1" data-wave-line></path>
+        </svg>
+        <span class="wave__packet" data-packet></span>
+        {
+          nodes.map((n, i) => (
+            <span class="wave__node" style={`--x:${n.x}%;--y:${n.y}%`} data-node data-px={n.px}>
+              <Icon name={process[i].icon} />
+            </span>
+          ))
+        }
+      </div>
+
+      <ol class="steps" data-steps>
+        <span class="steps__rail" aria-hidden="true"><span class="steps__fill" data-rail-fill></span></span>
+        {
+          process.map((s) => (
+            <li class="step" data-step>
+              <span class="step__node" aria-hidden="true">
+                <Icon name={s.icon} />
+              </span>
+              <h3 class="step__title">{s.title}</h3>
+              <p class="step__text">{s.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .process {
+    position: relative;
+    z-index: var(--z-content);
+    padding-block: var(--section-y);
+  }
+
+  .process.is-pinned {
+    height: 240vh;
+    padding-block: 0;
+  }
+
+  .process.is-pinned .process__stage {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    display: grid;
+    align-items: center;
+    padding-top: var(--nav-h);
+  }
+
+  .process__head {
+    margin-bottom: clamp(32px, 5vw, 64px);
+  }
+
+  .wave {
+    position: relative;
+    aspect-ratio: 1200 / 160;
+    margin-inline: auto;
+  }
+
+  .wave svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .wave__base {
+    stroke: var(--line-2);
+    stroke-width: 2;
+    stroke-dasharray: 3 9;
+    stroke-linecap: round;
+  }
+
+  .wave__line {
+    stroke: var(--accent);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+  }
+
+  .wave__packet {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 14px;
+    height: 14px;
+    margin: -7px 0 0 -7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow:
+      0 0 0 5px rgb(var(--accent-rgb) / 0.2),
+      0 0 0 11px rgb(var(--accent-rgb) / 0.08);
+    left: var(--px, 0%);
+    top: var(--py, 50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .wave__node,
+  .step__node {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--text-2);
+    box-shadow: inset 0 0 0 1px var(--line-2);
+    transition:
+      background-color 0.4s ease,
+      color 0.4s ease,
+      box-shadow 0.4s ease,
+      transform 0.5s var(--ease-spring);
+  }
+
+  .wave__node {
+    position: absolute;
+    left: var(--x);
+    top: var(--y);
+    margin: -28px 0 0 -28px;
+  }
+
+  .wave__node svg,
+  .step__node svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .wave__node.is-on,
+  .step.is-on .step__node {
+    background: var(--accent);
+    color: var(--accent-ink);
+    box-shadow: 0 0 0 8px rgb(var(--accent-rgb) / 0.14);
+    transform: scale(1.06);
+  }
+
+  .steps {
+    position: relative;
+    list-style: none;
+    padding: 0;
+    margin-top: clamp(40px, 5vw, 64px);
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  .steps__rail,
+  .step__node {
+    display: none;
+  }
+
+  .step {
+    text-align: center;
+    padding-inline: 6px;
+    opacity: 0.35;
+    transform: translateY(10px);
+    transition:
+      opacity 0.5s ease,
+      transform 0.6s var(--ease-out);
+  }
+
+  .step.is-on {
+    opacity: 1;
+    transform: none;
+  }
+
+  .step__title {
+    font-size: 1.2rem;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+
+  .step__text {
+    font-size: 0.93rem;
+    color: var(--text-2);
+    line-height: 1.5;
+  }
+
+  /* ---------- Vertical rail: phones, tablets, short screens ---------- */
+  @media (max-width: 900px), (max-height: 639px) {
+    .wave {
+      display: none;
+    }
+    .steps {
+      grid-template-columns: 1fr;
+      gap: 26px;
+      padding-left: 62px;
+      margin-top: 0;
+    }
+    .steps__rail {
+      display: block;
+      position: absolute;
+      left: 21px;
+      top: 22px;
+      bottom: 22px;
+      width: 2px;
+      background: var(--line-2);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .steps__fill {
+      display: block;
+      width: 100%;
+      height: 100%;
+      background: var(--accent);
+      transform: scaleY(var(--fill, 0));
+      transform-origin: 0 0;
+    }
+    .step {
+      position: relative;
+      text-align: left;
+      padding: 0;
+      min-height: 44px;
+    }
+    .step__title {
+      font-size: 1.08rem;
+      margin-bottom: 4px;
+    }
+    .step__text {
+      font-size: 0.9rem;
+    }
+    .step__node {
+      display: grid;
+      position: absolute;
+      left: -62px;
+      top: -6px;
+      width: 44px;
+      height: 44px;
+    }
+    .step__node svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+</style>
+
+<script>
+  import { gsap, ScrollTrigger, prefersReduced } from '../scripts/core';
+
+  const section = document.querySelector<HTMLElement>('[data-process]')!;
+  const line = section.querySelector<SVGPathElement>('[data-wave-line]')!;
+  const packet = section.querySelector<HTMLElement>('[data-packet]')!;
+  const nodes = [...section.querySelectorAll<HTMLElement>('[data-node]')];
+  const steps = [...section.querySelectorAll<HTMLElement>('[data-step]')];
+  const list = section.querySelector<HTMLElement>('[data-steps]')!;
+  const fill = section.querySelector<HTMLElement>('[data-rail-fill]')!;
+
+  if (prefersReduced()) {
+    line.style.strokeDashoffset = '0';
+    nodes.forEach((n) => n.classList.add('is-on'));
+    steps.forEach((s) => s.classList.add('is-on'));
+    list.style.setProperty('--fill', '1');
+  } else {
+    // Where along the path (0..1) each checkpoint sits.
+    const total = line.getTotalLength();
+    const at = nodes.map((n) => {
+      const target = Number(n.dataset.px);
+      let lo = 0,
+        hi = total;
+      for (let k = 0; k < 24; k++) {
+        const mid = (lo + hi) / 2;
+        if (line.getPointAtLength(mid).x < target) lo = mid;
+        else hi = mid;
+      }
+      return lo / total;
+    });
+
+    const drawWave = (p: number) => {
+      const t = gsap.utils.clamp(0, 1, (p - 0.06) / 0.82);
+      line.style.strokeDashoffset = String(1 - t);
+      const pt = line.getPointAtLength(total * t);
+      packet.style.setProperty('--px', `${(pt.x / 1200) * 100}%`);
+      packet.style.setProperty('--py', `${(pt.y / 160) * 100}%`);
+      packet.style.opacity = t > 0.002 && t < 0.999 ? '1' : '0';
+      at.forEach((a, i) => {
+        const on = t >= a - 0.005;
+        nodes[i].classList.toggle('is-on', on);
+        steps[i]?.classList.toggle('is-on', on);
+      });
+    };
+
+    const mm = gsap.matchMedia();
+    mm.add('(min-width: 901px) and (min-height: 640px)', () => {
+      section.classList.add('is-pinned');
+      const st = ScrollTrigger.create({
+        trigger: section,
+        start: 'top top',
+        end: 'bottom bottom',
+        onUpdate: (self) => drawWave(self.progress),
+      });
+      drawWave(0);
+      return () => {
+        st.kill();
+        section.classList.remove('is-pinned');
+      };
+    });
+    mm.add('(max-width: 900px), (max-height: 639px)', () => {
+      const st = ScrollTrigger.create({
+        trigger: list,
+        start: 'top 72%',
+        end: 'bottom 55%',
+        onUpdate(self) {
+          list.style.setProperty('--fill', self.progress.toFixed(3));
+          const rail = list.getBoundingClientRect();
+          steps.forEach((s) => {
+            const y = s.getBoundingClientRect().top - rail.top + 28;
+            s.classList.toggle('is-on', y <= self.progress * rail.height + 4);
+          });
+        },
+      });
+      return () => st.kill();
+    });
+  }
+</script>

@@ -1,0 +1,239 @@
+---
+/* Footer (codesval idea): link columns over a giant wordmark that fades into the page. */
+import { Icon } from 'astro-icon/components';
+import { nav, profile, categories } from '../data/site';
+
+interface Props {
+  home?: boolean;
+}
+const { home = false } = Astro.props;
+const href = (h: string) => (home ? h : `/${h}`);
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container footer__grid">
+    <div class="footer__brand">
+      <a class="footer__logo" href={home ? '#top' : '/'}>
+        <span class="port" aria-hidden="true"></span>
+        <span>{profile.name}</span>
+      </a>
+      <p>CCNA-certified junior network engineer in Goes, Zeeland. Available full-time.</p>
+    </div>
+
+    <nav aria-label="Footer: sections">
+      <h2 class="label">Sections</h2>
+      <ul>{nav.map((n) => <li><a class="link" href={href(n.href)}>{n.label}</a></li>)}</ul>
+    </nav>
+
+    <nav aria-label="Footer: labs">
+      <h2 class="label">Labs</h2>
+      <ul>
+        {categories.map((c) => <li><a class="link" href={`/labs/#${c.slug}`}>{c.label}</a></li>)}
+        <li><a class="link" href="/labs/campus/">Enterprise campus</a></li>
+      </ul>
+    </nav>
+
+    <nav aria-label="Footer: elsewhere">
+      <h2 class="label">Elsewhere</h2>
+      <ul>
+        <li><a class="link" href={profile.github} target="_blank" rel="noopener">GitHub</a></li>
+        <li><a class="link" href={profile.linkedin} target="_blank" rel="noopener">LinkedIn</a></li>
+        <li><a class="link" href={`mailto:${profile.email}`}>Email</a></li>
+        <li><a class="link" href={profile.cv} download>Download CV</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="container footer__bottom">
+    <p>&copy; {year} {profile.name}</p>
+    <a class="footer__top" href={home ? '#top' : '#main'}>
+      <span>Back to top</span>
+      <Icon name="ph:arrow-up-right" />
+    </a>
+  </div>
+
+  <div class="footer__word" aria-hidden="true" data-wordmark>
+    <svg viewBox="0 0 1000 118" preserveAspectRatio="xMidYMax meet">
+      <defs>
+        <linearGradient id="wm-grad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" style="stop-color: var(--accent); stop-opacity: 0.9"></stop>
+          <stop offset="0.75" style="stop-color: var(--accent); stop-opacity: 0.12"></stop>
+          <stop offset="1" style="stop-color: var(--accent); stop-opacity: 0"></stop>
+        </linearGradient>
+      </defs>
+      <text x="500" y="104" text-anchor="middle" textLength="996" lengthAdjust="spacing">Abdul Wahab Saim</text>
+    </svg>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    z-index: var(--z-content);
+    padding-top: clamp(56px, 7vw, 88px);
+    border-top: 1px solid var(--line);
+    overflow: hidden;
+  }
+
+  .footer__grid {
+    display: grid;
+    grid-template-columns: 1.6fr repeat(3, minmax(0, 1fr));
+    gap: clamp(28px, 4vw, 56px);
+  }
+
+  .footer__brand {
+    display: grid;
+    gap: 14px;
+    align-content: start;
+    max-width: 320px;
+  }
+
+  .footer__brand p {
+    color: var(--text-2);
+    font-size: 0.95rem;
+  }
+
+  .footer__logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+
+  .footer nav ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 16px;
+    display: grid;
+    gap: 10px;
+  }
+
+  .footer nav a {
+    color: var(--text-2);
+    font-size: 0.95rem;
+    transition: color 0.2s ease;
+  }
+
+  @media (hover: hover) {
+    .footer nav a:hover {
+      color: var(--text);
+    }
+  }
+
+  .footer__bottom {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    margin-top: clamp(40px, 6vw, 72px);
+    padding-block: 20px;
+    font-size: 0.875rem;
+    color: var(--text-3);
+  }
+
+  .footer__bottom::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: var(--gutter);
+    right: var(--gutter);
+    height: 1px;
+    background: var(--line);
+  }
+
+  .footer__top {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-2);
+  }
+
+  .footer__top svg {
+    width: 16px;
+    height: 16px;
+    transform: rotate(-45deg);
+  }
+
+  .footer__word {
+    width: 100%;
+    max-width: calc(var(--container) + var(--gutter) * 2 + 80px);
+    margin: 8px auto -0.6%;
+    padding-inline: calc(var(--gutter) / 2);
+    user-select: none;
+  }
+
+  .footer__word svg {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+
+  .footer__word text {
+    font-family: var(--font-sans);
+    font-weight: 700;
+    font-size: 117px;
+    letter-spacing: -4.6px;
+    fill: url(#wm-grad);
+  }
+
+  /* The wordmark sits at the very bottom of the page, so it has its own observer (no negative margin). */
+  :global(.js) .footer__word {
+    opacity: 0;
+    transform: translateY(40%);
+    transition:
+      opacity 1.2s var(--ease-out),
+      transform 1.4s var(--ease-out);
+  }
+
+  :global(.js) .footer__word.is-in {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    :global(.js) .footer__word {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .footer__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    .footer__brand {
+      grid-column: 1 / -1;
+      max-width: none;
+    }
+  }
+
+  @media (max-width: 520px) {
+    .footer__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: 36px;
+    }
+    .footer__bottom {
+      padding-bottom: max(20px, env(safe-area-inset-bottom));
+    }
+  }
+</style>
+
+<script>
+  const word = document.querySelector<HTMLElement>('[data-wordmark]');
+  if (word) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          word.classList.add('is-in');
+          io.disconnect();
+        }
+      },
+      { threshold: 0 },
+    );
+    io.observe(word);
+  }
+</script>

@@ -1,0 +1,215 @@
+---
+import { Icon } from 'astro-icon/components';
+/*
+ * One shared image viewer. Any element with data-lightbox="<full-size url>" opens it.
+ * Optional: data-caption, data-group (enables previous / next within the group).
+ */
+---
+
+<dialog class="lb" data-lb aria-label="Image viewer">
+  <figure class="lb__figure">
+    <img alt="" data-lb-img decoding="async" />
+    <div class="lb__svg" data-lb-svg hidden></div>
+    <figcaption class="lb__caption" data-lb-caption></figcaption>
+  </figure>
+  <div class="lb__bar">
+    <button class="icon-btn" type="button" data-lb-prev aria-label="Previous image"><Icon name="ph:arrow-left" /></button>
+    <span class="lb__count mono" data-lb-count></span>
+    <button class="icon-btn" type="button" data-lb-next aria-label="Next image"><Icon name="ph:arrow-right" /></button>
+    <button class="icon-btn" type="button" data-lb-close aria-label="Close viewer"><Icon name="ph:x" /></button>
+  </div>
+</dialog>
+
+<style>
+  .lb {
+    width: 100vw;
+    height: 100dvh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: max(16px, env(safe-area-inset-top)) var(--gutter) max(16px, env(safe-area-inset-bottom));
+    border: 0;
+    background: rgb(var(--bg-rgb) / 0.9);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    color: var(--text);
+  }
+
+  .lb[open] {
+    display: grid;
+    grid-template-rows: 1fr auto;
+    gap: 12px;
+    animation: lb-in 0.35s var(--ease-out);
+  }
+
+  .lb::backdrop {
+    background: transparent;
+  }
+
+  @keyframes lb-in {
+    from {
+      opacity: 0;
+    }
+  }
+
+  .lb__figure {
+    min-height: 0;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    place-items: center;
+    gap: 12px;
+  }
+
+  .lb__figure img {
+    max-width: min(1400px, 100%);
+    max-height: 100%;
+    min-height: 0;
+    object-fit: contain;
+    border-radius: var(--r-media);
+    background: var(--paper);
+    box-shadow: 0 30px 80px -30px rgb(var(--shadow-tint) / 0.5);
+    animation: lb-img 0.45s var(--ease-out);
+  }
+
+  @keyframes lb-img {
+    from {
+      opacity: 0;
+      transform: scale(0.97);
+    }
+  }
+
+  /* Inline diagrams: keep a readable minimum width and let phones pan sideways. */
+  .lb__svg {
+    width: min(1400px, 100%);
+    max-height: 100%;
+    min-height: 0;
+    overflow: auto;
+    border-radius: var(--r-media);
+    background: var(--surface);
+    padding: 16px;
+    --topo-surface: var(--surface);
+  }
+
+  .lb__svg :global(svg) {
+    min-width: 820px;
+    max-height: calc(100dvh - 160px);
+  }
+
+  .lb__caption {
+    font-size: 0.9rem;
+    color: var(--text-2);
+    text-align: center;
+  }
+
+  .lb__bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .lb__bar .icon-btn {
+    box-shadow: inset 0 0 0 1px var(--line-2);
+    color: var(--text);
+  }
+
+  .lb__count {
+    font-size: 0.8rem;
+    color: var(--text-3);
+    min-width: 56px;
+    text-align: center;
+  }
+
+  .lb:not(.has-group) [data-lb-prev],
+  .lb:not(.has-group) [data-lb-next],
+  .lb:not(.has-group) .lb__count {
+    display: none;
+  }
+</style>
+
+<script>
+  import { lockScroll } from '../scripts/core';
+  import { whoosh, click } from '../scripts/sound';
+
+  const dlg = document.querySelector<HTMLDialogElement>('[data-lb]')!;
+  const img = dlg.querySelector<HTMLImageElement>('[data-lb-img]')!;
+  const cap = dlg.querySelector<HTMLElement>('[data-lb-caption]')!;
+  const countEl = dlg.querySelector<HTMLElement>('[data-lb-count]')!;
+  let group: HTMLElement[] = [];
+  let index = 0;
+
+  const svgBox = dlg.querySelector<HTMLElement>('[data-lb-svg]')!;
+
+  function show(el: HTMLElement) {
+    const inline = el.hasAttribute('data-lightbox-inline');
+    img.hidden = inline;
+    svgBox.hidden = !inline;
+    svgBox.replaceChildren();
+    if (inline) {
+      const svg = el.querySelector('svg');
+      if (svg) svgBox.appendChild(svg.cloneNode(true));
+      cap.textContent = el.dataset.caption || '';
+      countEl.textContent = '';
+      return;
+    }
+    img.src = el.dataset.lightbox!;
+    img.alt = el.dataset.caption || el.getAttribute('aria-label') || '';
+    cap.textContent = el.dataset.caption || '';
+    img.style.animation = 'none';
+    void img.offsetWidth;
+    img.style.animation = '';
+    countEl.textContent = group.length > 1 ? `${index + 1} / ${group.length}` : '';
+  }
+
+  function open(el: HTMLElement) {
+    const g = el.dataset.group;
+    group = g ? [...document.querySelectorAll<HTMLElement>(`[data-lightbox][data-group="${g}"]`)] : [el];
+    index = Math.max(0, group.indexOf(el));
+    dlg.classList.toggle('has-group', group.length > 1);
+    show(el);
+    dlg.showModal();
+    lockScroll(true);
+    whoosh();
+  }
+
+  function step(d: number) {
+    if (group.length < 2) return;
+    index = (index + d + group.length) % group.length;
+    show(group[index]);
+    click();
+  }
+
+  document.addEventListener('click', (e) => {
+    const el = (e.target as HTMLElement).closest<HTMLElement>('[data-lightbox], [data-lightbox-inline]');
+    if (!el) return;
+    e.preventDefault();
+    open(el);
+  });
+
+  dlg.addEventListener('click', (e) => {
+    const t = e.target as HTMLElement;
+    if (t.closest('[data-lb-close]') || t === dlg || t.classList.contains('lb__figure')) dlg.close();
+    else if (t.closest('[data-lb-prev]')) step(-1);
+    else if (t.closest('[data-lb-next]')) step(1);
+  });
+  dlg.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') step(-1);
+    if (e.key === 'ArrowRight') step(1);
+  });
+  dlg.addEventListener('close', () => {
+    lockScroll(false);
+    img.removeAttribute('src');
+  });
+
+  // Swipe between images on touch screens.
+  let sx = 0;
+  dlg.addEventListener('touchstart', (e) => (sx = e.touches[0].clientX), { passive: true });
+  dlg.addEventListener(
+    'touchend',
+    (e) => {
+      const dx = e.changedTouches[0].clientX - sx;
+      if (Math.abs(dx) > 50) step(dx < 0 ? 1 : -1);
+    },
+    { passive: true },
+  );
+</script>
